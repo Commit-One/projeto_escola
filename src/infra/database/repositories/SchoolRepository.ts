@@ -45,6 +45,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
         data.address,
         data.phone,
         data.email,
+        data.nameDirector,
       );
 
       const user = new User(
@@ -52,6 +53,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
         config.PASSWORD_DEFAULT,
         school.uuid as string,
         profileAdmin?.uuid as string,
+        data.nameDirector,
       );
 
       user.password = await new BcryptSecurity().hash(config.PASSWORD_DEFAULT);
@@ -86,6 +88,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
       schoolData.address,
       schoolData.phone,
       schoolData.email,
+      schoolData.nameDirector,
     );
   }
 
@@ -97,12 +100,20 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
 
   async update(uuid: string, data: SchoolDTO): Promise<School> {
     await this._repo.update({ uuid }, { ...data });
-    return new School(data.name, data.address, data.phone, data.email);
+    return new School(
+      data.name,
+      data.address,
+      data.phone,
+      data.email,
+      data.nameDirector,
+    );
   }
 
   async getAll(): Promise<School[]> {
     const entities = await this._repo.find();
 
-    return entities.map((e) => new School(e.name, e.address, e.phone, e.email));
+    return entities.map(
+      (e) => new School(e.name, e.address, e.phone, e.email, e.nameDirector),
+    );
   }
 }

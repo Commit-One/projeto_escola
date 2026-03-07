@@ -12,6 +12,7 @@ describe("DeleteSchoolUseCase", () => {
       address: "Rua A",
       phone: "11999999999",
       email: "contato@escola.com",
+      nameDirector: "Jhonatan",
     });
 
     const deleted = await useCase.execute(school.uuid as string);

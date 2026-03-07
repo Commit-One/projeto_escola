@@ -39,6 +39,7 @@ export class FakeUserRepository implements IUserRepository {
       password,
       findOne.escolaUuid as string,
       findOne.profileUuid as string,
+      findOne.name,
     );
 
     const index = this.users.indexOf(findOne);

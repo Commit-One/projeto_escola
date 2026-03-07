@@ -28,6 +28,7 @@ export class FakeSchoolRepository implements ISchoolRepository {
       data.address,
       data.phone,
       data.email,
+      data.nameDirector,
     );
 
     const index = this.schools.indexOf(findOne);
@@ -45,15 +46,16 @@ export class FakeSchoolRepository implements ISchoolRepository {
   }
 
   async createSchoolAndUser(data: SchoolDTO): Promise<School> {
-    const { address, email, name, phone } = data;
+    const { address, email, name, phone, nameDirector } = data;
 
-    const school = new School(name, address, phone, email);
+    const school = new School(name, address, phone, email, nameDirector);
     const profile = new Profile("escola");
     const user = new User(
       email,
       "123",
       school.uuid as string,
       profile.uuid as string,
+      nameDirector,
     );
 
     if (!profile.name) new Error("Perfil não encontrado");

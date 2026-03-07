@@ -12,6 +12,7 @@ describe("UpdateSchoolUseCase", () => {
       address: "Rua A",
       phone: "11999999999",
       email: "contato@escola.com",
+      nameDirector: "Jhonatan",
     });
 
     const newData = {
@@ -19,6 +20,7 @@ describe("UpdateSchoolUseCase", () => {
       address: school.address,
       phone: school.phone,
       email: school.email,
+      nameDirector: school.nameDirector,
     };
 
     const updated = await useCase.execute(school.uuid as string, newData);

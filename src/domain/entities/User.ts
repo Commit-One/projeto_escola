@@ -6,6 +6,7 @@ export class User extends Base {
     public password: string,
     public escolaUuid: string,
     public profileUuid: string,
+    public name: string,
   ) {
     super();
   }

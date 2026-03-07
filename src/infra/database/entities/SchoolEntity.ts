@@ -14,4 +14,7 @@ export class SchoolEntity extends Base {
 
   @Column()
   email!: string;
+
+  @Column()
+  nameDirector!: string;
 }

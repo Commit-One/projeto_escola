@@ -13,6 +13,7 @@ describe("GetAllSchoolUseCase", () => {
       address: "Rua A",
       phone: "11999999999",
       email: "contato@escola.com",
+      nameDirector: "Jhonatan",
     });
 
     const schools = await useCase.execute();

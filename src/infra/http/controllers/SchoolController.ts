@@ -17,12 +17,13 @@ export class SchoolController {
 
   async create(req: Request, res: Response) {
     try {
-      const { address, email, name, phone } = req.body;
+      const { address, email, name, phone, nameDirector } = req.body;
       const school = await this._createSchoolUseCase.execute({
         name,
         address,
         phone,
         email,
+        nameDirector,
       });
       return handler.created(res, school);
     } catch (err: unknown) {
@@ -51,13 +52,14 @@ export class SchoolController {
 
   async update(req: Request, res: Response) {
     try {
-      const { name, address, phone, email } = req.body;
+      const { name, address, phone, email, nameDirector } = req.body;
       const { uuid } = req.params;
       const school = await this._updateSchoolUseCase.execute(String(uuid), {
         name,
         address,
         phone,
         email,
+        nameDirector,
       });
       return handler.ok(res, school);
     } catch (err: unknown) {

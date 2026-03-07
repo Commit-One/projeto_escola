@@ -12,6 +12,7 @@ describe("CreateSchoolUseCase", () => {
       address: "Rua A",
       phone: "11999999999",
       email: "contato@escola.com",
+      nameDirector: "Jhonatan",
     });
 
     expect(result).toHaveProperty("name", "Escola teste");

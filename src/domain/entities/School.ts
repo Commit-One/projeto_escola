@@ -6,6 +6,7 @@ export class School extends Base {
     public address: string,
     public phone: string,
     public email: string,
+    public nameDirector: string,
   ) {
     super();
   }

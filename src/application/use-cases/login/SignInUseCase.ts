@@ -10,7 +10,7 @@ export class SignInUseCase {
     this.jwt = new AuthenticationSecurity();
   }
 
-  async execute(email: string, password: string): Promise<unknown> {
+  async execute(email: string, password: string): Promise<{ token: string }> {
     const user = await this._loginRepository.findUserByEmail(email);
 
     if (!user) throw new Error(ApplicationError.user.notFound);

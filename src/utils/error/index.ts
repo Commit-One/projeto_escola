@@ -7,10 +7,11 @@ export const ApplicationError = {
     tokenNotFound: "Token não encontrado",
   },
   school: {
-    nameRequired: "Nome é obrigatório",
+    nameSchoolRequired: "Nome da escola é obrigatório",
     emailRequired: "E-mail é obrigatório",
     addressRequired: "Endereço é obrigatório",
     phoneRequired: "Telefone é obrigatório",
+    nameDirectorRequired: "Nome do diretor é obrigatório",
   },
   user: {
     passawordCompare: "Senha inválida",

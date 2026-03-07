@@ -26,6 +26,7 @@ export class UserTypeOrmRepository implements IUserRepository {
       password,
       findUser.escolaUuid,
       findUser.profileUuid,
+      findUser.name,
     );
 
     findUser.password = await new BcryptSecurity().hash(password);
@@ -54,6 +55,7 @@ export class UserTypeOrmRepository implements IUserRepository {
       return entities.map((entity) => {
         return {
           email: entity.email,
+          name: entity.name,
         };
       });
     });

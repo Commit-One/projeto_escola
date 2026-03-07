@@ -14,4 +14,7 @@ export class UserEntity extends Base {
 
   @Column()
   profileUuid!: string;
+
+  @Column()
+  name!: string;
 }

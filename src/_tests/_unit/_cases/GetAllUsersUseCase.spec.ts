@@ -12,6 +12,7 @@ describe("GetAllUsersUseCase", () => {
       escolaUuid: "123",
       password: "123",
       profileUuid: "1233",
+      name: "Jhonatan",
     });
 
     const list = await useCase.execute();

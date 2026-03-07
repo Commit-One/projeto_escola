@@ -30,6 +30,7 @@ export class LoginTypeOrmRepository implements ILoginRepository {
       user.password,
       user.escolaUuid,
       user.profileUuid,
+      user.name,
     );
   }
 

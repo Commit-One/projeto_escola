@@ -3,4 +3,5 @@ export interface SchoolDTO {
   address: string;
   phone: string;
   email: string;
+  nameDirector: string;
 }

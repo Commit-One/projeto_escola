@@ -3,9 +3,13 @@ import { ApplicationError } from "../../../utils/error";
 
 export const createSchoolSchema = z.object({
   body: z.object({
-    name: z.string().trim().min(1, ApplicationError.school.nameRequired),
+    name: z.string().trim().min(1, ApplicationError.school.nameSchoolRequired),
     address: z.string().trim().min(1, ApplicationError.school.addressRequired),
     phone: z.string().trim().min(1, ApplicationError.school.phoneRequired),
+    nameDirector: z
+      .string()
+      .trim()
+      .min(1, ApplicationError.school.nameDirectorRequired),
     email: z
       .string()
       .trim()
@@ -22,15 +26,19 @@ export const deleteSchoolSchema = z.object({
 
 export const getByNameSchema = z.object({
   params: z.object({
-    name: z.string().trim().min(1, ApplicationError.school.nameRequired),
+    name: z.string().trim().min(1, ApplicationError.school.nameSchoolRequired),
   }),
 });
 
 export const updateSchoolSchema = z.object({
   body: z.object({
-    name: z.string().trim().min(1, ApplicationError.school.nameRequired),
+    name: z.string().trim().min(1, ApplicationError.school.nameSchoolRequired),
     address: z.string().trim().min(1, ApplicationError.school.addressRequired),
     phone: z.string().trim().min(1, ApplicationError.school.phoneRequired),
+    nameDirector: z
+      .string()
+      .trim()
+      .min(1, ApplicationError.school.nameDirectorRequired),
     email: z
       .string()
       .trim()
