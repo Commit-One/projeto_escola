@@ -45,7 +45,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
     }
   }
 
-  async createSchoolAndUser(data: SchoolDTO): Promise<School> {
+  async createSchoolUserTransaction(data: SchoolDTO): Promise<School> {
     const queryRunner = AppDataSource.createQueryRunner();
 
     await queryRunner.connect();

@@ -7,7 +7,7 @@ describe("UpdateSchoolUseCase", () => {
   it("Deve atualizar o nome da escola", async () => {
     const useCase = new UpdateSchoolUseCase(repository);
 
-    const school = await repository.createSchoolAndUser({
+    const school = await repository.createSchoolUserTransaction({
       name: "Escola teste",
       address: "Rua A",
       phone: "11999999999",

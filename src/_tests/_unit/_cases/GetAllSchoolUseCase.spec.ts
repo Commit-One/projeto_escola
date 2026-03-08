@@ -8,7 +8,7 @@ describe("GetAllSchoolUseCase", () => {
   it("Deve retornar todas as escolas cadastradas", async () => {
     const useCase = new GetAllSchoolUseCase(repository);
 
-    await repository.createSchoolAndUser({
+    await repository.createSchoolUserTransaction({
       name: "Escola teste",
       address: "Rua A",
       phone: "11999999999",

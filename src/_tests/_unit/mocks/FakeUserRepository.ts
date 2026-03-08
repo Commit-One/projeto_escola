@@ -1,9 +1,29 @@
 import { UserResponseDTO } from "../../../application/dtos/UserDTO";
 import { User } from "../../../domain/entities/User";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
+import { StatusEnum } from "../../../utils/enum/status";
 
 export class FakeUserRepository implements IUserRepository {
   private users: User[] = [];
+
+  async updateStatus(uuid: string, status: StatusEnum): Promise<boolean> {
+    const findOne = this.users.find((s) => s.uuid === uuid);
+
+    if (!findOne) throw new Error("School not found");
+
+    const updateUser = new User(
+      findOne.email,
+      findOne.password,
+      findOne.escolaUuid as string,
+      findOne.profileUuid as string,
+      findOne.name,
+      status,
+    );
+    const index = this.users.indexOf(findOne);
+    this.users[index] = updateUser;
+
+    return this.users.find((s) => s.uuid === uuid)?.status === status;
+  }
 
   async create(user: User): Promise<void> {
     this.users.push(user);

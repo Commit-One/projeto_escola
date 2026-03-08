@@ -1,7 +1,6 @@
 import express from "express";
 import { AppDataSource } from "../infra/database/data-source";
 import { routes } from "../infra/http/routes";
-
 export class ServerInitializer {
   private readonly app: express.Application;
 

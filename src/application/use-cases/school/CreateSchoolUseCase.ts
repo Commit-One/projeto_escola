@@ -14,7 +14,7 @@ export class CreateSchoolUseCase {
       dto.nameDirector,
     );
 
-    await this._repo.createSchoolAndUser(school);
+    await this._repo.createSchoolUserTransaction(school);
 
     return school;
   }

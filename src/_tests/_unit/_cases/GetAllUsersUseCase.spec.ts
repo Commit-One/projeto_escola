@@ -1,4 +1,5 @@
 import { GetAllUsersUserCase } from "../../../application/use-cases/user/GetAllUsersUseCase";
+import { StatusEnum } from "../../../utils/enum/status";
 import { FakeUserRepository } from "../mocks/FakeUserRepository";
 
 const repository = new FakeUserRepository();
@@ -13,6 +14,7 @@ describe("GetAllUsersUseCase", () => {
       password: "123",
       profileUuid: "1233",
       name: "Jhonatan",
+      status: StatusEnum.ACTIVE,
     });
 
     const list = await useCase.execute();

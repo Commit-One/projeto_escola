@@ -3,10 +3,31 @@ import { Profile } from "../../../domain/entities/Profile";
 import { School } from "../../../domain/entities/School";
 import { User } from "../../../domain/entities/User";
 import { ISchoolRepository } from "../../../domain/repositories/ISchoolRepository";
+import { StatusEnum } from "../../../utils/enum/status";
 
 export class FakeSchoolRepository implements ISchoolRepository {
   private schools: School[] = [];
   private users: User[] = [];
+
+  async updateStatus(uuid: string, status: StatusEnum): Promise<boolean> {
+    const findOne = this.schools.find((s) => s.uuid === uuid);
+
+    if (!findOne) throw new Error("School not found");
+
+    const updatedSchool = new School(
+      findOne.name,
+      findOne.address,
+      findOne.phone,
+      findOne.email,
+      findOne.nameDirector,
+      status,
+    );
+
+    const index = this.schools.indexOf(findOne);
+    this.schools[index] = updatedSchool;
+
+    return this.schools.find((s) => s.uuid === uuid)?.status === status;
+  }
 
   async getAll(): Promise<School[]> {
     return this.schools;
@@ -45,7 +66,7 @@ export class FakeSchoolRepository implements ISchoolRepository {
     return find || null;
   }
 
-  async createSchoolAndUser(data: SchoolDTO): Promise<School> {
+  async createSchoolUserTransaction(data: SchoolDTO): Promise<School> {
     const { address, email, name, phone, nameDirector } = data;
 
     const school = new School(name, address, phone, email, nameDirector);

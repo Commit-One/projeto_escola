@@ -16,8 +16,8 @@ export class UserTypeOrmRepository implements IUserRepository {
   }
 
   async updateStatus(uuid: string, status: StatusEnum): Promise<boolean> {
-    const result = await this._repo.update({ uuid }, { status });
-    return !!result;
+    const updated = await this._repo.update({ uuid }, { status });
+    return (updated.affected ?? 0) > 0;
   }
 
   async updatePassword(password: string, email: string): Promise<boolean> {

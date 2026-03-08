@@ -1,4 +1,5 @@
 import { UpdatePasswordUseCase } from "../../../application/use-cases/user/UpdatePasswordUseCase";
+import { StatusEnum } from "../../../utils/enum/status";
 import { FakeUserRepository } from "../mocks/FakeUserRepository";
 
 const repository = new FakeUserRepository();
@@ -13,6 +14,7 @@ describe("UpdatePasswordUseCase", () => {
       password: "123",
       profileUuid: "1233",
       name: "Jhonatan",
+      status: StatusEnum.ACTIVE,
     };
 
     await repository.create(user);
