@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { handler } from "../statusCode";
+import { handler } from "../statusHttp";
 import { CreateProfileUseCase } from "../../../application/use-cases/profile/CreateProfileUseCase";
 
 export class ProfileController {

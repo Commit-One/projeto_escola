@@ -1,10 +1,11 @@
 import { CreateSchoolUseCase } from "../../../application/use-cases/school/CreateSchoolUseCase";
 import { Request, Response } from "express";
-import { handler } from "../statusCode";
+import { handler } from "../statusHttp";
 import { GetAllSchoolUseCase } from "../../../application/use-cases/school/GetAllSchoolUseCase";
 import { DeleteSchoolUseCase } from "../../../application/use-cases/school/DeleteSchoolUseCase";
 import { UpdateSchoolUseCase } from "../../../application/use-cases/school/UpdateSchoolUseCase";
 import { GetSchoolByNameUseCase } from "../../../application/use-cases/school/GetSchoolByNameUseCase";
+import { UpdateStatusSchoolUseCase } from "../../../application/use-cases/school/UpdateStatusSchoolUseCase";
 
 export class SchoolController {
   constructor(
@@ -13,6 +14,7 @@ export class SchoolController {
     private readonly _deleteSchoolUseCase: DeleteSchoolUseCase,
     private readonly _updateSchoolUseCase: UpdateSchoolUseCase,
     private readonly _getSchoolByNameUseCase: GetSchoolByNameUseCase,
+    private readonly _updateStatusSchool: UpdateStatusSchoolUseCase,
   ) {}
 
   async create(req: Request, res: Response) {
@@ -72,6 +74,20 @@ export class SchoolController {
       const { name } = req.params;
       const school = await this._getSchoolByNameUseCase.execute(String(name));
       return handler.ok(res, school);
+    } catch (err: unknown) {
+      return handler.error(res, err);
+    }
+  }
+
+  async updateStatus(req: Request, res: Response) {
+    try {
+      const { uuid } = req.params;
+      const { status } = req.body;
+      const updated = await this._updateStatusSchool.execute(
+        uuid as string,
+        status,
+      );
+      return handler.ok(res, updated);
     } catch (err: unknown) {
       return handler.error(res, err);
     }

@@ -6,12 +6,18 @@ import { User } from "../../../domain/entities/User";
 import { UserResponseDTO } from "../../../application/dtos/UserDTO";
 import { ApplicationError } from "../../../utils/error";
 import { BcryptSecurity } from "../../security/bcrypt";
+import { StatusEnum } from "../../../utils/enum/status";
 
 export class UserTypeOrmRepository implements IUserRepository {
   private readonly _repo: Repository<UserEntity>;
 
   constructor() {
     this._repo = AppDataSource.getRepository(UserEntity);
+  }
+
+  async updateStatus(uuid: string, status: StatusEnum): Promise<boolean> {
+    const result = await this._repo.update({ uuid }, { status });
+    return !!result;
   }
 
   async updatePassword(password: string, email: string): Promise<boolean> {
@@ -56,6 +62,7 @@ export class UserTypeOrmRepository implements IUserRepository {
         return {
           email: entity.email,
           name: entity.name,
+          sstatus: entity.status,
         };
       });
     });

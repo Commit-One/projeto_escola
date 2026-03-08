@@ -1,3 +1,4 @@
+import { StatusEnum } from "../../utils/enum/status";
 import { Base } from "./Base";
 
 export class School extends Base {
@@ -7,6 +8,7 @@ export class School extends Base {
     public phone: string,
     public email: string,
     public nameDirector: string,
+    public status: StatusEnum = StatusEnum.ACTIVE,
   ) {
     super();
   }

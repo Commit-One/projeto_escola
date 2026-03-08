@@ -6,8 +6,8 @@ import {
   deleteSchoolSchema,
   getByNameSchema,
   updateSchoolSchema,
+  updateStatusSchoolSchema,
 } from "../validators/school.validator";
-import { authMiddleware } from "../middleware/auth";
 
 export const schoolRoutes = Router();
 
@@ -41,4 +41,11 @@ schoolRoutes.get(
   validateMiddlewareSchema(getByNameSchema),
   // authMiddleware,
   (req, res) => controller.getByName(req, res),
+);
+
+schoolRoutes.put(
+  "/status/:uuid",
+  validateMiddlewareSchema(updateStatusSchoolSchema),
+  // authMiddleware,
+  (req, res) => controller.updateStatus(req, res),
 );

@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { ApplicationError } from "../../../utils/error";
 
-export const updatePasswordUserSchema = z.object({
+const updatePasswordUserSchema = z.object({
   body: z.object({
     email: z
       .string()
@@ -11,3 +11,14 @@ export const updatePasswordUserSchema = z.object({
     password: z.string().trim().min(1, ApplicationError.user.passwordRequired),
   }),
 });
+
+const updateStatusUserSchema = z.object({
+  params: z.object({
+    uuid: z.string().trim().min(1, ApplicationError.generic.uuid),
+  }),
+  body: z.object({
+    status: z.string().trim().min(1, ApplicationError.generic.uuid),
+  }),
+});
+
+export { updatePasswordUserSchema, updateStatusUserSchema };

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { handler } from "../statusCode";
+import { handler } from "../statusHttp";
 import { SignInUseCase } from "../../../application/use-cases/login/SignInUseCase";
 import { DecodedUseCase } from "../../../application/use-cases/login/DecodedUseCase";
 

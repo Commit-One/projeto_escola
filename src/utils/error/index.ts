@@ -5,6 +5,7 @@ export const ApplicationError = {
     formatEmail: "E-mail inválido",
     tokenInvalid: "Token inválido",
     tokenNotFound: "Token não encontrado",
+    updateStatus: "Status não informado ou com erro",
   },
   school: {
     nameSchoolRequired: "Nome da escola é obrigatório",

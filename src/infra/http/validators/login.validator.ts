@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { ApplicationError } from "../../../utils/error";
 
-export const loginSchemaValidator = z.object({
+const loginSchemaValidator = z.object({
   body: z.object({
     email: z
       .string()
@@ -12,8 +12,10 @@ export const loginSchemaValidator = z.object({
   }),
 });
 
-export const loginSchemaDecoded = z.object({
+const loginSchemaDecoded = z.object({
   body: z.object({
     token: z.string().min(1, "Token não informado"),
   }),
 });
+
+export { loginSchemaValidator, loginSchemaDecoded };

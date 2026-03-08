@@ -11,12 +11,38 @@ import { EnvironmentConfig } from "../../config";
 import { ProfileEnum } from "../../../utils/enum/profile";
 import { BcryptSecurity } from "../../security/bcrypt";
 import { ApplicationError } from "../../../utils/error";
+import { StatusEnum } from "../../../utils/enum/status";
 
 export class SchoolTypeOrmRepository implements ISchoolRepository {
   private readonly _repo: Repository<SchoolEntity>;
 
   constructor() {
     this._repo = AppDataSource.getRepository(SchoolEntity);
+  }
+
+  async updateStatus(uuid: string, status: StatusEnum): Promise<boolean> {
+    const queryRunner = AppDataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const _repoSchool = queryRunner.manager.getRepository(SchoolEntity);
+      const _repoUser = queryRunner.manager.getRepository(UserEntity);
+
+      const school = await _repoSchool.findOne({ where: { uuid } });
+
+      await _repoSchool.update({ uuid }, { status });
+      await _repoUser.update({ escolaUuid: school?.uuid }, { status });
+      await queryRunner.commitTransaction();
+
+      return true;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async createSchoolAndUser(data: SchoolDTO): Promise<School> {

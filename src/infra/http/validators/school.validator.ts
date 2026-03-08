@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { ApplicationError } from "../../../utils/error";
 
-export const createSchoolSchema = z.object({
+const createSchoolSchema = z.object({
   body: z.object({
     name: z.string().trim().min(1, ApplicationError.school.nameSchoolRequired),
     address: z.string().trim().min(1, ApplicationError.school.addressRequired),
@@ -18,19 +18,19 @@ export const createSchoolSchema = z.object({
   }),
 });
 
-export const deleteSchoolSchema = z.object({
+const deleteSchoolSchema = z.object({
   params: z.object({
     uuid: z.string().trim().uuid().min(1, ApplicationError.generic.uuid),
   }),
 });
 
-export const getByNameSchema = z.object({
+const getByNameSchema = z.object({
   params: z.object({
     name: z.string().trim().min(1, ApplicationError.school.nameSchoolRequired),
   }),
 });
 
-export const updateSchoolSchema = z.object({
+const updateSchoolSchema = z.object({
   body: z.object({
     name: z.string().trim().min(1, ApplicationError.school.nameSchoolRequired),
     address: z.string().trim().min(1, ApplicationError.school.addressRequired),
@@ -49,3 +49,20 @@ export const updateSchoolSchema = z.object({
     uuid: z.string().trim().uuid().min(1, ApplicationError.generic.uuid),
   }),
 });
+
+const updateStatusSchoolSchema = z.object({
+  body: z.object({
+    status: z.string().trim().min(1, ApplicationError.generic.updateStatus),
+  }),
+  params: z.object({
+    uuid: z.string().trim().min(1, ApplicationError.generic.uuid),
+  }),
+});
+
+export {
+  createSchoolSchema,
+  updateSchoolSchema,
+  deleteSchoolSchema,
+  getByNameSchema,
+  updateStatusSchoolSchema,
+};
