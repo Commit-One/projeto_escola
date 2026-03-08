@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { handler } from "../statusHttp";
-import { CreatePeriodoUseCase } from "../../../application/use-cases/periodo/CreatePeriodoUseCase";
+import { CreatePeriodUseCase } from "../../../application/use-cases/period/CreatePeriodoUseCase";
 
-export class PeriodoController {
-  constructor(private readonly _createPeriodo: CreatePeriodoUseCase) {}
+export class PeriodController {
+  constructor(private readonly _createPeriodo: CreatePeriodUseCase) {}
 
   async create(_: Request, res: Response) {
     try {

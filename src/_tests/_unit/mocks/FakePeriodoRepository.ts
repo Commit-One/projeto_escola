@@ -1,6 +1,6 @@
-import { IPeriodoRepository } from "../../../domain/repositories/IPeriodoRepository";
+import { IPeriodRepository } from "../../../domain/repositories/IPeriodRepository";
 
-export class FakePeriodoRepository implements IPeriodoRepository {
+export class FakePeriodoRepository implements IPeriodRepository {
   private profiles: string[] = [];
 
   async createPeriodo(name: string): Promise<boolean> {
