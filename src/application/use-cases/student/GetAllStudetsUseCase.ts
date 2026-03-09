@@ -10,12 +10,15 @@ export class GetAllStudetsUseCase {
   ) {}
 
   async execute(): Promise<StudentResponseDTO[]> {
-    const cached: any = await this._cache.get<StudentResponseDTO[]>(
-      cacheKeyEnum.STUDENTS,
-    );
+    const cached =
+      (await this._cache.get<StudentResponseDTO[]>(cacheKeyEnum.STUDENTS)) ??
+      [];
 
-    if (cached) return cached;
+    if (cached.length > 1) return cached;
 
-    return await this._repo.getAll();
+    const students = await this._repo.getAll();
+    await this._cache.set(cacheKeyEnum.STUDENTS, students);
+
+    return students;
   }
 }

@@ -136,29 +136,29 @@ export class StudentTypeOrmRepository implements IStudentRepository {
   async getAll(): Promise<StudentResponseDTO[]> {
     const query = `
       SELECT 
-      ts.name,
-      ts.matriculation,
-      ts.uuid as studentUuid,
-      ts.dateBirth,
-      ts.status as studentStatus,
-      ts.datePayment,
-      ts.discount,
-      ts.hasDiscount,
-      ts.dateMatriculation,
-      ts.classStudent,
-      ts.phone,
-      ts.nameFather,
-      ts.nameMother,
-      ts2.uuid as schoolUuid,
-      ts2.name as schoolName,
-      tp.uuid  as profileUuid,
-      tp.name  as profileName,
-      tp2.uuid as periodUuid,
-      tp2.name as periodName
-    FROM tb_student ts 
-    inner join tb_school ts2 on ts2.uuid = ts.schoolUuid 
-    inner join tb_profile tp on tp.uuid = ts.profileUuid 
-    inner join tb_periodo tp2 on tp2.uuid = ts.periodUuid 
+        ts.name,
+        ts.matriculation,
+        ts.uuid as studentUuid,
+        ts.dateBirth,
+        ts.status as studentStatus,
+        ts.datePayment,
+        ts.discount,
+        ts.hasDiscount,
+        ts.dateMatriculation,
+        ts.classStudent,
+        ts.phone,
+        ts.nameFather,
+        ts.nameMother,
+        ts2.uuid as schoolUuid,
+        ts2.name as schoolName,
+        tp.uuid  as profileUuid,
+        tp.name  as profileName,
+        tp2.uuid as periodUuid,
+        tp2.name as periodName
+      FROM tb_student ts 
+      inner join tb_school ts2 on ts2.uuid = ts.schoolUuid 
+      inner join tb_profile tp on tp.uuid = ts.profileUuid 
+      inner join tb_periodo tp2 on tp2.uuid = ts.periodUuid 
   `;
 
     const students = await this._repo.query(query);

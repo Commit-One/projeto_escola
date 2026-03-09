@@ -89,7 +89,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
       await userRepository.save(user);
 
       await queryRunner.commitTransaction();
-
+      // await queryRunner.rollbackTransaction();
       return school;
     } catch (error) {
       await queryRunner.rollbackTransaction();
