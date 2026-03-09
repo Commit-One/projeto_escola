@@ -6,6 +6,7 @@
     "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.18.2",
     "nodemon": "^3.1.14",
+    "redis": "^5.11.0",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.28",
     "typescript": "^5.9.3",

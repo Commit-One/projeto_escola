@@ -1,13 +1,15 @@
 import { UpdateSchoolUseCase } from "../../../application/use-cases/school/UpdateSchoolUseCase";
 import { UpdateStatusSchoolUseCase } from "../../../application/use-cases/school/UpdateStatusSchoolUseCase";
 import { StatusEnum } from "../../../utils/enum/status";
+import { FakeCacheRepository } from "../mocks/FakeCacheRepository";
 import { FakeSchoolRepository } from "../mocks/FakeSchoolRepository";
 
 const repository = new FakeSchoolRepository();
+const cache = new FakeCacheRepository();
 
 describe("UpdateStatusSchool.spec", () => {
   it("Deve atualizar o status da escola", async () => {
-    const useCase = new UpdateStatusSchoolUseCase(repository);
+    const useCase = new UpdateStatusSchoolUseCase(repository, cache);
 
     const school = await repository.createSchoolUserTransaction({
       name: "Escola teste",

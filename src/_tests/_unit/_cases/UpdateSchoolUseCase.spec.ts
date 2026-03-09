@@ -1,11 +1,13 @@
 import { UpdateSchoolUseCase } from "../../../application/use-cases/school/UpdateSchoolUseCase";
+import { FakeCacheRepository } from "../mocks/FakeCacheRepository";
 import { FakeSchoolRepository } from "../mocks/FakeSchoolRepository";
 
 const repository = new FakeSchoolRepository();
+const cache = new FakeCacheRepository();
 
 describe("UpdateSchoolUseCase", () => {
   it("Deve atualizar o nome da escola", async () => {
-    const useCase = new UpdateSchoolUseCase(repository);
+    const useCase = new UpdateSchoolUseCase(repository, cache);
 
     const school = await repository.createSchoolUserTransaction({
       name: "Escola teste",

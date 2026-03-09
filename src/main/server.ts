@@ -1,6 +1,7 @@
 import express from "express";
 import { AppDataSource } from "../infra/database/data-source";
 import { routes } from "../infra/http/routes";
+import { connectRedis } from "../infra/cache/cache.connection";
 export class ServerInitializer {
   private readonly app: express.Application;
 
@@ -11,6 +12,9 @@ export class ServerInitializer {
   public async execute() {
     await AppDataSource.initialize();
     console.log("✅ Database connected");
+
+    connectRedis();
+    console.log("✅ Cache connected");
 
     this.app.use(express.json());
 

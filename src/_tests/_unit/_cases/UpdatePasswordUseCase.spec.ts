@@ -1,4 +1,5 @@
 import { UpdatePasswordUseCase } from "../../../application/use-cases/user/UpdatePasswordUseCase";
+import { User } from "../../../domain/entities/User";
 import { StatusEnum } from "../../../utils/enum/status";
 import { FakeUserRepository } from "../mocks/FakeUserRepository";
 
@@ -8,14 +9,14 @@ describe("UpdatePasswordUseCase", () => {
   it("Deve atualizar a senha do usuário", async () => {
     const useCase = new UpdatePasswordUseCase(repository);
 
-    const user = {
-      email: "email@gmail.com",
-      schoolUuid: "123",
-      password: "123",
-      profileUuid: "1233",
-      name: "Jhonatan",
-      status: StatusEnum.ACTIVE,
-    };
+    const user = new User(
+      "email@gmail.com",
+      "123",
+      "123",
+      "1233",
+      "Jhonatan",
+      StatusEnum.ACTIVE,
+    );
 
     await repository.create(user);
 

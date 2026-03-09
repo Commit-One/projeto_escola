@@ -1,9 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-import { EnvironmentConfig } from "../../config";
 import { ApplicationError } from "../../../utils/error";
-
-const config = new EnvironmentConfig();
 
 export function authMiddleware(
   req: Request,
@@ -21,7 +18,7 @@ export function authMiddleware(
   const [, token] = authHeader.split(" ");
 
   try {
-    const decoded = jwt.verify(token, config.JWT_SECRET!);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
     (req as any).user = decoded;
 
     next();

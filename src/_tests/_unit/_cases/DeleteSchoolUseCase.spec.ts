@@ -1,11 +1,13 @@
 import { DeleteSchoolUseCase } from "../../../application/use-cases/school/DeleteSchoolUseCase";
+import { FakeCacheRepository } from "../mocks/FakeCacheRepository";
 import { FakeSchoolRepository } from "../mocks/FakeSchoolRepository";
 
 const repository = new FakeSchoolRepository();
+const cache = new FakeCacheRepository();
 
 describe("DeleteSchoolUseCase", () => {
   it("Deve retornar true quando deletar uma escola", async () => {
-    const useCase = new DeleteSchoolUseCase(repository);
+    const useCase = new DeleteSchoolUseCase(repository, cache);
 
     const school = await repository.createSchoolUserTransaction({
       name: "Escola teste",

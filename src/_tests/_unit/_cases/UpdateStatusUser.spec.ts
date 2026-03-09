@@ -1,13 +1,15 @@
 import { UpdateStatusUserUseCase } from "../../../application/use-cases/user/UpdateStatusUserUseCase";
 import { User } from "../../../domain/entities/User";
 import { StatusEnum } from "../../../utils/enum/status";
+import { FakeCacheRepository } from "../mocks/FakeCacheRepository";
 import { FakeUserRepository } from "../mocks/FakeUserRepository";
 
 const repository = new FakeUserRepository();
+const cache = new FakeCacheRepository();
 
 describe("UpdateStatusUser.spec", () => {
   it("Deve atualizar o status do usuário", async () => {
-    const useCase = new UpdateStatusUserUseCase(repository);
+    const useCase = new UpdateStatusUserUseCase(repository, cache);
 
     const user = new User(
       "jhonatan@gmail.com",

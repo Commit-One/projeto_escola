@@ -1,19 +1,4 @@
-Aluno
-
-- schoolUuid
-- matriculation
-- dateBirth
-- status
-- nameMother
-- nameFather
-- name
-- phone
-- class
-- periodoUuid
-- dateMatriculation
-- hasDiscount
-- discount
-- datePayment
+Colcoar chace student
 
 Mensalidade
 
@@ -25,3 +10,5 @@ Mensalidade
 - yearReference
 - status (pago, pendente, atradasa)
 - discountApplied
+
+- O criar o aluno, criar o boleto para o pŕoximo mês

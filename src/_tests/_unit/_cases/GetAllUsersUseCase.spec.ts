@@ -1,21 +1,26 @@
 import { GetAllUsersUserCase } from "../../../application/use-cases/user/GetAllUsersUseCase";
+import { User } from "../../../domain/entities/User";
 import { StatusEnum } from "../../../utils/enum/status";
+import { FakeCacheRepository } from "../mocks/FakeCacheRepository";
 import { FakeUserRepository } from "../mocks/FakeUserRepository";
 
 const repository = new FakeUserRepository();
+const cache = new FakeCacheRepository();
 
 describe("GetAllUsersUseCase", () => {
   it("Deve listar todos os usuários criados", async () => {
-    const useCase = new GetAllUsersUserCase(repository);
+    const useCase = new GetAllUsersUserCase(repository, cache);
 
-    await repository.create({
-      email: "email@gmail.com",
-      schoolUuid: "123",
-      password: "123",
-      profileUuid: "1233",
-      name: "Jhonatan",
-      status: StatusEnum.ACTIVE,
-    });
+    const user = new User(
+      "email@gmail.com",
+      "123",
+      "123",
+      "1233",
+      "Jhonatan",
+      StatusEnum.ACTIVE,
+    );
+
+    await repository.create(user);
 
     const list = await useCase.execute();
 

@@ -7,11 +7,11 @@ import { SchoolDTO } from "../../../application/dtos/SchoolDTO";
 import { User } from "../../../domain/entities/User";
 import { UserEntity } from "../entities/UserEntity";
 import { ProfileEntity } from "../entities/ProfilesEntity";
-import { EnvironmentConfig } from "../../config";
 import { ProfileEnum } from "../../../utils/enum/profile";
 import { BcryptSecurity } from "../../security/bcrypt";
 import { ApplicationError } from "../../../utils/error";
 import { StatusEnum } from "../../../utils/enum/status";
+import { environmentConfig } from "../../../main/instances/environment.instance";
 
 export class SchoolTypeOrmRepository implements ISchoolRepository {
   private readonly _repo: Repository<SchoolEntity>;
@@ -52,7 +52,6 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
     await queryRunner.startTransaction();
 
     try {
-      const config = new EnvironmentConfig();
       const schoolRepository = queryRunner.manager.getRepository(SchoolEntity);
       const userRepository = queryRunner.manager.getRepository(UserEntity);
       const profileRepository =
@@ -76,13 +75,15 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
 
       const user = new User(
         data.email,
-        config.PASSWORD_DEFAULT,
+        environmentConfig.PASSWORD_DEFAULT,
         school.uuid,
         profileAdmin?.uuid as string,
         data.nameDirector,
       );
 
-      user.password = await new BcryptSecurity().hash(config.PASSWORD_DEFAULT);
+      user.password = await new BcryptSecurity().hash(
+        environmentConfig.PASSWORD_DEFAULT,
+      );
 
       await schoolRepository.save(school);
       await userRepository.save(user);
