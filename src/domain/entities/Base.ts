@@ -1,7 +1,7 @@
 export class Base {
-  public readonly uuid?: string;
-  public readonly createdAt?: Date;
-  public readonly enable?: boolean;
+  public readonly uuid: string;
+  public readonly createdAt: Date;
+  public readonly enable: boolean;
 
   constructor() {
     this.uuid = crypto.randomUUID();

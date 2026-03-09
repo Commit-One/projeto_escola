@@ -4,7 +4,9 @@ import { ProfileController } from "../../infra/http/controllers/ProfileControlle
 
 export const makeProfileContainer = () => {
   const repo = new ProfileTypeOrmRepository();
+
   const createUC = new CreateProfileUseCase(repo);
+
   const controller = new ProfileController(createUC);
 
   return controller;

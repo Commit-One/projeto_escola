@@ -14,8 +14,8 @@ export class FakeUserRepository implements IUserRepository {
     const updateUser = new User(
       findOne.email,
       findOne.password,
-      findOne.escolaUuid as string,
-      findOne.profileUuid as string,
+      findOne.schoolUuid,
+      findOne.profileUuid,
       findOne.name,
       status,
     );
@@ -57,8 +57,8 @@ export class FakeUserRepository implements IUserRepository {
     const updateUser = new User(
       email,
       password,
-      findOne.escolaUuid as string,
-      findOne.profileUuid as string,
+      findOne.schoolUuid,
+      findOne.profileUuid,
       findOne.name,
     );
 

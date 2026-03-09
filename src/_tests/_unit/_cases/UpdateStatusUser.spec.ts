@@ -19,7 +19,7 @@ describe("UpdateStatusUser.spec", () => {
     );
     await repository.create(user);
 
-    await useCase.execute(user.uuid as string, StatusEnum.DISABLED);
+    await useCase.execute(user.uuid, StatusEnum.DISABLED);
 
     const userUpdated = await repository.findByEmail(user.email);
     const isUpdated = userUpdated?.status !== user.status;

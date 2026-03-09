@@ -33,7 +33,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
       const school = await _repoSchool.findOne({ where: { uuid } });
 
       await _repoSchool.update({ uuid }, { status });
-      await _repoUser.update({ escolaUuid: school?.uuid }, { status });
+      await _repoUser.update({ schoolUuid: school?.uuid }, { status });
       await queryRunner.commitTransaction();
 
       return true;
@@ -77,7 +77,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
       const user = new User(
         data.email,
         config.PASSWORD_DEFAULT,
-        school.uuid as string,
+        school.uuid,
         profileAdmin?.uuid as string,
         data.nameDirector,
       );
@@ -136,7 +136,9 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
   }
 
   async getAll(): Promise<School[]> {
-    const entities = await this._repo.find();
+    const entities = await this._repo.find({
+      where: { status: StatusEnum.ACTIVE },
+    });
 
     return entities.map(
       (e) => new School(e.name, e.address, e.phone, e.email, e.nameDirector),

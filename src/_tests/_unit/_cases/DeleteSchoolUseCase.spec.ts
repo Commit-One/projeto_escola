@@ -15,7 +15,7 @@ describe("DeleteSchoolUseCase", () => {
       nameDirector: "Jhonatan",
     });
 
-    const deleted = await useCase.execute(school.uuid as string);
+    const deleted = await useCase.execute(school.uuid);
 
     expect(deleted).toBe(true);
   });

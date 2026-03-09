@@ -17,7 +17,7 @@ describe("UpdateStatusSchool.spec", () => {
       nameDirector: "Jhonatan",
     });
 
-    await useCase.execute(school.uuid as string, StatusEnum.DISABLED);
+    await useCase.execute(school.uuid, StatusEnum.DISABLED);
 
     const shcoolUpdated = await repository.findByName(school.name);
     const isUpdated = shcoolUpdated?.status !== school.status;

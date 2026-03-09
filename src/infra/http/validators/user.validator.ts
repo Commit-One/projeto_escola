@@ -4,20 +4,29 @@ import { ApplicationError } from "../../../utils/error";
 const updatePasswordUserSchema = z.object({
   body: z.object({
     email: z
-      .string()
+      .string({ error: ApplicationError.user.emailRequired })
       .trim()
       .email(ApplicationError.generic.formatEmail)
       .min(1, ApplicationError.user.emailRequired),
-    password: z.string().trim().min(1, ApplicationError.user.passwordRequired),
+    password: z
+      .string({ error: ApplicationError.user.passwordRequired })
+      .trim()
+      .min(1, ApplicationError.user.passwordRequired),
   }),
 });
 
 const updateStatusUserSchema = z.object({
   params: z.object({
-    uuid: z.string().trim().min(1, ApplicationError.generic.uuid),
+    uuid: z
+      .string({ error: ApplicationError.generic.uuid })
+      .trim()
+      .min(1, ApplicationError.generic.uuid),
   }),
   body: z.object({
-    status: z.string().trim().min(1, ApplicationError.generic.uuid),
+    status: z
+      .string({ error: ApplicationError.generic.uuid })
+      .trim()
+      .min(1, ApplicationError.generic.uuid),
   }),
 });
 

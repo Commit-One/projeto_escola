@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { makeUSerContainer } from "../../../main/container/user.container";
+import { makeUserContainer } from "../../../main/container/user.container";
 import { validateMiddlewareSchema } from "../middleware/validateSchema";
 import {
   updatePasswordUserSchema,
@@ -8,7 +8,7 @@ import {
 
 export const usersRoutes = Router();
 
-const controller = makeUSerContainer();
+const controller = makeUserContainer();
 
 usersRoutes.get("/", (req, res) => controller.getAll(req, res));
 

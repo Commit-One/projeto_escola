@@ -10,7 +10,7 @@ describe("GetAllUsersUseCase", () => {
 
     await repository.create({
       email: "email@gmail.com",
-      escolaUuid: "123",
+      schoolUuid: "123",
       password: "123",
       profileUuid: "1233",
       name: "Jhonatan",

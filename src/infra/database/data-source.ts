@@ -5,6 +5,7 @@ import { EnvironmentConfig } from "../config";
 import { UserEntity } from "./entities/UserEntity";
 import { ProfileEntity } from "./entities/ProfilesEntity";
 import { PeriodEntity } from "./entities/PeriodEntity";
+import { StudentEntity } from "./entities/StudentEntity";
 
 const config = new EnvironmentConfig();
 
@@ -17,6 +18,12 @@ export const AppDataSource = new DataSource({
   database: config.DB_NAME,
   synchronize: config.SYNCHRONIZE,
   logging: config.LOGGING,
-  entities: [SchoolEntity, UserEntity, ProfileEntity, PeriodEntity],
+  entities: [
+    SchoolEntity,
+    UserEntity,
+    ProfileEntity,
+    PeriodEntity,
+    StudentEntity,
+  ],
   migrations: [],
 });

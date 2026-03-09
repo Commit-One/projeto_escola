@@ -5,9 +5,11 @@ import { LoginController } from "../../infra/http/controllers/LoginController";
 
 export const makeLoginContainer = () => {
   const repo = new LoginTypeOrmRepository();
-  const signIn = new SignInUseCase(repo);
-  const decoded = new DecodedUseCase();
-  const controller = new LoginController(signIn, decoded);
+
+  const signInUC = new SignInUseCase(repo);
+  const decodedUC = new DecodedUseCase();
+
+  const controller = new LoginController(signInUC, decodedUC);
 
   return controller;
 };

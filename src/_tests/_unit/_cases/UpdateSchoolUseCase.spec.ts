@@ -23,7 +23,7 @@ describe("UpdateSchoolUseCase", () => {
       nameDirector: school.nameDirector,
     };
 
-    const updated = await useCase.execute(school.uuid as string, newData);
+    const updated = await useCase.execute(school.uuid, newData);
 
     expect(updated.name).toBe("Escola teste 1");
   });

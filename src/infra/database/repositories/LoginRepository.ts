@@ -28,7 +28,7 @@ export class LoginTypeOrmRepository implements ILoginRepository {
     return new User(
       user.email,
       user.password,
-      user.escolaUuid,
+      user.schoolUuid,
       user.profileUuid,
       user.name,
     );
@@ -40,7 +40,7 @@ export class LoginTypeOrmRepository implements ILoginRepository {
       where: { uuid: user?.profileUuid },
     });
     const school = await this._repoSchool.findOne({
-      where: { uuid: user?.escolaUuid },
+      where: { uuid: user?.schoolUuid },
     });
 
     const result: LoginDTO = {

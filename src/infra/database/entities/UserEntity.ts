@@ -11,7 +11,7 @@ export class UserEntity extends Base {
   password!: string;
 
   @Column()
-  escolaUuid!: string;
+  schoolUuid!: string;
 
   @Column()
   profileUuid!: string;

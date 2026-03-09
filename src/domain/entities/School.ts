@@ -1,4 +1,5 @@
 import { StatusEnum } from "../../utils/enum/status";
+import { replace } from "../../utils/functions/replace";
 import { Base } from "./Base";
 
 export class School extends Base {
@@ -11,5 +12,6 @@ export class School extends Base {
     public status: StatusEnum = StatusEnum.ACTIVE,
   ) {
     super();
+    this.phone = replace(this.phone);
   }
 }

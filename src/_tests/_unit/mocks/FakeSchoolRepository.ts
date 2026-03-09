@@ -74,8 +74,8 @@ export class FakeSchoolRepository implements ISchoolRepository {
     const user = new User(
       email,
       "123",
-      school.uuid as string,
-      profile.uuid as string,
+      school.uuid,
+      profile.uuid,
       nameDirector,
     );
 

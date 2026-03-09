@@ -29,7 +29,7 @@ export class FakeLoginRepository implements ILoginRepository {
     }
 
     const profile = this.profiles.find((p) => p.uuid === user.profileUuid);
-    const school = this.schools.find((s) => s.uuid === user.escolaUuid);
+    const school = this.schools.find((s) => s.uuid === user.schoolUuid);
 
     if (!profile) {
       throw new Error("Perfil não encontrado");
@@ -51,7 +51,7 @@ export class FakeLoginRepository implements ILoginRepository {
       user: {
         email: user.email,
         name: user.email,
-        uuid: user.uuid as string,
+        uuid: user.uuid,
       },
     };
   }

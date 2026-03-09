@@ -4,6 +4,7 @@ import { usersRoutes } from "./users.routes";
 import { profileRoutes } from "./profile.routes";
 import { loginRoutes } from "./login.routes";
 import { periodRoutes } from "./period.routes";
+import { studentsRoutes } from "./student.routes";
 
 export const routes = Router();
 
@@ -13,3 +14,4 @@ routes.use("/user", usersRoutes);
 routes.use("/profile", profileRoutes);
 routes.use("/login", loginRoutes);
 routes.use("/periodo", periodRoutes);
+routes.use("/student", studentsRoutes);

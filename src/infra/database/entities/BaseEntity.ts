@@ -8,8 +8,10 @@ export class Base {
   @Column()
   createdAt!: Date;
 
-  @Column()
-  enable!: Boolean;
+  @Column({
+    default: true,
+  })
+  enable!: boolean;
 
   @Column()
   uuid!: string;

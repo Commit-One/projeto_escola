@@ -4,12 +4,18 @@ import { UpdateStatusUserUseCase } from "../../application/use-cases/user/Update
 import { UserTypeOrmRepository } from "../../infra/database/repositories/UserRepository";
 import { UserController } from "../../infra/http/controllers/UserController";
 
-export const makeUSerContainer = () => {
+export const makeUserContainer = () => {
   const repo = new UserTypeOrmRepository();
-  const getAll = new GetAllUsersUserCase(repo);
-  const updatePassword = new UpdatePasswordUseCase(repo);
-  const updateStatus = new UpdateStatusUserUseCase(repo);
-  const controller = new UserController(getAll, updatePassword, updateStatus);
+
+  const getAllUC = new GetAllUsersUserCase(repo);
+  const updatePasswordUC = new UpdatePasswordUseCase(repo);
+  const updateStatusUC = new UpdateStatusUserUseCase(repo);
+
+  const controller = new UserController(
+    getAllUC,
+    updatePasswordUC,
+    updateStatusUC,
+  );
 
   return controller;
 };

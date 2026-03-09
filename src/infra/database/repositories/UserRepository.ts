@@ -30,7 +30,7 @@ export class UserTypeOrmRepository implements IUserRepository {
     const user = new User(
       email,
       password,
-      findUser.escolaUuid,
+      findUser.schoolUuid,
       findUser.profileUuid,
       findUser.name,
     );
@@ -49,7 +49,7 @@ export class UserTypeOrmRepository implements IUserRepository {
       uuid: user.uuid,
       createdAt: user.createdAt,
       enable: user.enable,
-      escolaUuid: user.escolaUuid,
+      schoolUuid: user.schoolUuid,
       profileUuid: user.profileUuid,
     });
 
@@ -57,15 +57,17 @@ export class UserTypeOrmRepository implements IUserRepository {
   }
 
   getAll(): Promise<UserResponseDTO[]> {
-    return this._repo.find().then((entities) => {
-      return entities.map((entity) => {
-        return {
-          email: entity.email,
-          name: entity.name,
-          sstatus: entity.status,
-        };
+    return this._repo
+      .find({ where: { status: StatusEnum.ACTIVE } })
+      .then((entities) => {
+        return entities.map((entity) => {
+          return {
+            email: entity.email,
+            name: entity.name,
+            sstatus: entity.status,
+          };
+        });
       });
-    });
   }
 
   delete(uuid: string): Promise<boolean> {

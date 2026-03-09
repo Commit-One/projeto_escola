@@ -3,15 +3,24 @@ import { ApplicationError } from "../../../utils/error";
 
 const createSchoolSchema = z.object({
   body: z.object({
-    name: z.string().trim().min(1, ApplicationError.school.nameSchoolRequired),
-    address: z.string().trim().min(1, ApplicationError.school.addressRequired),
-    phone: z.string().trim().min(1, ApplicationError.school.phoneRequired),
+    name: z
+      .string({ error: ApplicationError.school.nameSchoolRequired })
+      .trim()
+      .min(1, ApplicationError.school.nameSchoolRequired),
+    address: z
+      .string({ error: ApplicationError.school.addressRequired })
+      .trim()
+      .min(1, ApplicationError.school.addressRequired),
+    phone: z
+      .string({ error: ApplicationError.school.phoneRequired })
+      .trim()
+      .min(1, ApplicationError.school.phoneRequired),
     nameDirector: z
-      .string()
+      .string({ error: ApplicationError.school.nameDirectorRequired })
       .trim()
       .min(1, ApplicationError.school.nameDirectorRequired),
     email: z
-      .string()
+      .string({ error: ApplicationError.school.emailRequired })
       .trim()
       .email(ApplicationError.generic.formatEmail)
       .min(1, ApplicationError.school.emailRequired),
@@ -20,33 +29,53 @@ const createSchoolSchema = z.object({
 
 const deleteSchoolSchema = z.object({
   params: z.object({
-    uuid: z.string().trim().uuid().min(1, ApplicationError.generic.uuid),
+    uuid: z
+      .string({ error: ApplicationError.generic.uuid })
+      .trim()
+      .uuid()
+      .min(1, ApplicationError.generic.uuid),
   }),
 });
 
 const getByNameSchema = z.object({
   params: z.object({
-    name: z.string().trim().min(1, ApplicationError.school.nameSchoolRequired),
+    name: z
+      .string({ error: ApplicationError.school.nameSchoolRequired })
+      .trim()
+      .min(1, ApplicationError.school.nameSchoolRequired),
   }),
 });
 
 const updateSchoolSchema = z.object({
   body: z.object({
-    name: z.string().trim().min(1, ApplicationError.school.nameSchoolRequired),
-    address: z.string().trim().min(1, ApplicationError.school.addressRequired),
-    phone: z.string().trim().min(1, ApplicationError.school.phoneRequired),
+    name: z
+      .string({ error: ApplicationError.school.nameSchoolRequired })
+      .trim()
+      .min(1, ApplicationError.school.nameSchoolRequired),
+    address: z
+      .string({ error: ApplicationError.school.addressRequired })
+      .trim()
+      .min(1, ApplicationError.school.addressRequired),
+    phone: z
+      .string({ error: ApplicationError.school.phoneRequired })
+      .trim()
+      .min(1, ApplicationError.school.phoneRequired),
     nameDirector: z
-      .string()
+      .string({ error: ApplicationError.school.nameDirectorRequired })
       .trim()
       .min(1, ApplicationError.school.nameDirectorRequired),
     email: z
-      .string()
+      .string({ error: ApplicationError.school.emailRequired })
       .trim()
       .email()
       .min(1, ApplicationError.school.emailRequired),
   }),
   params: z.object({
-    uuid: z.string().trim().uuid().min(1, ApplicationError.generic.uuid),
+    uuid: z
+      .string({ error: ApplicationError.generic.uuid })
+      .trim()
+      .uuid()
+      .min(1, ApplicationError.generic.uuid),
   }),
 });
 
