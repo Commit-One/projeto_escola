@@ -1,4 +1,3 @@
-import { UserResponseDTO } from "../../../application/dtos/UserDTO";
 import { User } from "../../../domain/entities/User";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { StatusEnum } from "../../../utils/enum/status";
@@ -30,10 +29,11 @@ export class FakeUserRepository implements IUserRepository {
     return user;
   }
 
-  async getAll(): Promise<UserResponseDTO[]> {
+  async getAll(): Promise<{email: string, status: string}[]> {
     return this.users.map((u) => {
       return {
         email: u.email,
+        status: u.status
       };
     });
   }
