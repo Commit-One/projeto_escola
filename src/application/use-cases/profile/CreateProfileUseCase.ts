@@ -1,11 +1,11 @@
 import { IProfileRepository } from "../../../domain/repositories/IProfileRepository";
-import { ICacheRepository } from "../../../infra/cache/cache.repository";
+import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 
 export class CreateProfileUseCase {
   constructor(
     private _profileRepository: IProfileRepository,
-    private readonly _cache: ICacheRepository,
+    private readonly _cache: ICacheService,
   ) {}
 
   async execute(): Promise<boolean> {

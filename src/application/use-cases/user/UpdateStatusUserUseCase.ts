@@ -1,13 +1,12 @@
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { ICacheRepository } from "../../../infra/cache/cache.repository";
+import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { StatusEnum } from "../../../utils/enum/status";
-import { ApplicationError } from "../../../utils/error";
 
 export class UpdateStatusUserUseCase {
   constructor(
     private _repo: IUserRepository,
-    private _cache: ICacheRepository,
+    private _cache: ICacheService,
   ) {}
 
   async execute(uuid: string, status: StatusEnum) {

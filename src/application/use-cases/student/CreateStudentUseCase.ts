@@ -1,12 +1,12 @@
 import { IStudentRepository } from "../../../domain/repositories/IStudentRepository";
-import { ICacheRepository } from "../../../infra/cache/cache.repository";
+import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { StudentDTO, StudentResponseDTO } from "../../dtos/StudentDTO";
 
 export class CreateStudentUseCase {
   constructor(
     private readonly _repo: IStudentRepository,
-    private readonly _cache: ICacheRepository,
+    private readonly _cache: ICacheService,
   ) {}
 
   async execute(data: StudentDTO): Promise<StudentResponseDTO | null> {

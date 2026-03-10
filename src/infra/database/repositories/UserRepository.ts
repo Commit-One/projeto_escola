@@ -7,53 +7,29 @@ import { UserResponseDTO } from "../../../application/dtos/UserDTO";
 import { ApplicationError } from "../../../utils/error";
 import { BcryptSecurity } from "../../security/bcrypt";
 import { StatusEnum } from "../../../utils/enum/status";
+import { BaseRepository } from "./BaseRepository";
 
-export class UserTypeOrmRepository implements IUserRepository {
-  private readonly _repo: Repository<UserEntity>;
+export class UserTypeOrmRepository
+  extends BaseRepository<UserEntity>
+  implements IUserRepository
+{
+  protected readonly _repo: Repository<UserEntity>;
+  private readonly _bcryp = new BcryptSecurity();
 
   constructor() {
+    const inicialize = AppDataSource.getRepository(UserEntity);
+    super(inicialize);
     this._repo = AppDataSource.getRepository(UserEntity);
   }
 
-  async updateStatus(uuid: string, status: StatusEnum): Promise<boolean> {
-    const updated = await this._repo.update({ uuid }, { status });
-    return (updated.affected ?? 0) > 0;
-  }
-
   async updatePassword(password: string, email: string): Promise<boolean> {
-    const findUser = await this._repo.findOne({ where: { email } });
+    const user = await this._repo.findOne({ where: { email } });
 
-    if (!findUser) {
-      throw new Error(ApplicationError.user.notFound);
-    }
+    if (!user) throw new Error(ApplicationError.user.notFound);
+    password = await this._bcryp.hash(password);
 
-    const user = new User(
-      email,
-      password,
-      findUser.schoolUuid,
-      findUser.profileUuid,
-      findUser.name,
-    );
-
-    findUser.password = await new BcryptSecurity().hash(password);
-
-    await this._repo.save(findUser);
-
-    return true;
-  }
-
-  create(user: User): Promise<void> {
-    const entity = this._repo.create({
-      email: user.email,
-      password: user.password,
-      uuid: user.uuid,
-      createdAt: user.createdAt,
-      enable: user.enable,
-      schoolUuid: user.schoolUuid,
-      profileUuid: user.profileUuid,
-    });
-
-    return this._repo.save(entity).then((entity) => {});
+    const updated = await this._repo.update({ email }, { password });
+    return (updated.affected ?? 0) > 0;
   }
 
   getAll(): Promise<UserResponseDTO[]> {
@@ -70,13 +46,8 @@ export class UserTypeOrmRepository implements IUserRepository {
       });
   }
 
-  delete(uuid: string): Promise<boolean> {
-    return this._repo.delete({ uuid }).then(() => true);
-  }
-
   findByEmail(email: string): Promise<User | null> {
     const query = `SELECT * FROM tb_user WHERE LOWER(email) = LOWER("${email}")`;
-
     return this._repo.query(query);
   }
 }

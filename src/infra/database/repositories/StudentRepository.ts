@@ -11,6 +11,8 @@ import {
 import { ProfileEntity } from "../entities/ProfilesEntity";
 import { SchoolEntity } from "../entities/SchoolEntity";
 import { PeriodEntity } from "../entities/PeriodEntity";
+import { ProfileEnum } from "../../../utils/enum/profile";
+import { ApplicationError } from "../../../utils/error";
 
 export class StudentTypeOrmRepository implements IStudentRepository {
   private readonly _repo: Repository<StudentEntity>;
@@ -32,8 +34,12 @@ export class StudentTypeOrmRepository implements IStudentRepository {
 
   async create(data: StudentDTO): Promise<StudentResponseDTO | null> {
     const profileStudent = await this._repoProfile.findOne({
-      where: { name: "student" },
+      where: { name: ProfileEnum.STUDENT },
     });
+
+    if (!profileStudent) {
+      throw new Error(ApplicationError.profile.notFound);
+    }
 
     const student = new Student(
       data.schoolUuid,
@@ -61,23 +67,8 @@ export class StudentTypeOrmRepository implements IStudentRepository {
 
   async update(uuid: string, data: StudentDTO): Promise<Student> {
     await this._repo.update({ uuid }, { ...data });
-    return new Student(
-      data.schoolUuid,
-      data.matriculation,
-      data.dateBirth,
-      data.status,
-      data.nameMother,
-      data.nameFather,
-      data.name,
-      data.phone,
-      data.classStudent,
-      data.periodUuid,
-      data.dateMatriculation,
-      data.hasDiscount,
-      data.discount,
-      data.datePayment,
-      data.periodUuid,
-    );
+    const updated = await this._repo.findOne({ where: { uuid } });
+    return updated as Student;
   }
 
   async delete(uuid: string): Promise<boolean> {
@@ -87,18 +78,22 @@ export class StudentTypeOrmRepository implements IStudentRepository {
 
   async getOne(uuid: string): Promise<StudentResponseDTO | null> {
     const student = await this._repo.findOne({ where: { uuid } });
+    if (!student) throw new Error(ApplicationError.student.notFound);
 
     const profile = await this._repoProfile.findOne({
       where: { uuid: student!.profileUuid },
     });
+    if (!profile) throw new Error(ApplicationError.profile.notFound);
 
     const period = await this._repoPeriod.findOne({
       where: { uuid: student!.periodUuid },
     });
+    if (!period) throw new Error(ApplicationError.period.notFound);
 
     const school = await this._repoSchool.findOne({
       where: { uuid: student!.schoolUuid },
     });
+    if (!school) throw new Error(ApplicationError.school.notFound);
 
     const response: StudentResponseDTO = {
       escola: {
@@ -127,8 +122,6 @@ export class StudentTypeOrmRepository implements IStudentRepository {
       datePayment: student!.datePayment,
       uuid: student!.uuid,
     };
-
-    if (!response) return null;
 
     return response;
   }

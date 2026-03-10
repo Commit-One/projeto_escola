@@ -13,6 +13,7 @@ export const ApplicationError = {
     addressRequired: "Endereço da escola não informado",
     phoneRequired: "Telefone da escola não informado",
     nameDirectorRequired: "Nome do diretor da escola não informado",
+    notFound: "Escola não encontrada",
   },
   user: {
     passawordCompare: "Senha inválida",
@@ -24,6 +25,7 @@ export const ApplicationError = {
   profile: {
     nameRequired: "Nome do perfil não informado",
     profileNotFound: "Perfil não informado",
+    notFound: "Perfil de estudante não encontrado",
   },
   student: {
     nameRequired: "O nome do aluno não informado",
@@ -38,5 +40,14 @@ export const ApplicationError = {
     datePaymentRequired: "Data do pagamento não informada",
     schoolUuidRequired: "EscolaUuid não informada",
     periodUuidRequired: "Período não informado",
+    notFound: "Estudante não encontrado",
+  },
+  period: {
+    notFound: "Período não encontrado",
+  },
+  class: {
+    nameRequired: "O nome da classe não informado",
+    maxAgeRequired: "Idade máxima não preenchida",
+    minAgeRequired: "Idade mínima não preenchida",
   },
 };

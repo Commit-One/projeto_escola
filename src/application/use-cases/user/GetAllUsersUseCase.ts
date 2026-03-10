@@ -1,12 +1,12 @@
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { ICacheRepository } from "../../../infra/cache/cache.repository";
+import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { UserResponseDTO } from "../../dtos/UserDTO";
 
 export class GetAllUsersUserCase {
   constructor(
     private _repo: IUserRepository,
-    private _cache: ICacheRepository,
+    private _cache: ICacheService,
   ) {}
 
   async execute() {

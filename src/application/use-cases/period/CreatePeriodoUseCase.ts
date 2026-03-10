@@ -1,11 +1,11 @@
 import { IPeriodRepository } from "../../../domain/repositories/IPeriodRepository";
-import { ICacheRepository } from "../../../infra/cache/cache.repository";
+import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 
 export class CreatePeriodUseCase {
   constructor(
     private _periodRepository: IPeriodRepository,
-    private readonly _cache: ICacheRepository,
+    private readonly _cache: ICacheService,
   ) {}
 
   async execute(): Promise<boolean> {

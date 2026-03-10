@@ -1,3 +1,3 @@
-import { ICacheRepository } from "../../infra/cache/cache.repository";
+import { ICacheService } from "../../infra/cache/ICacheService";
 
-export const cacheInstance = new ICacheRepository();
+export const cacheInstance = new ICacheService();

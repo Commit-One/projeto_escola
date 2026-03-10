@@ -12,19 +12,19 @@ import { UpdateStudentUseCase } from "../../../application/use-cases/student/Upd
 
 export class StudentController {
   constructor(
-    private readonly _createStudent: CreateStudentUseCase,
-    private readonly _getOneStudent: GetOneStudentUseCase,
-    private readonly _getAllStudents: GetAllStudetsUseCase,
-    private readonly _updateStudent: UpdateStudentUseCase,
-    private readonly _updateStatusStudent: UpdateStatusStudentUseCase,
-    private readonly _deleteStudent: DeleteStudentUseCase,
+    private readonly _create: CreateStudentUseCase,
+    private readonly _getOne: GetOneStudentUseCase,
+    private readonly _getAll: GetAllStudetsUseCase,
+    private readonly _update: UpdateStudentUseCase,
+    private readonly _updateStatus: UpdateStatusStudentUseCase,
+    private readonly _delete: DeleteStudentUseCase,
   ) {}
 
   async create(req: Request, res: Response) {
     try {
       const body = req.body;
 
-      const student = await this._createStudent.execute(body);
+      const student = await this._create.execute(body);
       return handler.created(res, student);
     } catch (err: unknown) {
       return handler.error(res, err);
@@ -33,7 +33,7 @@ export class StudentController {
 
   async getAll(_: Request, res: Response) {
     try {
-      const students = await this._getAllStudents.execute();
+      const students = await this._getAll.execute();
       return handler.ok(res, students);
     } catch (err: unknown) {
       return handler.error(res, err);
@@ -43,7 +43,7 @@ export class StudentController {
   async getOne(req: Request, res: Response) {
     try {
       const { uuid } = req.params;
-      const student = await this._getOneStudent.execute(uuid as string);
+      const student = await this._getOne.execute(uuid as string);
       return handler.ok(res, student);
     } catch (err: unknown) {
       return handler.error(res, err);
@@ -53,7 +53,7 @@ export class StudentController {
   async delete(req: Request, res: Response) {
     try {
       const { uuid } = req.params;
-      const deleted = await this._deleteStudent.execute(uuid as string);
+      const deleted = await this._delete.execute(uuid as string);
       return handler.ok(res, deleted);
     } catch (err: unknown) {
       return handler.error(res, err);
@@ -64,7 +64,7 @@ export class StudentController {
     try {
       const { uuid } = req.params;
       const body = req.body;
-      const updated = await this._updateStudent.execute(uuid as string, body);
+      const updated = await this._update.execute(uuid as string, body);
       return handler.ok(res, updated);
     } catch (err: unknown) {
       return handler.error(res, err);
@@ -75,10 +75,7 @@ export class StudentController {
     try {
       const { uuid } = req.params;
       const { status } = req.body;
-      const updated = await this._updateStatusStudent.execute(
-        uuid as string,
-        status,
-      );
+      const updated = await this._updateStatus.execute(uuid as string, status);
       return handler.ok(res, updated);
     } catch (err: unknown) {
       return handler.error(res, err);

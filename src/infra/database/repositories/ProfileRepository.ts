@@ -13,14 +13,11 @@ export class ProfileTypeOrmRepository implements IProfileRepository {
 
   async existByName(name: string): Promise<boolean> {
     const exist = await this._repo.findOne({ where: { name } });
-
     return !!exist?.uuid;
   }
 
   async createProfile(name: string): Promise<boolean> {
-    const profile = new Profile(name);
-
-    await this._repo.save(profile);
+    await this._repo.save({ name });
     return true;
   }
 }

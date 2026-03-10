@@ -1,12 +1,12 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { SchoolEntity } from "./entities/SchoolEntity";
-import { EnvironmentConfig } from "../config";
 import { UserEntity } from "./entities/UserEntity";
 import { ProfileEntity } from "./entities/ProfilesEntity";
 import { PeriodEntity } from "./entities/PeriodEntity";
 import { StudentEntity } from "./entities/StudentEntity";
 import { environmentConfig } from "../../main/instances/environment.instance";
+import { ClassStudentEntity } from "./entities/ClassStudentEntity";
 
 export const AppDataSource = new DataSource({
   type: "mysql",
@@ -23,6 +23,7 @@ export const AppDataSource = new DataSource({
     ProfileEntity,
     PeriodEntity,
     StudentEntity,
+    ClassStudentEntity,
   ],
   migrations: [],
 });

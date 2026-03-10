@@ -1,0 +1,27 @@
+import { ClassStudent } from "../../../domain/entities/ClassStudent";
+import { IClassStudentRepository } from "../../../domain/repositories/IClassStudentRepository";
+import { ICacheService } from "../../../infra/cache/ICacheService";
+import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
+
+export class GetOneClassStudentUseCase {
+  constructor(
+    private _classRepository: IClassStudentRepository,
+    private readonly _cache: ICacheService,
+  ) {}
+
+  async execute(uuid: string): Promise<ClassStudent | null> {
+    console.log(uuid);
+    const classStudentCached = await this._cache.get<ClassStudent[]>(
+      cacheKeyEnum.CLASS,
+    );
+    let classStudent;
+
+    console.log(classStudentCached);
+
+    if (!classStudentCached)
+      classStudent = await this._classRepository.getOne(uuid);
+    else classStudent = classStudentCached.find((s) => s.uuid.includes(uuid));
+
+    return classStudent ?? null;
+  }
+}

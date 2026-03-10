@@ -1,13 +1,13 @@
 import { School } from "../../../domain/entities/School";
 import { ISchoolRepository } from "../../../domain/repositories/ISchoolRepository";
-import { ICacheRepository } from "../../../infra/cache/cache.repository";
+import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { SchoolDTO } from "../../dtos/SchoolDTO";
 
 export class UpdateSchoolUseCase {
   constructor(
     private readonly _repo: ISchoolRepository,
-    private readonly _cache: ICacheRepository,
+    private readonly _cache: ICacheService,
   ) {}
 
   async execute(uuid: string, data: SchoolDTO): Promise<School> {

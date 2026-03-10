@@ -18,9 +18,7 @@ export class PeriodTypeOrmRepository implements IPeriodRepository {
   }
 
   async createPeriodo(name: string): Promise<boolean> {
-    const periodo = new Period(name);
-
-    await this._repo.save(periodo);
+    await this._repo.save({ name });
     return true;
   }
 }

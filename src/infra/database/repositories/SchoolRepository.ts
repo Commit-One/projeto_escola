@@ -15,6 +15,7 @@ import { environmentConfig } from "../../../main/instances/environment.instance"
 
 export class SchoolTypeOrmRepository implements ISchoolRepository {
   private readonly _repo: Repository<SchoolEntity>;
+  private readonly _bcryp = new BcryptSecurity();
 
   constructor() {
     this._repo = AppDataSource.getRepository(SchoolEntity);
@@ -32,11 +33,11 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
 
       const school = await _repoSchool.findOne({ where: { uuid } });
 
-      await _repoSchool.update({ uuid }, { status });
-      await _repoUser.update({ schoolUuid: school?.uuid }, { status });
+      const updated = await _repoSchool.update({ uuid }, { status });
+      await _repoUser.update({ schoolUuid: school!.uuid }, { status });
       await queryRunner.commitTransaction();
 
-      return true;
+      return (updated.affected ?? 0) > 0;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;
@@ -61,8 +62,8 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
         where: { name: ProfileEnum.ADMIN },
       });
 
-      if (!profileAdmin?.uuid) {
-        new Error(ApplicationError.profile.profileNotFound);
+      if (!profileAdmin) {
+        throw new Error(ApplicationError.profile.profileNotFound);
       }
 
       const school = new School(
@@ -73,23 +74,21 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
         data.nameDirector,
       );
 
+      const hashedPassword = await this._bcryp.hash(
+        environmentConfig.PASSWORD_DEFAULT,
+      );
       const user = new User(
         data.email,
-        environmentConfig.PASSWORD_DEFAULT,
+        hashedPassword,
         school.uuid,
-        profileAdmin?.uuid as string,
+        profileAdmin.uuid,
         data.nameDirector,
-      );
-
-      user.password = await new BcryptSecurity().hash(
-        environmentConfig.PASSWORD_DEFAULT,
       );
 
       await schoolRepository.save(school);
       await userRepository.save(user);
 
       await queryRunner.commitTransaction();
-      // await queryRunner.rollbackTransaction();
       return school;
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -107,33 +106,22 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
     if (result.length === 0) {
       return null;
     }
-
     const schoolData = result[0];
-
-    return new School(
-      schoolData.name,
-      schoolData.address,
-      schoolData.phone,
-      schoolData.email,
-      schoolData.nameDirector,
-    );
+    return schoolData as School;
   }
 
   async delete(uuid: string): Promise<boolean> {
-    await this._repo.delete({ uuid });
-
-    return true;
+    const deleted = await this._repo.delete({ uuid });
+    return (deleted.affected ?? 0) > 0;
   }
 
   async update(uuid: string, data: SchoolDTO): Promise<School> {
     await this._repo.update({ uuid }, { ...data });
-    return new School(
-      data.name,
-      data.address,
-      data.phone,
-      data.email,
-      data.nameDirector,
-    );
+    const updated = await this._repo.findOne({ where: { uuid } });
+
+    if (!updated) throw new Error(ApplicationError.school.notFound);
+
+    return updated as School;
   }
 
   async getAll(): Promise<School[]> {

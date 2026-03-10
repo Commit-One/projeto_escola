@@ -6,6 +6,7 @@ import { LoginDTO } from "../../../application/dtos/LoginDTO";
 import { User } from "../../../domain/entities/User";
 import { UserEntity } from "../entities/UserEntity";
 import { SchoolEntity } from "../entities/SchoolEntity";
+import { ApplicationError } from "../../../utils/error";
 
 export class LoginTypeOrmRepository implements ILoginRepository {
   private readonly _repoProfile: Repository<ProfileEntity>;
@@ -20,28 +21,24 @@ export class LoginTypeOrmRepository implements ILoginRepository {
 
   async findUserByEmail(email: string): Promise<User | null> {
     const user = await this._repoUser.findOne({ where: { email } });
+    if (!user) throw new Error(ApplicationError.user.notFound);
 
-    if (!user) {
-      return null;
-    }
-
-    return new User(
-      user.email,
-      user.password,
-      user.schoolUuid,
-      user.profileUuid,
-      user.name,
-    );
+    return user as User;
   }
 
   async schemaDatabase(email: string): Promise<LoginDTO> {
     const user = await this._repoUser.findOne({ where: { email } });
+    if (!user) throw new Error(ApplicationError.user.notFound);
+
     const profile = await this._repoProfile.findOne({
       where: { uuid: user?.profileUuid },
     });
+    if (!profile) throw new Error(ApplicationError.profile.notFound);
+
     const school = await this._repoSchool.findOne({
       where: { uuid: user?.schoolUuid },
     });
+    if (!school) throw new Error(ApplicationError.school.notFound);
 
     const result: LoginDTO = {
       escola: {

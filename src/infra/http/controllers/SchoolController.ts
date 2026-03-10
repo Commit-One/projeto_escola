@@ -9,18 +9,18 @@ import { UpdateStatusSchoolUseCase } from "../../../application/use-cases/school
 
 export class SchoolController {
   constructor(
-    private readonly _createSchoolUseCase: CreateSchoolUseCase,
-    private readonly _getAllSchoolsUseCase: GetAllSchoolUseCase,
-    private readonly _deleteSchoolUseCase: DeleteSchoolUseCase,
-    private readonly _updateSchoolUseCase: UpdateSchoolUseCase,
-    private readonly _getSchoolByNameUseCase: GetSchoolByNameUseCase,
-    private readonly _updateStatusSchool: UpdateStatusSchoolUseCase,
+    private readonly _create: CreateSchoolUseCase,
+    private readonly _getAll: GetAllSchoolUseCase,
+    private readonly _delete: DeleteSchoolUseCase,
+    private readonly _update: UpdateSchoolUseCase,
+    private readonly _getByName: GetSchoolByNameUseCase,
+    private readonly _updateStatus: UpdateStatusSchoolUseCase,
   ) {}
 
   async create(req: Request, res: Response) {
     try {
       const { address, email, name, phone, nameDirector } = req.body;
-      const school = await this._createSchoolUseCase.execute({
+      const school = await this._create.execute({
         name,
         address,
         phone,
@@ -35,7 +35,7 @@ export class SchoolController {
 
   async getAll(_: Request, res: Response) {
     try {
-      const schools = await this._getAllSchoolsUseCase.execute();
+      const schools = await this._getAll.execute();
       return handler.ok(res, schools);
     } catch (err: unknown) {
       return handler.error(res, err);
@@ -45,7 +45,7 @@ export class SchoolController {
   async delete(req: Request, res: Response) {
     try {
       const { uuid } = req.params;
-      const deleted = await this._deleteSchoolUseCase.execute(String(uuid));
+      const deleted = await this._delete.execute(String(uuid));
       return handler.ok(res, deleted);
     } catch (err: unknown) {
       return handler.error(res, err);
@@ -56,7 +56,7 @@ export class SchoolController {
     try {
       const { name, address, phone, email, nameDirector } = req.body;
       const { uuid } = req.params;
-      const school = await this._updateSchoolUseCase.execute(String(uuid), {
+      const school = await this._update.execute(String(uuid), {
         name,
         address,
         phone,
@@ -72,7 +72,7 @@ export class SchoolController {
   async getByName(req: Request, res: Response) {
     try {
       const { name } = req.params;
-      const school = await this._getSchoolByNameUseCase.execute(String(name));
+      const school = await this._getByName.execute(String(name));
       return handler.ok(res, school);
     } catch (err: unknown) {
       return handler.error(res, err);
@@ -83,10 +83,7 @@ export class SchoolController {
     try {
       const { uuid } = req.params;
       const { status } = req.body;
-      const updated = await this._updateStatusSchool.execute(
-        uuid as string,
-        status,
-      );
+      const updated = await this._updateStatus.execute(uuid as string, status);
       return handler.ok(res, updated);
     } catch (err: unknown) {
       return handler.error(res, err);

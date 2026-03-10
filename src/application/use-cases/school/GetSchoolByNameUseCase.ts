@@ -1,12 +1,12 @@
 import { School } from "../../../domain/entities/School";
 import { ISchoolRepository } from "../../../domain/repositories/ISchoolRepository";
-import { ICacheRepository } from "../../../infra/cache/cache.repository";
+import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 
 export class GetSchoolByNameUseCase {
   constructor(
     private readonly _repo: ISchoolRepository,
-    private readonly _cache: ICacheRepository,
+    private readonly _cache: ICacheService,
   ) {}
 
   async execute(name: string) {

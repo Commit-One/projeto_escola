@@ -6,14 +6,14 @@ import { UpdateStatusUserUseCase } from "../../../application/use-cases/user/Upd
 
 export class UserController {
   constructor(
-    private readonly _getAllUser: GetAllUsersUserCase,
-    private readonly _updatePasswordUser: UpdatePasswordUseCase,
-    private readonly _updateStatusUser: UpdateStatusUserUseCase,
+    private readonly _getAll: GetAllUsersUserCase,
+    private readonly _updatePassword: UpdatePasswordUseCase,
+    private readonly _updateStatus: UpdateStatusUserUseCase,
   ) {}
 
   async getAll(_: Request, res: Response) {
     try {
-      const users = await this._getAllUser.execute();
+      const users = await this._getAll.execute();
       return handler.ok(res, users);
     } catch (err: unknown) {
       return handler.error(res, err);
@@ -23,7 +23,7 @@ export class UserController {
   async updatePassword(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
-      const updated = await this._updatePasswordUser.execute(password, email);
+      const updated = await this._updatePassword.execute(password, email);
       return handler.ok(res, updated);
     } catch (err: unknown) {
       return handler.error(res, err);
@@ -34,10 +34,7 @@ export class UserController {
     try {
       const { uuid } = req.params;
       const { status } = req.body;
-      const updated = await this._updateStatusUser.execute(
-        uuid as string,
-        status,
-      );
+      const updated = await this._updateStatus.execute(uuid as string, status);
       return handler.ok(res, updated);
     } catch (err: unknown) {
       return handler.error(res, err);
