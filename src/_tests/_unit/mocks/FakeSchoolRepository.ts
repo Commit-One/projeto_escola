@@ -66,6 +66,11 @@ export class FakeSchoolRepository implements ISchoolRepository {
     return find || null;
   }
 
+  async create(school: School): Promise<School> {
+    this.schools.push(school);
+    return school;
+  }
+
   async createSchoolUserTransaction(school: School): Promise<School> {
     const profile = new Profile("escola");
     const user = new User(

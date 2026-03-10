@@ -2,15 +2,18 @@ import { Repository } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { ProfileEntity } from "../entities/ProfilesEntity";
 import { IProfileRepository } from "../../../domain/repositories/IProfileRepository";
-import { BaseRepository } from "./BaseRepository";
+import { Profile } from "../../../domain/entities/Profile";
 
-export class ProfileTypeOrmRepository extends BaseRepository<ProfileEntity> implements IProfileRepository {
+export class ProfileTypeOrmRepository implements IProfileRepository {
   protected readonly _repo: Repository<ProfileEntity>;
 
-  constructor() {
-    const inicialize = AppDataSource.getRepository(ProfileEntity);
-    super(inicialize);
+  constructor() {    
     this._repo = AppDataSource.getRepository(ProfileEntity);
+  }
+
+  async create(name: string): Promise<boolean> {
+    const profile = new Profile(name)
+    return await this._repo.save(profile).then(() => true).catch(() => false)
   }
 
   async existByName(name: string): Promise<boolean> {

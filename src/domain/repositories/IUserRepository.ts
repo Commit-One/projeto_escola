@@ -1,10 +1,12 @@
-import { UserResponseDTO } from "../../application/dtos/UserDTO";
-
+import { StatusEnum } from "../../utils/enum/status";
 import { User } from "../entities/User";
-import { IBaseRepository } from "./IBaseRepository";
 
-export interface IUserRepository extends IBaseRepository<User> {
-  getAll(): Promise<UserResponseDTO[]>;
+export interface IUserRepository {
+  getAll(): Promise<{ email: string, status: string }[]>;
   findByEmail(email: string): Promise<User | null>;
   updatePassword(password: string, email: string): Promise<boolean>;
+  create(data: User): Promise<User>
+  delete(uuid: string): Promise<boolean>
+  updateStatus(uuid: string, status: StatusEnum): Promise<boolean>,
+  update(uuid: string, data: User): Promise<User>,
 }

@@ -2,12 +2,18 @@ process.env.JWT_SECRET = "teste-secret";
 process.env.JWT_EXPIRES_IN = "1d";
 
 import { SignInUseCase } from "../../../application/use-cases/login/SignInUseCase";
+import { AuthenticationSecurity } from "../../../infra/security/auth";
+import { BcryptSecurity } from "../../../infra/security/bcrypt";
 import { User } from "../../../domain/entities/User";
 import { FakeLoginRepository } from "../mocks/FakeLoginRepository";
 
 describe("Valida a autenticação ", () => {
   const _repo = new FakeLoginRepository();
-  const useCase = new SignInUseCase(_repo);
+  const useCase = new SignInUseCase(
+    _repo,
+    new AuthenticationSecurity(),
+    new BcryptSecurity(),
+  );
   const profileUuid = "123";
   const schoolUuid = "312";
 
@@ -22,9 +28,11 @@ describe("Valida a autenticação ", () => {
       name: "Escola 1",
     });
 
+    const hashedPassword = await new BcryptSecurity().hash("123456");
+
     const user = new User(
       "jhonatan@email.com",
-      "123456",
+      hashedPassword,
       schoolUuid,
       profileUuid,
       "Jhonatan",
@@ -58,7 +66,7 @@ describe("Valida a autenticação ", () => {
 
   it("Deve retornar o token de autenticação", async () => {
     const initial = await initialValues();
-    const jwt = await useCase.execute(initial.email, initial.password);
+    const jwt = await useCase.execute(initial.email, "123456");
 
     expect(jwt.token).toBeDefined();
     expect(typeof jwt.token).toBe("string");

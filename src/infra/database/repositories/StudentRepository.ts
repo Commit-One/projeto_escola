@@ -4,39 +4,56 @@ import { IStudentRepository } from "../../../domain/repositories/IStudentReposit
 import { Student } from "../../../domain/entities/Student";
 import { StudentEntity } from "../entities/StudentEntity";
 import { StatusEnum } from "../../../utils/enum/status";
-import {
-  StudentDTO,
-  StudentResponseDTO,
-} from "../../../application/dtos/StudentDTO";
+import { StudentDTO, StudentResponseDTO } from "../../../application/dtos/StudentDTO";
 import { ProfileEntity } from "../entities/ProfilesEntity";
 import { SchoolEntity } from "../entities/SchoolEntity";
 import { PeriodEntity } from "../entities/PeriodEntity";
 import { ProfileEnum } from "../../../utils/enum/profile";
-import { ApplicationError } from "../../../utils/error";
-import { BaseRepository } from "./BaseRepository";
+import { ApplicationError, ValidationError } from "../../../utils/error";
 
-export class StudentTypeOrmRepository extends BaseRepository<StudentEntity> implements IStudentRepository {
+export class StudentTypeOrmRepository implements IStudentRepository {
   protected readonly _repo: Repository<StudentEntity>;
   private readonly _repoProfile: Repository<ProfileEntity>;
   private readonly _repoSchool: Repository<SchoolEntity>;
   private readonly _repoPeriod: Repository<PeriodEntity>;
 
   constructor() {
-    const inicialize = AppDataSource.getRepository(StudentEntity);
-    super(inicialize);
     this._repo = AppDataSource.getRepository(StudentEntity);
     this._repoProfile = AppDataSource.getRepository(ProfileEntity);
     this._repoSchool = AppDataSource.getRepository(SchoolEntity);
     this._repoPeriod = AppDataSource.getRepository(PeriodEntity);
   }
 
-  async createStudent(data: StudentDTO): Promise<StudentResponseDTO | null> {
+  async updateStatus(uuid: string, status: string): Promise<boolean> {
+    const updated = await this._repo.update({ uuid }, { status } as any);
+    return (updated.affected ?? 0) > 0;
+  }
+
+  async delete(uuid: string): Promise<boolean> {
+    const deleted = await this._repo.delete({ uuid });
+    return (deleted.affected ?? 0) > 0;
+  }
+
+  async update(uuid: string, data: StudentDTO): Promise<StudentResponseDTO> {
+    const student = await this._repo.findOne({ where: { uuid } });
+
+    if (!student) {
+      throw new ValidationError(ApplicationError.student.notFound);
+    }
+
+    await this._repo.update({ uuid }, { ...data });
+
+    const getOne = await this.getOne(uuid);
+    return getOne!
+  }
+
+  async create(data: StudentDTO): Promise<StudentResponseDTO> {
     const profileStudent = await this._repoProfile.findOne({
       where: { name: ProfileEnum.STUDENT },
-    });
+    });    
 
     if (!profileStudent) {
-      throw new Error(ApplicationError.profile.notFound);
+      throw new ValidationError(ApplicationError.profile.notFound);
     }
 
     const student = new Student(
@@ -48,7 +65,7 @@ export class StudentTypeOrmRepository extends BaseRepository<StudentEntity> impl
       data.nameFather,
       data.name,
       data.phone,
-      data.classStudent,
+      data.classStudentUuid,
       data.periodUuid,
       data.dateMatriculation,
       data.hasDiscount,
@@ -59,27 +76,27 @@ export class StudentTypeOrmRepository extends BaseRepository<StudentEntity> impl
 
     await this._repo.save(student);
     const studentOne = await this.getOne(student.uuid)
-    return studentOne
+    return studentOne!
   }
 
   async getOne(uuid: string): Promise<StudentResponseDTO | null> {
     const student = await this._repo.findOne({ where: { uuid } });
-    if (!student) throw new Error(ApplicationError.student.notFound);
+    if (!student) throw new ValidationError(ApplicationError.student.notFound);
 
     const profile = await this._repoProfile.findOne({
       where: { uuid: student!.profileUuid },
     });
-    if (!profile) throw new Error(ApplicationError.profile.notFound);
+    if (!profile) throw new ValidationError(ApplicationError.profile.notFound);
 
     const period = await this._repoPeriod.findOne({
       where: { uuid: student!.periodUuid },
     });
-    if (!period) throw new Error(ApplicationError.period.notFound);
+    if (!period) throw new ValidationError(ApplicationError.period.notFound);
 
     const school = await this._repoSchool.findOne({
       where: { uuid: student!.schoolUuid },
     });
-    if (!school) throw new Error(ApplicationError.school.notFound);
+    if (!school) throw new ValidationError(ApplicationError.school.notFound);
 
     const response: StudentResponseDTO = {
       escola: {
@@ -101,7 +118,7 @@ export class StudentTypeOrmRepository extends BaseRepository<StudentEntity> impl
       nameMother: student!.nameMother,
       nameFather: student!.nameFather,
       phone: student!.phone,
-      classStudent: student!.classStudent,
+      classStudent: student!.classStudentUuid,
       dateMatriculation: student!.dateMatriculation,
       hasDiscount: student!.hasDiscount,
       discount: student!.discount,

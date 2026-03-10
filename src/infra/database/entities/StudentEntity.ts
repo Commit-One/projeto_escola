@@ -32,7 +32,7 @@ export class StudentEntity extends Base {
   phone!: string;
 
   @Column()
-  classStudent!: string;
+  classStudentUuid!: string;
 
   @Column()
   dateMatriculation!: Date;

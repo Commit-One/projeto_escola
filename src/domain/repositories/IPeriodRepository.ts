@@ -1,6 +1,4 @@
-import { Period } from "../entities/Period";
-import { IBaseRepository } from "./IBaseRepository";
-
-export interface IPeriodRepository extends IBaseRepository<Period> {
+export interface IPeriodRepository {
+  create(name: string): Promise<boolean>
   existByName(name: string): Promise<boolean>;
 }

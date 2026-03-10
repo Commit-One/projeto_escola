@@ -7,6 +7,7 @@ import { User } from "../../../domain/entities/User";
 import { UserEntity } from "../entities/UserEntity";
 import { SchoolEntity } from "../entities/SchoolEntity";
 import { ApplicationError } from "../../../utils/error";
+import { UserMapper } from "../mappers/UserMapper";
 
 export class LoginTypeOrmRepository implements ILoginRepository {
   private readonly _repoProfile: Repository<ProfileEntity>;
@@ -23,7 +24,7 @@ export class LoginTypeOrmRepository implements ILoginRepository {
     const user = await this._repoUser.findOne({ where: { email } });
     if (!user) throw new Error(ApplicationError.user.notFound);
 
-    return user as User;
+    return UserMapper.toDomain(user);
   }
 
   async schemaDatabase(email: string): Promise<LoginDTO> {

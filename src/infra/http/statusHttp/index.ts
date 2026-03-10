@@ -1,5 +1,5 @@
 import { StatusHTTP } from "../../../utils/enum/statusHTTP";
-import { ApplicationError } from "../../../utils/error";
+import { AppError, ApplicationError } from "../../../utils/error";
 import { Response } from "express";
 
 export const handler = {
@@ -19,6 +19,12 @@ export const handler = {
     return res.status(StatusHTTP.INTERNAL_SERVER_ERROR).json({ message });
   },
   error(res: Response, err: unknown) {
+    if (err instanceof AppError) {
+      return res.status(err.statusCode).json({
+        message: err.message,
+      });
+    }
+
     if (err instanceof Error) {
       return res.status(StatusHTTP.BAD_REQUEST).json({
         message: err.message,

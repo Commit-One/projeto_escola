@@ -9,14 +9,11 @@ export class GetOneClassStudentUseCase {
     private readonly _cache: ICacheService,
   ) {}
 
-  async execute(uuid: string): Promise<ClassStudent | null> {
-    console.log(uuid);
+  async execute(uuid: string): Promise<ClassStudent | null> {    
     const classStudentCached = await this._cache.get<ClassStudent[]>(
       cacheKeyEnum.CLASS,
     );
     let classStudent;
-
-    console.log(classStudentCached);
 
     if (!classStudentCached)
       classStudent = await this._classRepository.getOne(uuid);

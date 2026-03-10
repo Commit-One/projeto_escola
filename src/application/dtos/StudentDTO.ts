@@ -43,4 +43,5 @@ export interface StudentDTO {
   datePayment: Date;
   schoolUuid: string;
   periodUuid: string;
+  classStudentUuid: string
 }

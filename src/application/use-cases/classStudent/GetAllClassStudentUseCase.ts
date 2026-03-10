@@ -1,7 +1,7 @@
+import { ClassStudent } from "../../../domain/entities/ClassStudent";
 import { IClassStudentRepository } from "../../../domain/repositories/IClassStudentRepository";
 import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
-import { ClassStudentDTO } from "../../dtos/ClassStudentDTO";
 
 export class GetAllClassStudentUseCase {
   constructor(
@@ -9,8 +9,8 @@ export class GetAllClassStudentUseCase {
     private readonly _cache: ICacheService,
   ) {}
 
-  async execute(): Promise<ClassStudentDTO[] | null> {
-    const cachedClass = await this._cache.get<ClassStudentDTO[]>(
+  async execute(): Promise<ClassStudent[] | null> {
+    const cachedClass = await this._cache.get<ClassStudent[]>(
       cacheKeyEnum.CLASS,
     );
 

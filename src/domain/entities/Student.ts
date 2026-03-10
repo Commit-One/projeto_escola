@@ -13,7 +13,7 @@ export class Student extends Base {
     public nameFather: string,
     public name: string,
     public phone: string,
-    public classStudent: string,
+    public classStudentUuid: string,
     public periodUuid: string,
     public dateMatriculation: Date,
     public hasDiscount: boolean,

@@ -3,7 +3,6 @@ import { DeleteClassStudentUseCase } from "../../application/use-cases/classStud
 import { GetAllClassStudentUseCase } from "../../application/use-cases/classStudent/GetAllClassStudentUseCase";
 import { GetOneClassStudentUseCase } from "../../application/use-cases/classStudent/GetOneClassStudentUseCase";
 import { UpdateClassStudentUseCase } from "../../application/use-cases/classStudent/UpdateClassStudentUseCase";
-import {} from "../../application/use-cases/login/SignInUseCase";
 import { ClassStudentTypeOrmRepository } from "../../infra/database/repositories/ClassStudentRepository";
 import { ClassStudentController } from "../../infra/http/controllers/ClassStudentController";
 import { cacheInstance } from "../instances/cache.instance";

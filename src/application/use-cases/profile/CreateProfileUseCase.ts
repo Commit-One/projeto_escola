@@ -15,9 +15,8 @@ export class CreateProfileUseCase {
     listProfile.forEach(async (p) => {
       const isExist = await this._profileRepository.existByName(p);
       
-      if (!isExist) {
-        const profile = new Profile(p)
-        await this._profileRepository.create(profile)
+      if (!isExist) {        
+        await this._profileRepository.create(p)
       }
     });
 

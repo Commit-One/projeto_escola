@@ -1,16 +1,15 @@
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
-import { UserResponseDTO } from "../../dtos/UserDTO";
 
 export class GetAllUsersUserCase {
   constructor(
     private _repo: IUserRepository,
     private _cache: ICacheService,
-  ) {}
+  ) { }
 
   async execute() {
-    const cachedusers = await this._cache.get<UserResponseDTO[]>(
+    const cachedusers = await this._cache.get<{ email: string, status: string }[]>(
       cacheKeyEnum.USERS,
     );
 

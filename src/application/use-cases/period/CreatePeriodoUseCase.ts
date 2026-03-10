@@ -14,9 +14,8 @@ export class CreatePeriodUseCase {
 
     for (const p of listPeriod) {
       const isExist = await this._periodRepository.existByName(p);
-      if (!isExist) {
-        const period = new Period(p);
-        await this._periodRepository.create(period);
+      if (!isExist) {        
+        await this._periodRepository.create(p);
       }
     }
 

@@ -1,11 +1,13 @@
 import { ClassStudentDTO } from "../../application/dtos/ClassStudentDTO";
+import { StatusEnum } from "../../utils/enum/status";
 import { ClassStudent } from "../entities/ClassStudent";
 
-export interface IClassStudentRepository {
-  create(data: ClassStudentDTO): Promise<ClassStudent>;
-  getAll(): Promise<ClassStudent[]>;
-  getOne(uuid: string): Promise<ClassStudent | null>;
-  update(uuid: string, data: ClassStudentDTO): Promise<ClassStudent>;
-  delete(uuid: string): Promise<boolean>;
+export interface IClassStudentRepository {  
+  getAll(): Promise<ClassStudent[]>;      
   existByName(name: string): Promise<boolean>;
+  create(data: ClassStudentDTO): Promise<ClassStudent>;    
+  getOne(uuid: string): Promise<ClassStudent | null>;
+  updateStatus(uuid: string, status: StatusEnum): Promise<boolean>;  
+  delete(uuid: string): Promise<boolean>;
+  update(uuid: string, data: ClassStudentDTO): Promise<ClassStudent>;
 }

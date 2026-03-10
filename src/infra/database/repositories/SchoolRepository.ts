@@ -8,19 +8,37 @@ import { UserEntity } from "../entities/UserEntity";
 import { ProfileEntity } from "../entities/ProfilesEntity";
 import { ProfileEnum } from "../../../utils/enum/profile";
 import { BcryptSecurity } from "../../security/bcrypt";
-import { ApplicationError } from "../../../utils/error";
+import { ApplicationError, ValidationError } from "../../../utils/error";
 import { StatusEnum } from "../../../utils/enum/status";
 import { environmentConfig } from "../../../main/instances/environment.instance";
-import { BaseRepository } from "./BaseRepository";
+import { SchoolMapper } from "../mappers/SchoolMapper";
+import { SchoolDTO } from "../../../application/dtos/SchoolDTO";
 
-export class SchoolTypeOrmRepository extends BaseRepository<SchoolEntity> implements ISchoolRepository {
+export class SchoolTypeOrmRepository implements ISchoolRepository {
   protected readonly _repo: Repository<SchoolEntity>;
   private readonly _bcryp = new BcryptSecurity();
 
   constructor() {
-    const inicialize = AppDataSource.getRepository(SchoolEntity);
-    super(inicialize);
     this._repo = AppDataSource.getRepository(SchoolEntity);
+  }
+
+  async delete(uuid: string): Promise<boolean> {
+    const deleted = await this._repo.delete({ uuid });
+    return (deleted.affected ?? 0) > 0;
+  }
+
+  async update(uuid: string, data: SchoolDTO): Promise<School> {
+    const student = await this._repo.findOne({ where: { uuid } });
+
+    if (!student) {
+      throw new ValidationError(ApplicationError.student.notFound);
+    }
+
+    await this._repo.update({ uuid }, { ...data })      
+    await this._repo.findOne({ where: { uuid } });
+    const find = await this.findByName(data.name)
+
+    return find!
   }
 
   async updateStatus(uuid: string, status: StatusEnum): Promise<boolean> {
@@ -48,7 +66,7 @@ export class SchoolTypeOrmRepository extends BaseRepository<SchoolEntity> implem
     }
   }
 
-  async createSchoolUserTransaction(school: School): Promise<School> {
+  async createSchoolUserTransaction(data: SchoolDTO): Promise<School> {
     const queryRunner = AppDataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -65,12 +83,14 @@ export class SchoolTypeOrmRepository extends BaseRepository<SchoolEntity> implem
       });
 
       if (!profileAdmin) {
-        throw new Error(ApplicationError.profile.profileNotFound);
+        throw new ValidationError(ApplicationError.profile.profileNotFound);
       }
 
       const hashedPassword = await this._bcryp.hash(
         environmentConfig.PASSWORD_DEFAULT,
       );
+
+      const school = new School(data.name, data.address, data.phone, data.email, data.nameDirector)
       const user = new User(
         school.email,
         hashedPassword,
@@ -83,7 +103,7 @@ export class SchoolTypeOrmRepository extends BaseRepository<SchoolEntity> implem
       await userRepository.save(user);
 
       await queryRunner.commitTransaction();
-      return school;
+      return school
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;
@@ -93,10 +113,9 @@ export class SchoolTypeOrmRepository extends BaseRepository<SchoolEntity> implem
   }
 
   async findByName(name: string): Promise<School | null> {
-    const school = await this._repo.findOne({ where: { name: ILike(name) } })
-    if (!school) return null;
-
-    return school;
+    const schoolEntity = await this._repo.findOne({ where: { name: ILike(name) } });
+    if (!schoolEntity) return null;
+    return SchoolMapper.toDomain(schoolEntity)
   }
 
   async getAll(): Promise<School[]> {
@@ -105,7 +124,7 @@ export class SchoolTypeOrmRepository extends BaseRepository<SchoolEntity> implem
     });
 
     return entities.map(
-      (e) => new School(e.name, e.address, e.phone, e.email, e.nameDirector),
+      (e) => SchoolMapper.toDomain(e),
     );
   }
 }

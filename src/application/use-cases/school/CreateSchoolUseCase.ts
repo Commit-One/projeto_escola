@@ -3,33 +3,17 @@ import { ISchoolRepository } from "../../../domain/repositories/ISchoolRepositor
 import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { SchoolDTO } from "../../dtos/SchoolDTO";
-import { ApplicationError } from "../../../utils/error";
 
 export class CreateSchoolUseCase {
   constructor(
     private readonly _repo: ISchoolRepository,
     private readonly _cache: ICacheService,
-  ) {}
+  ) { }
 
   async execute(dto: SchoolDTO): Promise<School> {
-    if (!dto.name) throw new Error(ApplicationError.school.nameSchoolRequired);
-    if (!dto.email) throw new Error(ApplicationError.school.emailRequired);
-    if (!dto.address) throw new Error(ApplicationError.school.addressRequired);
-    if (!dto.phone) throw new Error(ApplicationError.school.phoneRequired);
-    if (!dto.nameDirector)
-      throw new Error(ApplicationError.school.nameDirectorRequired);
-
-    const school = new School(
-      dto.name,
-      dto.address,
-      dto.phone,
-      dto.email,
-      dto.nameDirector,
-    );
-
-    await this._repo.createSchoolUserTransaction(school);
+    const created = await this._repo.createSchoolUserTransaction(dto);
     await this._cache.delete(cacheKeyEnum.SCHOOLS);
 
-    return school;
+    return created;
   }
 }

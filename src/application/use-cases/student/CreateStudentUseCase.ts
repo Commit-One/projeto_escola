@@ -10,7 +10,7 @@ export class CreateStudentUseCase {
   ) {}
 
   async execute(data: StudentDTO): Promise<StudentResponseDTO | null> {
-    const created = await this._repo.createStudent(data);
+    const created = await this._repo.create(data);
     if (created) await this._cache.delete(cacheKeyEnum.STUDENTS);
     return created;
   }

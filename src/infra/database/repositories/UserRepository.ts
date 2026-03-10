@@ -3,51 +3,76 @@ import { AppDataSource } from "../data-source";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { UserEntity } from "../entities/UserEntity";
 import { User } from "../../../domain/entities/User";
-import { UserResponseDTO } from "../../../application/dtos/UserDTO";
-import { ApplicationError } from "../../../utils/error";
+import { ApplicationError, ValidationError } from "../../../utils/error";
 import { BcryptSecurity } from "../../security/bcrypt";
 import { StatusEnum } from "../../../utils/enum/status";
-import { BaseRepository } from "./BaseRepository";
+import { UserMapper } from "../mappers/UserMapper";
 
-export class UserTypeOrmRepository
-  extends BaseRepository<UserEntity>
-  implements IUserRepository {
+export class UserTypeOrmRepository implements IUserRepository {
   protected readonly _repo: Repository<UserEntity>;
   private readonly _bcryp = new BcryptSecurity();
 
   constructor() {
-    const inicialize = AppDataSource.getRepository(UserEntity);
-    super(inicialize);
     this._repo = AppDataSource.getRepository(UserEntity);
+  }
+
+  async create(data: User): Promise<User> {
+    const user = await this._repo.save(data);
+    return UserMapper.toDomain(user)
+  }
+
+  async delete(uuid: string): Promise<boolean> {
+    const deleted = await this._repo.delete({ uuid });
+    return (deleted.affected ?? 0) > 0;
+  }
+
+  async updateStatus(uuid: string, status: string): Promise<boolean> {
+    const updated = await this._repo.update({ uuid }, { status } as any);
+    return (updated.affected ?? 0) > 0;
+  }
+
+  async update(uuid: string, data: User): Promise<User> {
+    const user = await this._repo.findOne({ where: { uuid } });
+
+    if (!user) {
+      throw new ValidationError(ApplicationError.user.notFound);
+    }
+
+    user.email = data.email;
+    user.password = data.password;
+    user.schoolUuid = data.schoolUuid;
+    user.profileUuid = data.profileUuid;
+    user.name = data.name;
+    user.status = data.status;
+
+    const userUpdate = await this._repo.save(user);
+    return UserMapper.toDomain(userUpdate)
   }
 
   async updatePassword(password: string, email: string): Promise<boolean> {
     const user = await this._repo.findOne({ where: { email } });
 
-    if (!user) throw new Error(ApplicationError.user.notFound);
+    if (!user) throw new ValidationError(ApplicationError.user.notFound);
+
     password = await this._bcryp.hash(password);
 
     const updated = await this._repo.update({ email }, { password });
     return (updated.affected ?? 0) > 0;
   }
 
-  getAll(): Promise<UserResponseDTO[]> {
-    return this._repo
-      .find({ where: { status: StatusEnum.ACTIVE } })
-      .then((entities) => {
-        return entities.map((entity) => {
-          return {
-            email: entity.email,
-            name: entity.name,
-            sstatus: entity.status,
-          };
-        });
-      });
+  async getAll(): Promise<{ email: string, status: string }[]> {
+    const entities = await this._repo.find({
+      where: { status: StatusEnum.ACTIVE },
+    });
+
+    return entities.map((entity) => UserMapper.toResponse(entity));
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    const user = await this._repo.findOne({ where: { email } })
-    if (!user) throw new Error(ApplicationError.user.notFound)
-    return user
+    const user = await this._repo.findOne({ where: { email } });
+
+    if (!user) throw new ValidationError(ApplicationError.user.notFound);
+
+    return UserMapper.toDomain(user)
   }
 }

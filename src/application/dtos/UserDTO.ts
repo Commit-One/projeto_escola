@@ -5,7 +5,3 @@ export interface UserDTO {
   password: string;
   status: StatusEnum;
 }
-
-export interface UserResponseDTO {
-  email: string;
-}

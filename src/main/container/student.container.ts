@@ -14,7 +14,7 @@ export const makeStudentContainer = () => {
   const createUC = new CreateStudentUseCase(repo, cacheInstance);
   const getAllUC = new GetAllStudetsUseCase(repo, cacheInstance);
   const updateUC = new UpdateStudentUseCase(repo, cacheInstance);
-  const getOneUC = new GetOneStudentUseCase(repo);
+  const getOneUC = new GetOneStudentUseCase(repo, cacheInstance);
   const deleteUC = new DeleteStudentUseCase(repo, cacheInstance);
   const updateStatusUC = new UpdateStatusStudentUseCase(repo, cacheInstance);
 

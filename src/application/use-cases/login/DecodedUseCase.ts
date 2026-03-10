@@ -1,15 +1,10 @@
-import { ILoginRepository } from "../../../domain/repositories/ILoginRepository";
-import { AuthenticationSecurity } from "../../../infra/security/auth";
+import { IAuthenticationSecurity } from "../../../domain/repositories/IAuthenticationSecurity";
 
 export class DecodedUseCase {
-  private jwt;
-
-  constructor() {
-    this.jwt = new AuthenticationSecurity();
-  }
+  constructor(private _authSecurity: IAuthenticationSecurity) {}
 
   async execute(token: string): Promise<unknown> {
-    const decoded = await this.jwt.decoded(token);
+    const decoded = await this._authSecurity.decoded(token);
     return decoded;
   }
 }
