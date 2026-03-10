@@ -1,6 +1,7 @@
 import { GetAllSchoolUseCase } from "../../../application/use-cases/school/GetAllSchoolUseCase";
 import { FakeCacheRepository } from "../mocks/FakeCacheRepository";
 import { FakeSchoolRepository } from "../mocks/FakeSchoolRepository";
+import { School } from "../../../domain/entities/School";
 
 const repository = new FakeSchoolRepository();
 const cache = new FakeCacheRepository();
@@ -9,13 +10,15 @@ describe("GetAllSchoolUseCase", () => {
   it("Deve retornar todas as escolas cadastradas", async () => {
     const useCase = new GetAllSchoolUseCase(repository, cache);
 
-    await repository.createSchoolUserTransaction({
-      name: "Escola teste",
-      address: "Rua A",
-      phone: "11999999999",
-      email: "contato@escola.com",
-      nameDirector: "Jhonatan",
-    });
+    const schoolEntity = new School(
+      "Escola teste",
+      "Rua A",
+      "11999999999",
+      "contato@escola.com",
+      "Jhonatan",
+    );
+
+    await repository.createSchoolUserTransaction(schoolEntity);
 
     const schools = await useCase.execute();
 

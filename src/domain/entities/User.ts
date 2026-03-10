@@ -1,5 +1,4 @@
 import { StatusEnum } from "../../utils/enum/status";
-import { EmailVO } from "../values-object/Email";
 import { Base } from "./Base";
 
 export class User extends Base {

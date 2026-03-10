@@ -1,4 +1,6 @@
-export interface IProfileRepository {
-  createProfile(name: string): Promise<boolean>;
+import { Profile } from "../entities/Profile";
+import { IBaseRepository } from "./IBaseRepository";
+
+export interface IProfileRepository extends IBaseRepository<Profile> {
   existByName(name: string): Promise<boolean>;
 }

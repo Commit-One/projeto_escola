@@ -7,7 +7,7 @@ export class UpdatePasswordUseCase {
   async execute(password: string, email: string) {
     const saved = await this._repo.updatePassword(password, email);
 
-    if (!saved) new Error(ApplicationError.user.updatePassword);
+    if (!saved) throw new Error(ApplicationError.user.updatePassword);
 
     return saved;
   }

@@ -6,7 +6,7 @@ import { StatusEnum } from "../../utils/enum/status";
 import { Student } from "../entities/Student";
 
 export interface IStudentRepository {
-  create(data: StudentDTO): Promise<StudentResponseDTO | null>;
+  createStudent(data: StudentDTO): Promise<StudentResponseDTO | null>;
   update(uuid: string, data: StudentDTO): Promise<Student>;
   updateStatus(uuid: string, status: StatusEnum): Promise<boolean>;
   delete(uuid: string): Promise<boolean>;

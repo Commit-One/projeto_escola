@@ -25,7 +25,7 @@
   "main": "index.js",
   "name": "projeto_escolas",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/main/index.ts",
+    "dev": "docker compose up -d && nodemon --exec ts-node src/main/index.ts",
     "test": "jest"
   },
   "version": "1.0.0"

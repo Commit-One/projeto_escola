@@ -7,6 +7,6 @@ export interface ISchoolRepository {
   delete(uuid: string): Promise<boolean>;
   update(uuid: string, data: SchoolDTO): Promise<School>;
   findByName(name: string): Promise<School | null>;
-  createSchoolUserTransaction(data: SchoolDTO): Promise<School>;
+  createSchoolUserTransaction(school: School): Promise<School>;
   updateStatus(uuid: string, status: StatusEnum): Promise<boolean>;
 }

@@ -66,24 +66,21 @@ export class FakeSchoolRepository implements ISchoolRepository {
     return find || null;
   }
 
-  async createSchoolUserTransaction(data: SchoolDTO): Promise<School> {
-    const { address, email, name, phone, nameDirector } = data;
-
-    const school = new School(name, address, phone, email, nameDirector);
+  async createSchoolUserTransaction(school: School): Promise<School> {
     const profile = new Profile("escola");
     const user = new User(
-      email,
+      school.email,
       "123",
       school.uuid,
       profile.uuid,
-      nameDirector,
+      school.nameDirector,
     );
 
-    if (!profile.name) new Error("Perfil não encontrado");
-    if (!user.uuid) new Error("Não foi possível criar o usuário");
+    if (!profile.name) throw new Error("Perfil não encontrado");
+    if (!user.uuid) throw new Error("Não foi possível criar o usuário");
 
-    await this.schools.push(school);
-    await this.users.push(user);
+    this.schools.push(school);
+    this.users.push(user);
 
     return school;
   }

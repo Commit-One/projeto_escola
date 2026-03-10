@@ -1,3 +1,4 @@
+import { Period } from "../../../domain/entities/Period";
 import { IPeriodRepository } from "../../../domain/repositories/IPeriodRepository";
 import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
@@ -6,17 +7,20 @@ export class CreatePeriodUseCase {
   constructor(
     private _periodRepository: IPeriodRepository,
     private readonly _cache: ICacheService,
-  ) {}
+  ) { }
 
   async execute(): Promise<boolean> {
-    const listProfile = ["manhã", "tarde", "noite"];
+    const listPeriod = ["Manhã", "Tarde", "Noite"];
 
-    listProfile.forEach(async (profile) => {
-      const isExist = await this._periodRepository.existByName(profile);
-      if (!isExist) await this._periodRepository.createPeriodo(profile);
-    });
+    for (const p of listPeriod) {
+      const isExist = await this._periodRepository.existByName(p);
+      if (!isExist) {
+        const period = new Period(p);
+        await this._periodRepository.create(period);
+      }
+    }
 
-    await this._cache.set(cacheKeyEnum.PERIOD, listProfile);
+    await this._cache.set(cacheKeyEnum.PERIOD, listPeriod);
 
     return true;
   }

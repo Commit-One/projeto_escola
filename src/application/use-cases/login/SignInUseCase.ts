@@ -18,7 +18,7 @@ export class SignInUseCase {
     const bycrpty = new BcryptSecurity();
     const isAuthorization = bycrpty.compare(password, user.password);
 
-    if (!isAuthorization) new Error(ApplicationError.user.passawordCompare);
+    if (!isAuthorization) throw new Error(ApplicationError.user.passwordCompare);
 
     const schemaDatabase = await this._loginRepository.schemaDatabase(email);
 

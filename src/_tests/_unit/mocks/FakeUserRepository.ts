@@ -25,8 +25,9 @@ export class FakeUserRepository implements IUserRepository {
     return this.users.find((s) => s.uuid === uuid)?.status === status;
   }
 
-  async create(user: User): Promise<void> {
+  async create(user: User): Promise<User> {
     this.users.push(user);
+    return user;
   }
 
   async getAll(): Promise<UserResponseDTO[]> {
@@ -66,5 +67,25 @@ export class FakeUserRepository implements IUserRepository {
     this.users[index] = updateUser;
 
     return updateUser.password !== findOne.password;
+  }
+
+  async update(uuid: string, data: User): Promise<User> {
+    const findOne = this.users.find((u) => u.uuid === uuid);
+
+    if (!findOne) throw new Error("User not found");
+
+    const updatedUser = new User(
+      data.email ?? findOne.email,
+      data.password ?? findOne.password,
+      data.schoolUuid ?? findOne.schoolUuid,
+      data.profileUuid ?? findOne.profileUuid,
+      data.name ?? findOne.name,
+      data.status ?? findOne.status,
+    );
+
+    const index = this.users.indexOf(findOne);
+    this.users[index] = updatedUser;
+
+    return updatedUser;
   }
 }

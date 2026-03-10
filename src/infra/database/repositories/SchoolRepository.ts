@@ -1,9 +1,8 @@
-import { Repository } from "typeorm";
+import { ILike, Repository } from "typeorm";
 import { ISchoolRepository } from "../../../domain/repositories/ISchoolRepository";
 import { School } from "../../../domain/entities/School";
 import { SchoolEntity } from "../entities/SchoolEntity";
 import { AppDataSource } from "../data-source";
-import { SchoolDTO } from "../../../application/dtos/SchoolDTO";
 import { User } from "../../../domain/entities/User";
 import { UserEntity } from "../entities/UserEntity";
 import { ProfileEntity } from "../entities/ProfilesEntity";
@@ -12,12 +11,15 @@ import { BcryptSecurity } from "../../security/bcrypt";
 import { ApplicationError } from "../../../utils/error";
 import { StatusEnum } from "../../../utils/enum/status";
 import { environmentConfig } from "../../../main/instances/environment.instance";
+import { BaseRepository } from "./BaseRepository";
 
-export class SchoolTypeOrmRepository implements ISchoolRepository {
-  private readonly _repo: Repository<SchoolEntity>;
+export class SchoolTypeOrmRepository extends BaseRepository<SchoolEntity> implements ISchoolRepository {
+  protected readonly _repo: Repository<SchoolEntity>;
   private readonly _bcryp = new BcryptSecurity();
 
   constructor() {
+    const inicialize = AppDataSource.getRepository(SchoolEntity);
+    super(inicialize);
     this._repo = AppDataSource.getRepository(SchoolEntity);
   }
 
@@ -46,7 +48,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
     }
   }
 
-  async createSchoolUserTransaction(data: SchoolDTO): Promise<School> {
+  async createSchoolUserTransaction(school: School): Promise<School> {
     const queryRunner = AppDataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -66,23 +68,15 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
         throw new Error(ApplicationError.profile.profileNotFound);
       }
 
-      const school = new School(
-        data.name,
-        data.address,
-        data.phone,
-        data.email,
-        data.nameDirector,
-      );
-
       const hashedPassword = await this._bcryp.hash(
         environmentConfig.PASSWORD_DEFAULT,
       );
       const user = new User(
-        data.email,
+        school.email,
         hashedPassword,
         school.uuid,
         profileAdmin.uuid,
-        data.nameDirector,
+        school.nameDirector,
       );
 
       await schoolRepository.save(school);
@@ -99,29 +93,10 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
   }
 
   async findByName(name: string): Promise<School | null> {
-    const query = `SELECT * FROM tb_school WHERE LOWER(name) = LOWER("${name}")`;
+    const school = await this._repo.findOne({ where: { name: ILike(name) } })
+    if (!school) return null;
 
-    const result = await this._repo.query(query);
-
-    if (result.length === 0) {
-      return null;
-    }
-    const schoolData = result[0];
-    return schoolData as School;
-  }
-
-  async delete(uuid: string): Promise<boolean> {
-    const deleted = await this._repo.delete({ uuid });
-    return (deleted.affected ?? 0) > 0;
-  }
-
-  async update(uuid: string, data: SchoolDTO): Promise<School> {
-    await this._repo.update({ uuid }, { ...data });
-    const updated = await this._repo.findOne({ where: { uuid } });
-
-    if (!updated) throw new Error(ApplicationError.school.notFound);
-
-    return updated as School;
+    return school;
   }
 
   async getAll(): Promise<School[]> {

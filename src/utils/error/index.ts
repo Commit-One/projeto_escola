@@ -6,6 +6,7 @@ export const ApplicationError = {
     tokenInvalid: "Token inválido",
     tokenNotFound: "Token não encontrado",
     updateStatus: "Status não informado ou com erro",
+    notFound: "Dado não encontrado"
   },
   school: {
     nameSchoolRequired: "Nome da escola é obrigatório",
@@ -16,6 +17,8 @@ export const ApplicationError = {
     notFound: "Escola não encontrada",
   },
   user: {
+    passwordCompare: "Senha inválida",
+    // alias para compatibilidade com código existente
     passawordCompare: "Senha inválida",
     emailRequired: "E-mail do usuário não informado",
     passwordRequired: "Senha do usuário não informado",

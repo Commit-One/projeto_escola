@@ -13,26 +13,24 @@ import { SchoolEntity } from "../entities/SchoolEntity";
 import { PeriodEntity } from "../entities/PeriodEntity";
 import { ProfileEnum } from "../../../utils/enum/profile";
 import { ApplicationError } from "../../../utils/error";
+import { BaseRepository } from "./BaseRepository";
 
-export class StudentTypeOrmRepository implements IStudentRepository {
-  private readonly _repo: Repository<StudentEntity>;
+export class StudentTypeOrmRepository extends BaseRepository<StudentEntity> implements IStudentRepository {
+  protected readonly _repo: Repository<StudentEntity>;
   private readonly _repoProfile: Repository<ProfileEntity>;
   private readonly _repoSchool: Repository<SchoolEntity>;
   private readonly _repoPeriod: Repository<PeriodEntity>;
 
   constructor() {
+    const inicialize = AppDataSource.getRepository(StudentEntity);
+    super(inicialize);
     this._repo = AppDataSource.getRepository(StudentEntity);
     this._repoProfile = AppDataSource.getRepository(ProfileEntity);
     this._repoSchool = AppDataSource.getRepository(SchoolEntity);
     this._repoPeriod = AppDataSource.getRepository(PeriodEntity);
   }
 
-  async updateStatus(uuid: string, status: StatusEnum): Promise<boolean> {
-    const updated = await this._repo.update({ uuid }, { status });
-    return (updated.affected ?? 0) > 0;
-  }
-
-  async create(data: StudentDTO): Promise<StudentResponseDTO | null> {
+  async createStudent(data: StudentDTO): Promise<StudentResponseDTO | null> {
     const profileStudent = await this._repoProfile.findOne({
       where: { name: ProfileEnum.STUDENT },
     });
@@ -59,21 +57,9 @@ export class StudentTypeOrmRepository implements IStudentRepository {
       profileStudent!.uuid,
     );
 
-    const created = await this._repo.save(student);
-    const findOne = await this.getOne(created.uuid);
-
-    return findOne;
-  }
-
-  async update(uuid: string, data: StudentDTO): Promise<Student> {
-    await this._repo.update({ uuid }, { ...data });
-    const updated = await this._repo.findOne({ where: { uuid } });
-    return updated as Student;
-  }
-
-  async delete(uuid: string): Promise<boolean> {
-    const deleted = await this._repo.delete({ uuid });
-    return (deleted.affected ?? 0) > 0;
+    await this._repo.save(student);
+    const studentOne = await this.getOne(student.uuid)
+    return studentOne
   }
 
   async getOne(uuid: string): Promise<StudentResponseDTO | null> {

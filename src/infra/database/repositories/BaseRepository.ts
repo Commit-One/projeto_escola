@@ -1,7 +1,9 @@
 import { Repository } from "typeorm";
 import { ObjectLiteral } from "typeorm";
+import { IBaseRepository } from "../../../domain/repositories/IBaseRepository";
+import { ApplicationError } from "../../../utils/error";
 
-export class BaseRepository<T extends ObjectLiteral> {
+export class BaseRepository<T extends ObjectLiteral> implements IBaseRepository<T>{
   constructor(protected readonly _repo: Repository<T>) {}
 
   async delete(uuid: string): Promise<boolean> {
@@ -18,9 +20,18 @@ export class BaseRepository<T extends ObjectLiteral> {
       .catch(() => false);
   }
 
-  async create(data: any): Promise<boolean> {
-    const entity = this._repo.create(data);
-    await this._repo.create(entity);
-    return true;
+  async update(uuid: string, data: T): Promise<T> {
+    const findOne = await this._repo.findOne({ where: { uuid } as any });
+    if (!findOne) throw new Error(ApplicationError.generic.notFound);
+
+    return await this._repo
+      .update({ uuid } as any, { ...data } as any)
+      .then((e) => e)
+      .catch((e) => e);
+  }
+
+  async create(data: T): Promise<T> {    
+    await this._repo.save(data);
+    return data;
   }
 }

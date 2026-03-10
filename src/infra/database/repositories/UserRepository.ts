@@ -11,8 +11,7 @@ import { BaseRepository } from "./BaseRepository";
 
 export class UserTypeOrmRepository
   extends BaseRepository<UserEntity>
-  implements IUserRepository
-{
+  implements IUserRepository {
   protected readonly _repo: Repository<UserEntity>;
   private readonly _bcryp = new BcryptSecurity();
 
@@ -46,8 +45,9 @@ export class UserTypeOrmRepository
       });
   }
 
-  findByEmail(email: string): Promise<User | null> {
-    const query = `SELECT * FROM tb_user WHERE LOWER(email) = LOWER("${email}")`;
-    return this._repo.query(query);
+  async findByEmail(email: string): Promise<User | null> {
+    const user = await this._repo.findOne({ where: { email } })
+    if (!user) throw new Error(ApplicationError.user.notFound)
+    return user
   }
 }

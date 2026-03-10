@@ -16,3 +16,6 @@ Mensalidade
 ---
 
 - Ao criar um estudando, vincular a classe e verificar se a idade está autorizada com a classe em questão;
+
+
+- classe
