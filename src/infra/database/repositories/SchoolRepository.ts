@@ -34,7 +34,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
       throw new ValidationError(ApplicationError.student.notFound);
     }
 
-    await this._repo.update({ uuid }, { ...data })      
+    await this._repo.update({ uuid }, { ...data })
     await this._repo.findOne({ where: { uuid } });
     const find = await this.findByName(data.name)
 
@@ -42,6 +42,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
   }
 
   async updateStatus(uuid: string, status: StatusEnum): Promise<boolean> {
+
     const queryRunner = AppDataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -67,6 +68,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
   }
 
   async createSchoolUserTransaction(data: SchoolDTO): Promise<School> {
+
     const queryRunner = AppDataSource.createQueryRunner();
 
     await queryRunner.connect();
