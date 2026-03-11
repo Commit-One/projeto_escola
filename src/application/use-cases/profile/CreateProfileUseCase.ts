@@ -1,6 +1,6 @@
+import { ICacheService } from "../../../domain/contracts/ICacheService";
 import { Profile } from "../../../domain/entities/Profile";
 import { IProfileRepository } from "../../../domain/repositories/IProfileRepository";
-import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 
 export class CreateProfileUseCase {

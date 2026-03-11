@@ -1,6 +1,5 @@
-import { Period } from "../../../domain/entities/Period";
+import { ICacheService } from "../../../domain/contracts/ICacheService";
 import { IPeriodRepository } from "../../../domain/repositories/IPeriodRepository";
-import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 
 export class CreatePeriodUseCase {

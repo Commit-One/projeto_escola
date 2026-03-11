@@ -1,6 +1,6 @@
+import { ICacheService } from "../../../domain/contracts/ICacheService";
 import { ClassStudent } from "../../../domain/entities/ClassStudent";
 import { IClassStudentRepository } from "../../../domain/repositories/IClassStudentRepository";
-import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 
 export class GetOneClassStudentUseCase {

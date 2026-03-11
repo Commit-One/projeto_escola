@@ -1,5 +1,5 @@
+import { ICacheService } from "../../../domain/contracts/ICacheService";
 import { IClassStudentRepository } from "../../../domain/repositories/IClassStudentRepository";
-import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 
 export class DeleteClassStudentUseCase {

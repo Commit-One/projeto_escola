@@ -1,6 +1,7 @@
+import { ICacheService } from "../../domain/contracts/ICacheService";
 import { redisClient } from "./cache.connection";
 
-export class ICacheService {
+export class CacheService implements ICacheService {
   async set(key: string, value: unknown) {
     await redisClient.set(key, JSON.stringify(value));
   }

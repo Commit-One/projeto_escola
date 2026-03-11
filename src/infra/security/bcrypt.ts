@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { IBcryptSecurity } from "../../domain/repositories/IBcryptSecurity";
+import { IBcryptSecurity } from "../../domain/contracts/IBcryptSecurity";
 
 export class BcryptSecurity implements IBcryptSecurity {
   async hash(value: string): Promise<string> {

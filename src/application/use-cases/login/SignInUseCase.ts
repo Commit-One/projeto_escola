@@ -1,6 +1,6 @@
 import { ILoginRepository } from "../../../domain/repositories/ILoginRepository";
-import { IAuthenticationSecurity } from "../../../domain/repositories/IAuthenticationSecurity";
-import { IBcryptSecurity } from "../../../domain/repositories/IBcryptSecurity";
+import { IAuthenticationSecurity } from "../../../domain/contracts/IAuthenticationSecurity";
+import { IBcryptSecurity } from "../../../domain/contracts/IBcryptSecurity";
 import { ApplicationError, ValidationError } from "../../../utils/error";
 
 export class SignInUseCase {

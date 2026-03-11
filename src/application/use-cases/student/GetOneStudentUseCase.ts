@@ -1,5 +1,5 @@
+import { ICacheService } from "../../../domain/contracts/ICacheService";
 import { IStudentRepository } from "../../../domain/repositories/IStudentRepository";
-import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { StudentResponseDTO } from "../../dtos/StudentDTO";
 

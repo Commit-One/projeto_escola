@@ -1,4 +1,4 @@
-import { IAuthenticationSecurity } from "../../domain/repositories/IAuthenticationSecurity";
+import { IAuthenticationSecurity } from "../../domain/contracts/IAuthenticationSecurity";
 import { LoginDTO } from "../../application/dtos/LoginDTO";
 import jwt from "jsonwebtoken";
 

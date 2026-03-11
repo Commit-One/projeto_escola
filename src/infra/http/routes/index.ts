@@ -9,6 +9,7 @@ import { classStudents } from "./classStudent.routes";
 
 export const routes = Router();
 
+
 routes.get("/", (_req, res) => res.send("OK"));
 routes.use("/escola", schoolRoutes);
 routes.use("/user", usersRoutes);

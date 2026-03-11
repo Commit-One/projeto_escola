@@ -1,9 +1,8 @@
-import { School } from "../../../domain/entities/School";
+
+import { ICacheService } from "../../../domain/contracts/ICacheService";
 import { ISchoolRepository } from "../../../domain/repositories/ISchoolRepository";
-import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { StatusEnum } from "../../../utils/enum/status";
-import { SchoolDTO } from "../../dtos/SchoolDTO";
 
 export class UpdateStatusSchoolUseCase {
   constructor(

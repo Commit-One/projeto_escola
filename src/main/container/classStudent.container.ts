@@ -8,7 +8,7 @@ import { ClassStudentController } from "../../infra/http/controllers/ClassStuden
 import { cacheInstance } from "../instances/cache.instance";
 
 export const makeClassStudentContainer = () => {
-  const repo = new ClassStudentTypeOrmRepository();
+  const repo = new ClassStudentTypeOrmRepository();  
 
   const createUC = new CreateClassStudentuUseCase(repo, cacheInstance);
   const deleteUC = new DeleteClassStudentUseCase(repo, cacheInstance);

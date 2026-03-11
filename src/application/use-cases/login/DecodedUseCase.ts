@@ -1,4 +1,4 @@
-import { IAuthenticationSecurity } from "../../../domain/repositories/IAuthenticationSecurity";
+import { IAuthenticationSecurity } from "../../../domain/contracts/IAuthenticationSecurity";
 
 export class DecodedUseCase {
   constructor(private _authSecurity: IAuthenticationSecurity) {}

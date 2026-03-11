@@ -1,3 +1,3 @@
-import { ICacheService } from "../../infra/cache/ICacheService";
+import { CacheService } from "../../infra/cache/ICacheService";
 
-export const cacheInstance = new ICacheService();
+export const cacheInstance = new CacheService();

@@ -1,5 +1,5 @@
+import { ICacheService } from "../../../domain/contracts/ICacheService";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { StatusEnum } from "../../../utils/enum/status";
 

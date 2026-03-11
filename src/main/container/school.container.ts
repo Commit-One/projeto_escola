@@ -7,11 +7,12 @@ import { UpdateStatusSchoolUseCase } from "../../application/use-cases/school/Up
 import { SchoolTypeOrmRepository } from "../../infra/database/repositories/SchoolRepository";
 import { SchoolController } from "../../infra/http/controllers/SchoolController";
 import { cacheInstance } from "../instances/cache.instance";
+import { rabbitServiceInstance } from "../instances/rabbit.instance";
 
 export const makeSchoolContainer = () => {
   const repo = new SchoolTypeOrmRepository();
 
-  const createUC = new CreateSchoolUseCase(repo, cacheInstance);
+  const createUC = new CreateSchoolUseCase(repo, cacheInstance, rabbitServiceInstance);
   const getAllUC = new GetAllSchoolUseCase(repo, cacheInstance);
   const deleteUC = new DeleteSchoolUseCase(repo, cacheInstance);
   const updateUC = new UpdateSchoolUseCase(repo, cacheInstance);

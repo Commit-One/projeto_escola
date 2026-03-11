@@ -1,6 +1,6 @@
+import { ICacheService } from "../../../domain/contracts/ICacheService";
 import { School } from "../../../domain/entities/School";
 import { ISchoolRepository } from "../../../domain/repositories/ISchoolRepository";
-import { ICacheService } from "../../../infra/cache/ICacheService";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { SchoolDTO } from "../../dtos/SchoolDTO";
 
