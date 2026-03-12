@@ -30,16 +30,15 @@ export class ClassStudentTypeOrmRepository implements IClassStudentRepository {
   }
   
   async update(uuid: string, data: ClassStudentDTO): Promise<ClassStudent> {
-    const classStudent = await this._repo.findOne({ where: { uuid } });
+    const entity = await this._repo.findOne({ where: { uuid } });
 
-    if (!classStudent) {
+    if (!entity) {
       throw new ValidationError(ApplicationError.generic.notFound);
     }
-
+    
     await this._repo.update({ uuid }, { ...data });
 
-    const getOne = await this.getOne(uuid);
-    return getOne!
+    return ClassStudentMapper.toDomain(entity);
   }
 
   async getAll(): Promise<ClassStudent[]> {

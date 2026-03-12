@@ -8,6 +8,7 @@ import { UserEntity } from "../entities/UserEntity";
 import { SchoolEntity } from "../entities/SchoolEntity";
 import { ApplicationError } from "../../../utils/error";
 import { UserMapper } from "../mappers/UserMapper";
+import { LoginMapper } from "../mappers/LoginMapper";
 
 export class LoginTypeOrmRepository implements ILoginRepository {
   private readonly _repoProfile: Repository<ProfileEntity>;
@@ -39,24 +40,9 @@ export class LoginTypeOrmRepository implements ILoginRepository {
     const school = await this._repoSchool.findOne({
       where: { uuid: user?.schoolUuid },
     });
+    
     if (!school) throw new Error(ApplicationError.school.notFound);
 
-    const result: LoginDTO = {
-      escola: {
-        name: school!.name,
-        uuid: school!.uuid,
-      },
-      profile: {
-        name: profile!.name,
-        uuid: profile!.uuid,
-      },
-      user: {
-        email: user!.email,
-        name: user!.email,
-        uuid: user!.uuid,
-      },
-    };
-
-    return result;
+    return LoginMapper.toResponse(user, profile, school)
   }
 }

@@ -28,17 +28,16 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
   }
 
   async update(uuid: string, data: SchoolDTO): Promise<School> {
-    const student = await this._repo.findOne({ where: { uuid } });
+    const school = await this._repo.findOne({ where: { uuid } });
 
-    if (!student) {
-      throw new ValidationError(ApplicationError.student.notFound);
+    if (!school) {
+      throw new ValidationError(ApplicationError.school.notFound);
     }
 
     await this._repo.update({ uuid }, { ...data })
     await this._repo.findOne({ where: { uuid } });
-    const find = await this.findByName(data.name)
 
-    return find!
+    return SchoolMapper.toDomain(school)
   }
 
   async updateStatus(uuid: string, status: StatusEnum): Promise<boolean> {
@@ -53,8 +52,8 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
       const _repoUser = queryRunner.manager.getRepository(UserEntity);
 
       const school = await _repoSchool.findOne({ where: { uuid } });
-
       const updated = await _repoSchool.update({ uuid }, { status });
+
       await _repoUser.update({ schoolUuid: school!.uuid }, { status });
       await queryRunner.commitTransaction();
 
@@ -92,7 +91,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
         environmentConfig.PASSWORD_DEFAULT,
       );
 
-      const school = new School(data.name, data.address, data.phone, data.email, data.nameDirector)
+      const school = new School(data.name, data.address, data.phone, data.email, data.nameDirector)      
       const user = new User(
         school.email,
         hashedPassword,
@@ -103,8 +102,8 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
 
       await schoolRepository.save(school);
       await userRepository.save(user);
-
       await queryRunner.commitTransaction();
+      
       return school
     } catch (error) {
       await queryRunner.rollbackTransaction();

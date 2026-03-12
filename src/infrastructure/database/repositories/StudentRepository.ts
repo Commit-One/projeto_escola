@@ -1,15 +1,14 @@
 import { Repository } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { IStudentRepository } from "../../../domain/repositories/IStudentRepository";
-import { Student } from "../../../domain/entities/Student";
 import { StudentEntity } from "../entities/StudentEntity";
-import { StatusEnum } from "../../../utils/enum/status";
 import { StudentDTO, StudentResponseDTO } from "../../../application/dtos/StudentDTO";
 import { ProfileEntity } from "../entities/ProfilesEntity";
 import { SchoolEntity } from "../entities/SchoolEntity";
 import { PeriodEntity } from "../entities/PeriodEntity";
 import { ProfileEnum } from "../../../utils/enum/profile";
 import { ApplicationError, ValidationError } from "../../../utils/error";
+import { StudentMapper } from "../mappers/StudentMapper";
 
 export class StudentTypeOrmRepository implements IStudentRepository {
   protected readonly _repo: Repository<StudentEntity>;
@@ -42,44 +41,25 @@ export class StudentTypeOrmRepository implements IStudentRepository {
     }
 
     await this._repo.update({ uuid }, { ...data });
-
-    const getOne = await this.getOne(uuid);
-    return getOne!
+    return await this.getOne(uuid);    
   }
 
   async create(data: StudentDTO): Promise<StudentResponseDTO> {
-    const profileStudent = await this._repoProfile.findOne({
+    const profile = await this._repoProfile.findOne({
       where: { name: ProfileEnum.STUDENT },
-    });    
+    });
 
-    if (!profileStudent) {
+    if (!profile) {
       throw new ValidationError(ApplicationError.profile.notFound);
     }
-
-    const student = new Student(
-      data.schoolUuid,
-      data.matriculation,
-      data.dateBirth,
-      StatusEnum.ACTIVE,
-      data.nameMother,
-      data.nameFather,
-      data.name,
-      data.phone,
-      data.classStudentUuid,
-      data.periodUuid,
-      data.dateMatriculation,
-      data.hasDiscount,
-      data.discount,
-      data.datePayment,
-      profileStudent!.uuid,
-    );
+    
+    const student = StudentMapper.toDomain(data)
 
     await this._repo.save(student);
-    const studentOne = await this.getOne(student.uuid)
-    return studentOne!
+    return await this.getOne(student.uuid)
   }
 
-  async getOne(uuid: string): Promise<StudentResponseDTO | null> {
+  async getOne(uuid: string): Promise<StudentResponseDTO> {
     const student = await this._repo.findOne({ where: { uuid } });
     if (!student) throw new ValidationError(ApplicationError.student.notFound);
 
@@ -98,35 +78,7 @@ export class StudentTypeOrmRepository implements IStudentRepository {
     });
     if (!school) throw new ValidationError(ApplicationError.school.notFound);
 
-    const response: StudentResponseDTO = {
-      escola: {
-        name: school!.name,
-        uuid: school!.uuid,
-      },
-      periodo: {
-        name: period!.name,
-        uuid: period!.uuid,
-      },
-      profile: {
-        name: profile!.name,
-        uuid: profile!.uuid,
-      },
-      name: student!.name,
-      matriculation: student!.matriculation,
-      dateBirth: student!.dateBirth,
-      status: student!.status,
-      nameMother: student!.nameMother,
-      nameFather: student!.nameFather,
-      phone: student!.phone,
-      classStudent: student!.classStudentUuid,
-      dateMatriculation: student!.dateMatriculation,
-      hasDiscount: student!.hasDiscount,
-      discount: student!.discount,
-      datePayment: student!.datePayment,
-      uuid: student!.uuid,
-    };
-
-    return response;
+    return StudentMapper.toResponse(student, school, profile, period)
   }
 
   async getAll(): Promise<StudentResponseDTO[]> {
@@ -158,35 +110,6 @@ export class StudentTypeOrmRepository implements IStudentRepository {
   `;
 
     const students = await this._repo.query(query);
-
-    return students.map((e: any) => {
-      return {
-        escola: {
-          name: e.schoolName,
-          uuid: e!.schoolUuid,
-        },
-        periodo: {
-          name: e!.periodName,
-          uuid: e!.periodUuid,
-        },
-        profile: {
-          name: e!.profileName,
-          uuid: e!.profileUuid,
-        },
-        name: e!.name,
-        matriculation: e!.matriculation,
-        dateBirth: e!.dateBirth,
-        status: e!.studentStatus,
-        nameMother: e!.nameMother,
-        nameFather: e!.nameFather,
-        phone: e!.phone,
-        classStudent: e!.classStudent,
-        dateMatriculation: e!.dateMatriculation,
-        hasDiscount: e!.hasDiscount,
-        discount: e!.discount,
-        datePayment: e!.datePayment,
-        uuid: e.studentUuid,
-      };
-    });
+    return students.map((e: any) => StudentMapper.toDto(e));
   }
 }

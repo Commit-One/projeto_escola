@@ -1,5 +1,5 @@
 import { ClassStudent } from "../../../domain/entities/ClassStudent";
-import { ClassStudentEntity } from "../entities/ClassStudentEntity";import { SchoolEntity } from "../entities/SchoolEntity";
+import { ClassStudentEntity } from "../entities/ClassStudentEntity";
 
 export class ClassStudentMapper {
     static toDomain(entity: ClassStudentEntity): ClassStudent {
