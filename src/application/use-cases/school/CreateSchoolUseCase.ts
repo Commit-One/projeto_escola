@@ -4,6 +4,7 @@ import { School } from "../../../domain/entities/School";
 import { ISchoolRepository } from "../../../domain/repositories/ISchoolRepository";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { QueueEnum } from "../../../utils/enum/queue";
+import { INotificationEmailDTO } from "../../dtos/NotificationDTO";
 import { SchoolDTO } from "../../dtos/SchoolDTO";
 
 export class CreateSchoolUseCase {
@@ -13,18 +14,14 @@ export class CreateSchoolUseCase {
     private readonly _queue: IQueueService
   ) { }
 
-  async execute(dto: SchoolDTO): Promise<School> {    
-    const created = await this._repo.createSchoolUserTransaction(dto);
-    
-      console.log(">>>Ç CHEOGOU")
+  async execute(dto: SchoolDTO): Promise<School> {
+    const school = await this._repo.createSchoolUserTransaction(dto);
     await this._cache.delete(cacheKeyEnum.SCHOOLS);
 
-
-
-    await this._queue.sendToQueue(
+    await this._queue.sendToQueue<School>(
       QueueEnum.NOTIFICATION,
-      { name: created.name }
+      school
     )
-    return created;
+    return school;
   }
 }

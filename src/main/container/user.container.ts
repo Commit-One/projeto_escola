@@ -1,9 +1,9 @@
 import { GetAllUsersUserCase } from "../../application/use-cases/user/GetAllUsersUseCase";
 import { UpdatePasswordUseCase } from "../../application/use-cases/user/UpdatePasswordUseCase";
 import { UpdateStatusUserUseCase } from "../../application/use-cases/user/UpdateStatusUserUseCase";
-import { UserTypeOrmRepository } from "../../infra/database/repositories/UserRepository";
-import { UserController } from "../../infra/http/controllers/UserController";
-import { cacheInstance } from "../instances/cache.instance";
+import { UserTypeOrmRepository } from "../../infrastructure/database/repositories/UserRepository";
+import { UserController } from "../../infrastructure/http/controllers/UserController";
+import { cacheInstance } from "../instances";
 
 export const makeUserContainer = () => {
   const repo = new UserTypeOrmRepository();

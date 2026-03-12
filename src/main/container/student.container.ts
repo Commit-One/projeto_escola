@@ -4,9 +4,9 @@ import { GetAllStudetsUseCase } from "../../application/use-cases/student/GetAll
 import { GetOneStudentUseCase } from "../../application/use-cases/student/GetOneStudentUseCase";
 import { UpdateStatusStudentUseCase } from "../../application/use-cases/student/UpdateStatusStudentUseCase";
 import { UpdateStudentUseCase } from "../../application/use-cases/student/UpdateStudentUseCase";
-import { StudentTypeOrmRepository } from "../../infra/database/repositories/StudentRepository";
-import { StudentController } from "../../infra/http/controllers/StudentController";
-import { cacheInstance } from "../instances/cache.instance";
+import { StudentTypeOrmRepository } from "../../infrastructure/database/repositories/StudentRepository";
+import { StudentController } from "../../infrastructure/http/controllers/StudentController";
+import { cacheInstance } from "../instances";
 
 export const makeStudentContainer = () => {
   const repo = new StudentTypeOrmRepository();

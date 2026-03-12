@@ -10,7 +10,7 @@ import { ProfileEnum } from "../../../utils/enum/profile";
 import { BcryptSecurity } from "../../security/bcrypt";
 import { ApplicationError, ValidationError } from "../../../utils/error";
 import { StatusEnum } from "../../../utils/enum/status";
-import { environmentConfigInstance } from "../../../main/instances/environment.instance";
+import { environmentConfig } from "../../../main/instances";
 import { SchoolMapper } from "../mappers/SchoolMapper";
 import { SchoolDTO } from "../../../application/dtos/SchoolDTO";
 
@@ -89,7 +89,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
       }
 
       const hashedPassword = await this._bcryp.hash(
-        environmentConfigInstance.PASSWORD_DEFAULT,
+        environmentConfig.PASSWORD_DEFAULT,
       );
 
       const school = new School(data.name, data.address, data.phone, data.email, data.nameDirector)

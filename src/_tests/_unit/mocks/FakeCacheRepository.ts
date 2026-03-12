@@ -1,4 +1,4 @@
-import { ICacheService } from "../../../infra/cache/ICacheService";
+import { ICacheService } from "../../../infrastructure/cache/ICacheService";
 
 export class FakeCacheRepository implements ICacheService {
   private cache: Record<string, unknown> = {};

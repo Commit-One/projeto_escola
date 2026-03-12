@@ -1,7 +1,7 @@
 import { CreatePeriodUseCase } from "../../application/use-cases/period/CreatePeriodoUseCase";
-import { PeriodTypeOrmRepository } from "../../infra/database/repositories/PeriodRepository";
-import { PeriodController } from "../../infra/http/controllers/PeriodController";
-import { cacheInstance } from "../instances/cache.instance";
+import { PeriodTypeOrmRepository } from "../../infrastructure/database/repositories/PeriodRepository";
+import { PeriodController } from "../../infrastructure/http/controllers/PeriodController";
+import { cacheInstance } from "../instances";
 
 export const makePeriodContainer = () => {
   const repo = new PeriodTypeOrmRepository();

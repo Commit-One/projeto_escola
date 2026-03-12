@@ -19,12 +19,9 @@ export class SchoolController {
 
   }
 
-  
-
   async create(req: Request, res: Response) {
     try {
       const { address, email, name, phone, nameDirector } = req.body;
-      console.log(">>> FTO")
       const school = await this._create.execute({
         name,
         address,

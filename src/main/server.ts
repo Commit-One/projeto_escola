@@ -1,8 +1,10 @@
 import express from "express";
-import { AppDataSource } from "../infra/database/data-source";
-import { routes } from "../infra/http/routes";
-import { connectRedis } from "../infra/cache/cache.connection";
-import { setupRabbitMQ } from "../infra/messaging/rabbit/setup";
+import { AppDataSource } from "../infrastructure/database/data-source";
+import { routes } from "../infrastructure/http/routes";
+import { connectRedis } from "../infrastructure/cache/cache.connection";
+import { setupRabbitMQ } from "../infrastructure/messaging/rabbit/setup";
+import { startWorkers } from "./instances";
+
 export class ServerInitializer {
   private readonly app: express.Application;
 
@@ -19,6 +21,9 @@ export class ServerInitializer {
 
     await setupRabbitMQ();
     console.log("✅ Rabbit connected");
+
+    // await startWorkers()
+    // console.log("✅ startWorkers connected");
 
     this.app.use(express.json());
     this.app.use(routes);

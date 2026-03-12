@@ -2,8 +2,8 @@ process.env.JWT_SECRET = "teste-secret";
 process.env.JWT_EXPIRES_IN = "1d";
 
 import { SignInUseCase } from "../../../application/use-cases/login/SignInUseCase";
-import { AuthenticationSecurity } from "../../../infra/security/auth";
-import { BcryptSecurity } from "../../../infra/security/bcrypt";
+import { AuthenticationSecurity } from "../../../infrastructure/security/auth";
+import { BcryptSecurity } from "../../../infrastructure/security/bcrypt";
 import { User } from "../../../domain/entities/User";
 import { FakeLoginRepository } from "../mocks/FakeLoginRepository";
 

@@ -1,9 +1,9 @@
 import { DecodedUseCase } from "../../application/use-cases/login/DecodedUseCase";
 import { SignInUseCase } from "../../application/use-cases/login/SignInUseCase";
-import { LoginTypeOrmRepository } from "../../infra/database/repositories/LoginRepository";
-import { LoginController } from "../../infra/http/controllers/LoginController";
-import { AuthenticationSecurity } from "../../infra/security/auth";
-import { BcryptSecurity } from "../../infra/security/bcrypt";
+import { LoginTypeOrmRepository } from "../../infrastructure/database/repositories/LoginRepository";
+import { LoginController } from "../../infrastructure/http/controllers/LoginController";
+import { AuthenticationSecurity } from "../../infrastructure/security/auth";
+import { BcryptSecurity } from "../../infrastructure/security/bcrypt";
 
 export const makeLoginContainer = () => {
   const repo = new LoginTypeOrmRepository();

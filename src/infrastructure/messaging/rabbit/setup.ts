@@ -1,5 +1,5 @@
 import { RabbitMQConnection } from "./connection";
-import { queues } from "../queues";
+import { queues } from "./queues";
 
 export async function setupRabbitMQ(): Promise<void> {
   const channel = await RabbitMQConnection.getChannel();

@@ -3,9 +3,9 @@ import { DeleteClassStudentUseCase } from "../../application/use-cases/classStud
 import { GetAllClassStudentUseCase } from "../../application/use-cases/classStudent/GetAllClassStudentUseCase";
 import { GetOneClassStudentUseCase } from "../../application/use-cases/classStudent/GetOneClassStudentUseCase";
 import { UpdateClassStudentUseCase } from "../../application/use-cases/classStudent/UpdateClassStudentUseCase";
-import { ClassStudentTypeOrmRepository } from "../../infra/database/repositories/ClassStudentRepository";
-import { ClassStudentController } from "../../infra/http/controllers/ClassStudentController";
-import { cacheInstance } from "../instances/cache.instance";
+import { ClassStudentTypeOrmRepository } from "../../infrastructure/database/repositories/ClassStudentRepository";
+import { ClassStudentController } from "../../infrastructure/http/controllers/ClassStudentController";
+import { cacheInstance } from "../instances";
 
 export const makeClassStudentContainer = () => {
   const repo = new ClassStudentTypeOrmRepository();  

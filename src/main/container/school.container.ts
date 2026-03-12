@@ -4,10 +4,9 @@ import { GetAllSchoolUseCase } from "../../application/use-cases/school/GetAllSc
 import { GetSchoolByNameUseCase } from "../../application/use-cases/school/GetSchoolByNameUseCase";
 import { UpdateSchoolUseCase } from "../../application/use-cases/school/UpdateSchoolUseCase";
 import { UpdateStatusSchoolUseCase } from "../../application/use-cases/school/UpdateStatusSchoolUseCase";
-import { SchoolTypeOrmRepository } from "../../infra/database/repositories/SchoolRepository";
-import { SchoolController } from "../../infra/http/controllers/SchoolController";
-import { cacheInstance } from "../instances/cache.instance";
-import { rabbitServiceInstance } from "../instances/rabbit.instance";
+import { SchoolTypeOrmRepository } from "../../infrastructure/database/repositories/SchoolRepository";
+import { SchoolController } from "../../infrastructure/http/controllers/SchoolController";
+import { cacheInstance, rabbitServiceInstance } from "../instances";
 
 export const makeSchoolContainer = () => {
   const repo = new SchoolTypeOrmRepository();
