@@ -5,7 +5,7 @@ import { environmentConfig } from "../../main/instances";
 
 export class NotificationWorker {
     public async execute() {
-        cron.schedule(environmentConfig.CRON_JOB_NOTIFICATION, async () => {
+        cron.schedule(environmentConfig.CRON_NOTIFICATION, async () => {
             // new NotificationConsumer(rabbitServiceInstance)
             console.log(">>>>> NotificationWorker")
         });
