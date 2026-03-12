@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-import { ApplicationError } from "../../../utils/error";
+import { AppError, NotFoundError } from "../../../utils/error";
 
 export function authMiddleware(
   req: Request,
@@ -12,7 +12,7 @@ export function authMiddleware(
   if (!authHeader) {
     return res
       .status(401)
-      .json({ message: ApplicationError.generic.tokenNotFound });
+      .json({ message: new NotFoundError("Token").response });
   }
 
   const [, token] = authHeader.split(" ");
@@ -25,6 +25,6 @@ export function authMiddleware(
   } catch {
     return res
       .status(401)
-      .json({ message: ApplicationError.generic.tokenInvalid });
+      .json({ message: new AppError("Token inválido") });
   }
 }

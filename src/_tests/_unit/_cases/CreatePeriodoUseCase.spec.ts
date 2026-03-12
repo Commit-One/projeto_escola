@@ -1,4 +1,4 @@
-import { CreatePeriodUseCase } from "../../../application/use-cases/period/CreatePeriodoUseCase";
+import { CreatePeriodUseCase } from "../../../application/use-cases/period/create.usecase";
 import { FakeCacheRepository } from "../mocks/FakeCacheRepository";
 import { FakePeriodoRepository } from "../mocks/FakePeriodoRepository";
 

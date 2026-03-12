@@ -1,4 +1,5 @@
 import { StatusEnum } from "../../utils/enum/status";
+import { ValidationEmpty } from "../../utils/error";
 import { Base } from "./Base";
 
 export class User extends Base {
@@ -11,5 +12,13 @@ export class User extends Base {
     public status: StatusEnum = StatusEnum.ACTIVE,
   ) {
     super();
+    this.validate()
+  }
+
+  private validate() {
+    if (!this.name) throw new ValidationEmpty("name");
+    if (!this.email) throw new ValidationEmpty("email");
+    if (!this.schoolUuid) throw new ValidationEmpty("schoolUuid");
+    if (!this.profileUuid) throw new ValidationEmpty("profileUuid");
   }
 }

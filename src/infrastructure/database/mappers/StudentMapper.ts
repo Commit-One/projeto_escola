@@ -1,4 +1,4 @@
-import { StudentResponseDTO } from "../../../application/dtos/StudentDTO";
+import { StudentResponseDTO } from "../../../application/dtos/student.dto";
 import { Student } from "../../../domain/entities/Student";
 import { PeriodEntity } from "../entities/PeriodEntity";
 import { ProfileEntity } from "../entities/ProfilesEntity";

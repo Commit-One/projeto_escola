@@ -1,4 +1,4 @@
-import { LoginDTO } from "../../application/dtos/LoginDTO";
+import { LoginDTO } from "../../application/dtos/login.dto";
 import { User } from "../entities/User";
 
 export interface ILoginRepository {

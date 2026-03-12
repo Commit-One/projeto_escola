@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { validateMiddlewareSchema } from "../middleware/validateSchema";
-import { makeStudentContainer } from "../../../main/container/student.container";
+import { MakeStudentContainer } from "../../../main/container/student.container";
 import {
   createStudentSchemaValidator,
   deleteStudentSchemaValidator,
@@ -12,7 +12,7 @@ import {
 
 export const studentsRoutes = Router();
 
-const controller = makeStudentContainer();
+const controller = MakeStudentContainer.inicialize();
 
 studentsRoutes.get("/", (req, res) => controller.getAll(req, res));
 

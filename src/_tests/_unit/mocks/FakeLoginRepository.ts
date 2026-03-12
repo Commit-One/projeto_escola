@@ -1,4 +1,4 @@
-import { LoginDTO } from "../../../application/dtos/LoginDTO";
+import { LoginDTO } from "../../../application/dtos/login.dto";
 import { User } from "../../../domain/entities/User";
 import { ILoginRepository } from "../../../domain/repositories/ILoginRepository";
 

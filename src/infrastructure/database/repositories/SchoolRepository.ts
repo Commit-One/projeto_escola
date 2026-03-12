@@ -8,11 +8,11 @@ import { UserEntity } from "../entities/UserEntity";
 import { ProfileEntity } from "../entities/ProfilesEntity";
 import { ProfileEnum } from "../../../utils/enum/profile";
 import { BcryptSecurity } from "../../security/bcrypt";
-import { ApplicationError, ValidationError } from "../../../utils/error";
+import {  NotFoundError } from "../../../utils/error";
 import { StatusEnum } from "../../../utils/enum/status";
 import { environmentConfig } from "../../../main/instances";
+import { SchoolDTO } from "../../../application/dtos/school.dto";
 import { SchoolMapper } from "../mappers/SchoolMapper";
-import { SchoolDTO } from "../../../application/dtos/SchoolDTO";
 
 export class SchoolTypeOrmRepository implements ISchoolRepository {
   protected readonly _repo: Repository<SchoolEntity>;
@@ -31,7 +31,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
     const school = await this._repo.findOne({ where: { uuid } });
 
     if (!school) {
-      throw new ValidationError(ApplicationError.school.notFound);
+      throw new NotFoundError("Escola");
     }
 
     await this._repo.update({ uuid }, { ...data })
@@ -41,7 +41,6 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
   }
 
   async updateStatus(uuid: string, status: StatusEnum): Promise<boolean> {
-
     const queryRunner = AppDataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -84,7 +83,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
       });
 
       if (!profileAdmin) {
-        throw new ValidationError(ApplicationError.profile.profileNotFound);
+        throw new NotFoundError("Perfil");
       }
 
       const hashedPassword = await this._bcryp.hash(

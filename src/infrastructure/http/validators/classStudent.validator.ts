@@ -1,43 +1,43 @@
 import * as z from "zod";
-import { ApplicationError } from "../../../utils/error";
+import {  ValidationEmpty } from "../../../utils/error";
 
 const createClassSchemaValidator = z.object({
   body: z.object({
     name: z
-      .string({ error: ApplicationError.class.nameRequired })
+      .string({ error: new ValidationEmpty("Nome").response })
       .trim()
-      .min(1, ApplicationError.class.nameRequired),
-    maxAge: z.number({ error: ApplicationError.class.maxAgeRequired }),
-    minAge: z.number({ error: ApplicationError.class.minAgeRequired }),
+      .min(1, new ValidationEmpty("Nome").response),
+    maxAge: z.number({ error: new ValidationEmpty("Idade máxima").response }),
+    minAge: z.number({ error: new ValidationEmpty("Idade mínima").response }),
   }),
 });
 
 const updateClassSchemaValidator = z.object({
   body: z.object({
     name: z
-      .string({ error: ApplicationError.class.nameRequired })
+      .string({ error: new ValidationEmpty("Nome").response })
       .trim()
-      .min(1, ApplicationError.class.nameRequired),
-    maxAge: z.number({ error: ApplicationError.class.maxAgeRequired }),
-    minAge: z.number({ error: ApplicationError.class.minAgeRequired }),
+      .min(1, new ValidationEmpty("Nome").response),
+    maxAge: z.number({ error: new ValidationEmpty("Idade máxima").response }),
+    minAge: z.number({ error: new ValidationEmpty("Idade mínima").response }),
   }),
 });
 
 const deleteClassSchemaValidator = z.object({
   params: z.object({
     uuid: z
-      .string({ error: ApplicationError.generic.uuid })
+      .string({ error: new ValidationEmpty("Uuid").response })
       .trim()
-      .min(1, ApplicationError.generic.uuid),
+      .min(1, new ValidationEmpty("Uuid").response),
   }),
 });
 
 const getOneClassSchemaValidator = z.object({
   params: z.object({
     uuid: z
-      .string({ error: ApplicationError.generic.uuid })
+      .string({ error: new ValidationEmpty("Uuid").response })
       .trim()
-      .min(1, ApplicationError.class.nameRequired),
+      .min(1, new ValidationEmpty("Uuid").response),
   }),
 });
 

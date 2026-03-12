@@ -1,4 +1,4 @@
-import { CreateProfileUseCase } from "../../../application/use-cases/profile/CreateProfileUseCase";
+import { CreateProfileUseCase } from "../../../application/use-cases/profile/create.usecase";
 import { FakeCacheRepository } from "../mocks/FakeCacheRepository";
 import { FakeProfileRepository } from "../mocks/FakeProfileRepository";
 

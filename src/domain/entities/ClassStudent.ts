@@ -1,3 +1,4 @@
+import { ValidationEmpty } from "../../utils/error";
 import { Base } from "./Base";
 
 export class ClassStudent extends Base {
@@ -7,5 +8,12 @@ export class ClassStudent extends Base {
     public minAge: number,
   ) {
     super();
+    this.validate()
+  }
+
+  private validate() {
+    if (!this.name) throw new ValidationEmpty("name")
+    if (!this.maxAge) throw new ValidationEmpty("maxAge")
+    if (!this.minAge) throw new ValidationEmpty("minAge")
   }
 }

@@ -3,9 +3,9 @@ import { AppDataSource } from "../data-source";
 import { IClassStudentRepository } from "../../../domain/repositories/IClassStudentRepository";
 import { ClassStudent } from "../../../domain/entities/ClassStudent";
 import { ClassStudentEntity } from "../entities/ClassStudentEntity";
+import { NotFoundError, } from "../../../utils/error";
+import { ClassStudentDTO } from "../../../application/dtos/classStudent.dto";
 import { ClassStudentMapper } from "../mappers/ClassStudentMapper";
-import { ApplicationError, ValidationError } from "../../../utils/error";
-import { ClassStudentDTO } from "../../../application/dtos/ClassStudentDTO";
 
 export class ClassStudentTypeOrmRepository implements IClassStudentRepository {
   protected readonly _repo: Repository<ClassStudentEntity>;
@@ -16,6 +16,7 @@ export class ClassStudentTypeOrmRepository implements IClassStudentRepository {
 
   async getOne(uuid: string): Promise<ClassStudent | null> {
     const find = await this._repo.findOne({where: {uuid}}) 
+    if (find) throw new NotFoundError("Classe")
     return ClassStudentMapper.toDomain(find!)
   }
   
@@ -32,10 +33,7 @@ export class ClassStudentTypeOrmRepository implements IClassStudentRepository {
   async update(uuid: string, data: ClassStudentDTO): Promise<ClassStudent> {
     const entity = await this._repo.findOne({ where: { uuid } });
 
-    if (!entity) {
-      throw new ValidationError(ApplicationError.generic.notFound);
-    }
-    
+    if (!entity) throw new NotFoundError("Classe");
     await this._repo.update({ uuid }, { ...data });
 
     return ClassStudentMapper.toDomain(entity);

@@ -1,4 +1,4 @@
-import { LoginDTO } from "../../../application/dtos/LoginDTO";
+import { LoginDTO } from "../../../application/dtos/login.dto";
 import { ProfileEntity } from "../entities/ProfilesEntity";
  import { SchoolEntity } from "../entities/SchoolEntity";
 import { UserEntity } from "../entities/UserEntity";

@@ -1,11 +1,11 @@
-import { CreateSchoolUseCase } from "../../../application/use-cases/school/CreateSchoolUseCase";
+import { CreateSchoolUseCase } from "../../../application/use-cases/school/create.usecase";
 import { Request, Response } from "express";
-import { handler } from "../statusHttp";
-import { GetAllSchoolUseCase } from "../../../application/use-cases/school/GetAllSchoolUseCase";
-import { DeleteSchoolUseCase } from "../../../application/use-cases/school/DeleteSchoolUseCase";
-import { UpdateSchoolUseCase } from "../../../application/use-cases/school/UpdateSchoolUseCase";
-import { GetSchoolByNameUseCase } from "../../../application/use-cases/school/GetSchoolByNameUseCase";
-import { UpdateStatusSchoolUseCase } from "../../../application/use-cases/school/UpdateStatusSchoolUseCase";
+import { Handler } from "../statusHttp";
+import { GetAllSchoolUseCase } from "../../../application/use-cases/school/getAll.usecase";
+import { DeleteSchoolUseCase } from "../../../application/use-cases/school/delete.usecase";
+import { UpdateSchoolUseCase } from "../../../application/use-cases/school/update.usecase";
+import { GetSchoolByNameUseCase } from "../../../application/use-cases/school/getByName.usecase";
+import { UpdateStatusSchoolUseCase } from "../../../application/use-cases/school/updateStatus.usecase";
 
 export class SchoolController {
   constructor(
@@ -29,18 +29,18 @@ export class SchoolController {
         email,
         nameDirector,
       });
-      return handler.created(res, school);
+      return Handler.created(res, school);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 
   async getAll(_: Request, res: Response) {
     try {
       const schools = await this._getAll.execute();
-      return handler.ok(res, schools);
+      return Handler.ok(res, schools);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 
@@ -48,9 +48,9 @@ export class SchoolController {
     try {
       const { uuid } = req.params;
       const deleted = await this._delete.execute(String(uuid));
-      return handler.ok(res, deleted);
+      return Handler.ok(res, deleted);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 
@@ -65,9 +65,9 @@ export class SchoolController {
         email,
         nameDirector,
       });
-      return handler.ok(res, school);
+      return Handler.ok(res, school);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 
@@ -75,9 +75,9 @@ export class SchoolController {
     try {
       const { name } = req.params;
       const school = await this._getByName.execute(String(name));
-      return handler.ok(res, school);
+      return Handler.ok(res, school);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 
@@ -86,9 +86,9 @@ export class SchoolController {
       const { uuid } = req.params;
       const { status } = req.body;
       const updated = await this._updateStatus.execute(uuid as string, status);
-      return handler.ok(res, updated);
+      return Handler.ok(res, updated);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 }

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { handler } from "../statusHttp";
-import { GetAllUsersUserCase } from "../../../application/use-cases/user/GetAllUsersUseCase";
-import { UpdatePasswordUseCase } from "../../../application/use-cases/user/UpdatePasswordUseCase";
-import { UpdateStatusUserUseCase } from "../../../application/use-cases/user/UpdateStatusUserUseCase";
+import { Handler } from "../statusHttp";
+import { GetAllUsersUserCase } from "../../../application/use-cases/user/getAll.usecase";
+import { UpdatePasswordUseCase } from "../../../application/use-cases/user/updatePassword.usecase";
+import { UpdateStatusUserUseCase } from "../../../application/use-cases/user/updateStatus.usecase";
 
 export class UserController {
   constructor(
@@ -14,9 +14,9 @@ export class UserController {
   async getAll(_: Request, res: Response) {
     try {
       const users = await this._getAll.execute();
-      return handler.ok(res, users);
+      return Handler.ok(res, users);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 
@@ -24,9 +24,9 @@ export class UserController {
     try {
       const { email, password } = req.body;
       const updated = await this._updatePassword.execute(password, email);
-      return handler.ok(res, updated);
+      return Handler.ok(res, updated);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 
@@ -35,9 +35,9 @@ export class UserController {
       const { uuid } = req.params;
       const { status } = req.body;
       const updated = await this._updateStatus.execute(uuid as string, status);
-      return handler.ok(res, updated);
+      return Handler.ok(res, updated);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 }

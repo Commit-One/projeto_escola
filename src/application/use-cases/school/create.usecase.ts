@@ -4,8 +4,7 @@ import { School } from "../../../domain/entities/School";
 import { ISchoolRepository } from "../../../domain/repositories/ISchoolRepository";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { QueueEnum } from "../../../utils/enum/queue";
-import { INotificationEmailDTO } from "../../dtos/NotificationDTO";
-import { SchoolDTO } from "../../dtos/SchoolDTO";
+import { SchoolDTO } from "../../dtos/school.dto";
 
 export class CreateSchoolUseCase {
   constructor(

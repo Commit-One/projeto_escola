@@ -1,4 +1,4 @@
-import { GetAllUsersUserCase } from "../../../application/use-cases/user/GetAllUsersUseCase";
+import { GetAllUsersUserCase } from "../../../application/use-cases/user/getAll.usecase";
 import { User } from "../../../domain/entities/User";
 import { StatusEnum } from "../../../utils/enum/status";
 import { FakeCacheRepository } from "../mocks/FakeCacheRepository";

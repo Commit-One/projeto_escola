@@ -1,90 +1,93 @@
 import * as z from "zod";
-import { ApplicationError } from "../../../utils/error";
+import { AppError, ValidationEmpty } from "../../../utils/error";
 
 const createSchoolSchema = z.object({
   body: z.object({
     name: z
-      .string({ error: ApplicationError.school.nameSchoolRequired })
+      .string({ error: new ValidationEmpty("Nome da escola").response })
       .trim()
-      .min(1, ApplicationError.school.nameSchoolRequired),
+      .min(1, new ValidationEmpty("Nome da escola").response),
     address: z
-      .string({ error: ApplicationError.school.addressRequired })
+      .string({ error: new ValidationEmpty("Endereço").response })
       .trim()
-      .min(1, ApplicationError.school.addressRequired),
+      .min(1, new ValidationEmpty("Endereço").response),
     phone: z
-      .string({ error: ApplicationError.school.phoneRequired })
+      .string({ error: new ValidationEmpty("Telefone").response })
       .trim()
-      .min(1, ApplicationError.school.phoneRequired),
+      .min(1, new ValidationEmpty("Telefone").response),
     nameDirector: z
-      .string({ error: ApplicationError.school.nameDirectorRequired })
+      .string({ error: new ValidationEmpty("Nome do diretor").response })
       .trim()
-      .min(1, ApplicationError.school.nameDirectorRequired),
+      .min(1, new ValidationEmpty("Nome do diretor").response),
     email: z
-      .string({ error: ApplicationError.school.emailRequired })
+      .string({ error: new ValidationEmpty("E-mail").response })
       .trim()
-      .email(ApplicationError.generic.formatEmail)
-      .min(1, ApplicationError.school.emailRequired),
+      .email(new AppError("Formato inválido"))
+      .min(1, new ValidationEmpty("E-mail").response),
   }),
 });
 
 const deleteSchoolSchema = z.object({
   params: z.object({
     uuid: z
-      .string({ error: ApplicationError.generic.uuid })
+      .string({ error: new ValidationEmpty("Uuid").response })
       .trim()
       .uuid()
-      .min(1, ApplicationError.generic.uuid),
+      .min(1, new ValidationEmpty("Uuid").response),
   }),
 });
 
 const getByNameSchema = z.object({
   params: z.object({
     name: z
-      .string({ error: ApplicationError.school.nameSchoolRequired })
+      .string({ error: new ValidationEmpty("Nome da escola").response })
       .trim()
-      .min(1, ApplicationError.school.nameSchoolRequired),
+      .min(1, new ValidationEmpty("Nome da escola").response),
   }),
 });
 
 const updateSchoolSchema = z.object({
   body: z.object({
     name: z
-      .string({ error: ApplicationError.school.nameSchoolRequired })
+      .string({ error: new ValidationEmpty("Nome da escola").response })
       .trim()
-      .min(1, ApplicationError.school.nameSchoolRequired),
+      .min(1, new ValidationEmpty("Nome da escola").response),
     address: z
-      .string({ error: ApplicationError.school.addressRequired })
+      .string({ error: new ValidationEmpty("Endereço").response })
       .trim()
-      .min(1, ApplicationError.school.addressRequired),
+      .min(1, new ValidationEmpty("Endereço").response),
     phone: z
-      .string({ error: ApplicationError.school.phoneRequired })
+      .string({ error: new ValidationEmpty("Telefone").response })
       .trim()
-      .min(1, ApplicationError.school.phoneRequired),
+      .min(1, new ValidationEmpty("Telefone").response),
     nameDirector: z
-      .string({ error: ApplicationError.school.nameDirectorRequired })
+      .string({ error: new ValidationEmpty("Nome do diretor").response })
       .trim()
-      .min(1, ApplicationError.school.nameDirectorRequired),
+      .min(1, new ValidationEmpty("Nome do diretor").response),
     email: z
-      .string({ error: ApplicationError.school.emailRequired })
+      .string({ error: new ValidationEmpty("E-mail").response })
       .trim()
-      .email()
-      .min(1, ApplicationError.school.emailRequired),
+      .email(new AppError("Formato inválido"))
+      .min(1, new ValidationEmpty("E-mail").response),
   }),
   params: z.object({
     uuid: z
-      .string({ error: ApplicationError.generic.uuid })
+      .string({ error: new ValidationEmpty("Uuid").response })
       .trim()
       .uuid()
-      .min(1, ApplicationError.generic.uuid),
+      .min(1, new ValidationEmpty("Uuid").response),
   }),
 });
 
 const updateStatusSchoolSchema = z.object({
   body: z.object({
-    status: z.string().trim().min(1, ApplicationError.generic.updateStatus),
+    status: z.string().trim().min(1, new ValidationEmpty("Status").response),
   }),
   params: z.object({
-    uuid: z.string().trim().min(1, ApplicationError.generic.uuid),
+    uuid: z
+      .string({ error: new ValidationEmpty("Uuid").response })
+      .trim()
+      .min(1, new ValidationEmpty("Uuid").response),
   }),
 });
 

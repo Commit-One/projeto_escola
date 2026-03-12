@@ -1,4 +1,4 @@
-import { UpdatePasswordUseCase } from "../../../application/use-cases/user/UpdatePasswordUseCase";
+import { UpdatePasswordUseCase } from "../../../application/use-cases/user/updatePassword.usecase";
 import { User } from "../../../domain/entities/User";
 import { StatusEnum } from "../../../utils/enum/status";
 import { FakeUserRepository } from "../mocks/FakeUserRepository";

@@ -1,13 +1,15 @@
-import { CreateProfileUseCase } from "../../application/use-cases/profile/CreateProfileUseCase";
+import { CreateProfileUseCase } from "../../application/use-cases/profile/create.usecase";
 import { ProfileTypeOrmRepository } from "../../infrastructure/database/repositories/ProfileRepository";
-import { ProfileController } from "../../infrastructure/http/controllers/ProfileController";
+import { ProfileController } from "../../infrastructure/http/controllers/profile.controller";
 import { cacheInstance } from "../instances";
 
-export const makeProfileContainer = () => {
-  const repo = new ProfileTypeOrmRepository();
+export class MakeProfileContainer {
+  public static inicialize() {
+    const repo = new ProfileTypeOrmRepository();
 
-  const createUC = new CreateProfileUseCase(repo, cacheInstance);
-  const controller = new ProfileController(createUC);
+    const createUC = new CreateProfileUseCase(repo, cacheInstance);
+    const controller = new ProfileController(createUC);
 
-  return controller;
-};
+    return controller;
+  }
+}

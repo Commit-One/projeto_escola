@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { handler } from "../statusHttp";
-import { CreatePeriodUseCase } from "../../../application/use-cases/period/CreatePeriodoUseCase";
+import { Handler } from "../statusHttp";
+import { CreatePeriodUseCase } from "../../../application/use-cases/period/create.usecase";
 
 export class PeriodController {
   constructor(private readonly _create: CreatePeriodUseCase) {}
@@ -8,9 +8,9 @@ export class PeriodController {
   async create(_: Request, res: Response) {
     try {
       const user = await this._create.execute();
-      return handler.created(res, user);
+      return Handler.created(res, user);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 }

@@ -12,7 +12,7 @@ export class ServerInitializer {
     this.app = express();
   }
 
-  public async execute() {
+  public async inicialize() {
     await AppDataSource.initialize();
     console.log("✅ Database connected");
 

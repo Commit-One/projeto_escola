@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { handler } from "../statusHttp";
-import { CreateProfileUseCase } from "../../../application/use-cases/profile/CreateProfileUseCase";
+import { Handler } from "../statusHttp";
+import { CreateProfileUseCase } from "../../../application/use-cases/profile/create.usecase";
 
 export class ProfileController {
   constructor(private readonly _create: CreateProfileUseCase) {}
@@ -8,9 +8,9 @@ export class ProfileController {
   async create(_: Request, res: Response) {
     try {
       const user = await this._create.execute();
-      return handler.created(res, user);
+      return Handler.created(res, user);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 }

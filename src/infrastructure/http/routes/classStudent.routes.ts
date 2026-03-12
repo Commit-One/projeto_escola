@@ -6,11 +6,11 @@ import {
   getOneClassSchemaValidator,
   updateClassSchemaValidator,
 } from "../validators/classStudent.validator";
-import { makeClassStudentContainer } from "../../../main/container/classStudent.container";
+import { MakeClassStudentContainer } from "../../../main/container/classStudent.container";
 
 export const classStudents = Router();
 
-const controller = makeClassStudentContainer();
+const controller = MakeClassStudentContainer.inicialize();
 
 classStudents.post(
   "/",

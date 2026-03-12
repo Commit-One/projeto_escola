@@ -1,4 +1,4 @@
-import { UpdateStatusUserUseCase } from "../../../application/use-cases/user/UpdateStatusUserUseCase";
+import { UpdateStatusUserUseCase } from "../../../application/use-cases/user/updateStatus.usecase";
 import { User } from "../../../domain/entities/User";
 import { StatusEnum } from "../../../utils/enum/status";
 import { FakeCacheRepository } from "../mocks/FakeCacheRepository";

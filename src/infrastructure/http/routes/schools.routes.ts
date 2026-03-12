@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { makeSchoolContainer } from "../../../main/container/school.container";
+import { MakeSchoolContainer } from "../../../main/container/school.container";
 import { validateMiddlewareSchema } from "../middleware/validateSchema";
 import {
   createSchoolSchema,
@@ -11,7 +11,7 @@ import {
 
 export const schoolRoutes = Router();
 
-const controller = makeSchoolContainer();
+const controller = MakeSchoolContainer.inicialize();
 
 schoolRoutes.post(
   "/",

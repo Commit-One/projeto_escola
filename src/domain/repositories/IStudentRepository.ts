@@ -1,7 +1,7 @@
 import {
   StudentDTO,
   StudentResponseDTO,
-} from "../../application/dtos/StudentDTO";
+} from "../../application/dtos/student.dto";
 import { StatusEnum } from "../../utils/enum/status";
 
 export interface IStudentRepository {

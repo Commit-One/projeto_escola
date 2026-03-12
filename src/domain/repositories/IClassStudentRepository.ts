@@ -1,4 +1,4 @@
-import { ClassStudentDTO } from "../../application/dtos/ClassStudentDTO";
+import { ClassStudentDTO } from "../../application/dtos/classStudent.dto";
 import { StatusEnum } from "../../utils/enum/status";
 import { ClassStudent } from "../entities/ClassStudent";
 

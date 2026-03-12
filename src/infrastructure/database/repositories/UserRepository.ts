@@ -3,7 +3,7 @@ import { AppDataSource } from "../data-source";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { UserEntity } from "../entities/UserEntity";
 import { User } from "../../../domain/entities/User";
-import { ApplicationError, ValidationError } from "../../../utils/error";
+import { NotFoundError } from "../../../utils/error";
 import { BcryptSecurity } from "../../security/bcrypt";
 import { StatusEnum } from "../../../utils/enum/status";
 import { UserMapper } from "../mappers/UserMapper";
@@ -35,7 +35,7 @@ export class UserTypeOrmRepository implements IUserRepository {
     const user = await this._repo.findOne({ where: { uuid } });
 
     if (!user) {
-      throw new ValidationError(ApplicationError.user.notFound);
+      throw new NotFoundError("Usuáiro");
     }
 
     user.email = data.email;
@@ -52,7 +52,7 @@ export class UserTypeOrmRepository implements IUserRepository {
   async updatePassword(password: string, email: string): Promise<boolean> {
     const user = await this._repo.findOne({ where: { email } });
 
-    if (!user) throw new ValidationError(ApplicationError.user.notFound);
+    if (!user) throw new NotFoundError("Usuário");
 
     password = await this._bcryp.hash(password);
 
@@ -71,7 +71,7 @@ export class UserTypeOrmRepository implements IUserRepository {
   async findByEmail(email: string): Promise<User | null> {
     const user = await this._repo.findOne({ where: { email } });
 
-    if (!user) throw new ValidationError(ApplicationError.user.notFound);
+    if (!user) throw new NotFoundError("Usuário");
 
     return UserMapper.toDomain(user)
   }

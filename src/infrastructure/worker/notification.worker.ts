@@ -1,7 +1,5 @@
 import cron from "node-cron";
 import { environmentConfig } from "../../main/instances";
-// import { NotificationConsumer } from "../messaging/rabbit/consumers/notification.consumer";
-// import { rabbitServiceInstance } from "../../main/instances";
 
 export class NotificationWorker {
     public async execute() {

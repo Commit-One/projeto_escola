@@ -1,7 +1,7 @@
 import { ICacheService } from "../../../domain/contracts/ICacheService";
 import { IStudentRepository } from "../../../domain/repositories/IStudentRepository";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
-import { StudentResponseDTO } from "../../dtos/StudentDTO";
+import { StudentResponseDTO } from "../../dtos/student.dto";
 
 export class GetAllStudetsUseCase {
   constructor(

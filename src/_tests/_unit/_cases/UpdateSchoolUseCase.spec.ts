@@ -1,4 +1,4 @@
-import { UpdateSchoolUseCase } from "../../../application/use-cases/school/UpdateSchoolUseCase";
+import { UpdateSchoolUseCase } from "../../../application/use-cases/school/update.usecase";
 import { FakeCacheRepository } from "../mocks/FakeCacheRepository";
 import { FakeSchoolRepository } from "../mocks/FakeSchoolRepository";
 import { School } from "../../../domain/entities/School";

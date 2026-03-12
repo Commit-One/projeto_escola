@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { handler } from "../statusHttp";
-import { SignInUseCase } from "../../../application/use-cases/login/SignInUseCase";
-import { DecodedUseCase } from "../../../application/use-cases/login/DecodedUseCase";
+import { Handler } from "../statusHttp";
+import { SignInUseCase } from "../../../application/use-cases/login/signIn.usecase";
+import { DecodedUseCase } from "../../../application/use-cases/login/decoded.usecase";
 
 export class LoginController {
   constructor(
@@ -14,9 +14,9 @@ export class LoginController {
       const { email, password } = req.body;
       const user = await this._login.execute(email, password);
 
-      return handler.ok(res, user);
+      return Handler.ok(res, user);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 
@@ -25,9 +25,9 @@ export class LoginController {
       const { token } = req.body;
       const user = await this._decoded.execute(token);
 
-      return handler.ok(res, user);
+      return Handler.ok(res, user);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 }

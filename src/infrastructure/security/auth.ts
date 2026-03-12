@@ -1,5 +1,5 @@
 import { IAuthenticationSecurity } from "../../domain/contracts/IAuthenticationSecurity";
-import { LoginDTO } from "../../application/dtos/LoginDTO";
+import { LoginDTO } from "../../application/dtos/login.dto";
 import jwt from "jsonwebtoken";
 
 export class AuthenticationSecurity implements IAuthenticationSecurity {

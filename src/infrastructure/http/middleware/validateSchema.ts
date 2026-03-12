@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { ZodSchema } from "zod";
-import { ApplicationError } from "../../../utils/error";
 
 export const validateMiddlewareSchema = (schema: ZodSchema) => {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -13,7 +12,7 @@ export const validateMiddlewareSchema = (schema: ZodSchema) => {
       next();
     } catch (error: any) {
       return res.status(400).json({
-        message: ApplicationError.generic.default,
+        message: "Ocorre um erro interno",
         errors: error?.flatten ? error.flatten() : error,
       });
     }

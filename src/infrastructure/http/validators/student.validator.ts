@@ -1,52 +1,53 @@
 import * as z from "zod";
-import { ApplicationError } from "../../../utils/error";
+import { ValidationEmpty } from "../../../utils/error";
+
 
 const createStudentSchemaValidator = z.object({
   body: z.object({
     name: z
-      .string({ error: ApplicationError.student.nameRequired })
+      .string({ error: new ValidationEmpty("Name").response })
       .trim()
-      .min(1, ApplicationError.student.nameRequired),
+      .min(1, new ValidationEmpty("Name").response),
 
     matriculation: z
       .string({
-        error: ApplicationError.student.matriculationRequired,
+        error: new ValidationEmpty("Matriculation").response,
       })
       .trim()
-      .min(1, ApplicationError.student.matriculationRequired),
+      .min(1, new ValidationEmpty("Matriculation").response),
 
     dateBirth: z.coerce.date({
-      error: () => ({ message: ApplicationError.student.dateBirthRequired }),
+      error: () => ({ message: new ValidationEmpty("Data aniversário").response }),
     }),
 
     status: z
-      .string({ error: ApplicationError.student.statusRequired })
+      .string({ error: new ValidationEmpty("Status").response })
       .trim()
-      .min(1, ApplicationError.student.statusRequired),
+      .min(1, new ValidationEmpty("Status").response),
 
     nameMother: z
-      .string({ error: ApplicationError.student.nameMotherRequired })
+      .string({ error: new ValidationEmpty("NameMother").response })
       .trim()
-      .min(1, ApplicationError.student.nameMotherRequired),
+      .min(1, new ValidationEmpty("NameMother").response),
 
     nameFather: z
-      .string({ error: ApplicationError.student.nameFatherRequired })
+      .string({ error: new ValidationEmpty("NameFather").response })
       .trim()
-      .min(1, ApplicationError.student.nameFatherRequired),
+      .min(1, new ValidationEmpty("NameFather").response),
 
     phone: z
-      .string({ error: ApplicationError.student.phoneRequired })
+      .string({ error: new ValidationEmpty("Phone").response })
       .trim()
-      .min(1, ApplicationError.student.phoneRequired),
+      .min(1, new ValidationEmpty("Phone").response),
 
     classStudent: z
-      .string({ error: ApplicationError.student.classStudentRequired })
+      .string({ error: new ValidationEmpty("ClassStudent").response })
       .trim()
-      .min(1, ApplicationError.student.classStudentRequired),
+      .min(1, new ValidationEmpty("ClassStudent").response),
 
     dateMatriculation: z.coerce.date({
       error: () => ({
-        message: ApplicationError.student.dateMatriculationRequired,
+        message: new ValidationEmpty("Data de matrícula").response,
       }),
     }),
 
@@ -56,92 +57,92 @@ const createStudentSchemaValidator = z.object({
 
     datePayment: z.coerce.date({
       error: () => ({
-        message: ApplicationError.student.datePaymentRequired,
+        message: new ValidationEmpty("Data de pagamento").response,
       }),
     }),
 
     schoolUuid: z
-      .string()
+      .string({ error: new ValidationEmpty("SchoolUuid").response })
       .trim()
-      .min(1, ApplicationError.student.schoolUuidRequired),
+      .min(1, new ValidationEmpty("SchoolUuid").response),
 
     periodUuid: z
-      .string()
+      .string({ error: new ValidationEmpty("PeriodUuid").response })
       .trim()
-      .min(1, ApplicationError.student.periodUuidRequired),
+      .min(1, new ValidationEmpty("PeriodUuid").response),
   }),
 });
 
 const deleteStudentSchemaValidator = z.object({
   params: z.object({
     uuid: z
-      .string({ error: ApplicationError.generic.uuid })
-      .min(1, ApplicationError.generic.uuid),
+      .string({ error: new ValidationEmpty("Uuid").response })
+      .min(1, new ValidationEmpty("Uuid").response),
   }),
 });
 
 const getOneStudentSchemaValidator = z.object({
   params: z.object({
     uuid: z
-      .string({ error: ApplicationError.generic.uuid })
-      .min(1, ApplicationError.generic.uuid),
+      .string({ error: new ValidationEmpty("Uuid").response })
+      .min(1, new ValidationEmpty("Uuid").response),
   }),
 });
 
 const updateStatusStudentSchemaValidator = z.object({
   params: z.object({
     uuid: z
-      .string({ error: ApplicationError.generic.uuid })
-      .min(1, ApplicationError.generic.uuid),
+      .string({ error: new ValidationEmpty("Uuid").response })
+      .min(1, new ValidationEmpty("Uuid").response),
   }),
 });
 
 const updateStudentSchemaValidator = z.object({
   body: z.object({
     name: z
-      .string({ error: ApplicationError.student.nameRequired })
+      .string({ error: new ValidationEmpty("Name").response })
       .trim()
-      .min(1, ApplicationError.student.nameRequired),
+      .min(1, new ValidationEmpty("Name").response),
 
     matriculation: z
       .string({
-        error: ApplicationError.student.matriculationRequired,
+        error: new ValidationEmpty("Matriculation").response,
       })
       .trim()
-      .min(1, ApplicationError.student.matriculationRequired),
+      .min(1, new ValidationEmpty("Matriculation").response),
 
     dateBirth: z.coerce.date({
-      error: () => ({ message: ApplicationError.student.dateBirthRequired }),
+      error: () => ({ message: new ValidationEmpty("Data de aniversário").response }),
     }),
 
     status: z
-      .string({ error: ApplicationError.student.statusRequired })
+      .string({ error: new ValidationEmpty("Status").response })
       .trim()
-      .min(1, ApplicationError.student.statusRequired),
+      .min(1, new ValidationEmpty("Status").response),
 
     nameMother: z
-      .string({ error: ApplicationError.student.nameMotherRequired })
+      .string({ error: new ValidationEmpty("NameMother").response })
       .trim()
-      .min(1, ApplicationError.student.nameMotherRequired),
+      .min(1, new ValidationEmpty("NameMother").response),
 
     nameFather: z
-      .string({ error: ApplicationError.student.nameFatherRequired })
+      .string({ error: new ValidationEmpty("NameFather").response })
       .trim()
-      .min(1, ApplicationError.student.nameFatherRequired),
+      .min(1, new ValidationEmpty("NameFather").response),
 
     phone: z
-      .string({ error: ApplicationError.student.phoneRequired })
+      .string({ error: new ValidationEmpty("Phone").response })
       .trim()
-      .min(1, ApplicationError.student.phoneRequired),
+      .min(1, new ValidationEmpty("Phone").response),
 
     classStudent: z
-      .string({ error: ApplicationError.student.classStudentRequired })
+      .string({ error: new ValidationEmpty("ClassStudent").response })
       .trim()
-      .min(1, ApplicationError.student.classStudentRequired),
+      .min(1, new ValidationEmpty("ClassStudent").response),
 
     dateMatriculation: z.coerce.date({
       error: () => ({
-        message: ApplicationError.student.dateMatriculationRequired,
+        message: new ValidationEmpty("Data de matrícula").response,
       }),
     }),
 
@@ -151,19 +152,19 @@ const updateStudentSchemaValidator = z.object({
 
     datePayment: z.coerce.date({
       error: () => ({
-        message: ApplicationError.student.datePaymentRequired,
+        message: new ValidationEmpty("Data de pagamento").response,
       }),
     }),
 
     schoolUuid: z
-      .string()
+      .string({ error: new ValidationEmpty("SchoolUuid").response })
       .trim()
-      .min(1, ApplicationError.student.schoolUuidRequired),
+      .min(1, new ValidationEmpty("SchoolUuid").response),
 
     periodUuid: z
-      .string()
+      .string({ error: new ValidationEmpty("PeriodUuid").response })
       .trim()
-      .min(1, ApplicationError.student.periodUuidRequired),
+      .min(1, new ValidationEmpty("PeriodUuid").response),
   }),
 });
 

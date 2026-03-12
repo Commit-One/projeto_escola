@@ -36,7 +36,6 @@ export interface StudentDTO {
   nameMother: string;
   nameFather: string;
   phone: string;
-  classStudent: string;
   dateMatriculation: Date;
   hasDiscount: boolean;
   discount: number;

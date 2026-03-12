@@ -1,4 +1,4 @@
-import { SchoolDTO } from "../../application/dtos/SchoolDTO";
+import { SchoolDTO } from "../../application/dtos/school.dto";
 import { StatusEnum } from "../../utils/enum/status";
 import { School } from "../entities/School";
 

@@ -1,17 +1,17 @@
 import * as z from "zod";
-import { ApplicationError } from "../../../utils/error";
+import { AppError, ValidationEmpty } from "../../../utils/error";
 
 const loginSchemaValidator = z.object({
   body: z.object({
     email: z
-      .string({ error: ApplicationError.user.emailRequired })
+      .string({ error: new ValidationEmpty("email").response })
       .trim()
-      .email(ApplicationError.generic.formatEmail)
-      .min(1, ApplicationError.user.emailRequired),
+      .email(new AppError("Formato inválido"))
+      .min(1, new ValidationEmpty("email").response),
     password: z
-      .string({ error: ApplicationError.user.passwordRequired })
+      .string({ error: new ValidationEmpty("password").response })
       .trim()
-      .min(1, ApplicationError.user.passwordRequired),
+      .min(1, new ValidationEmpty("password").response),
   }),
 });
 

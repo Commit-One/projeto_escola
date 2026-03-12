@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
-import { handler } from "../statusHttp";
-import { GetAllUsersUserCase } from "../../../application/use-cases/user/GetAllUsersUseCase";
-import { UpdatePasswordUseCase } from "../../../application/use-cases/user/UpdatePasswordUseCase";
-import { UpdateStatusUserUseCase } from "../../../application/use-cases/user/UpdateStatusUserUseCase";
-import { CreateStudentUseCase } from "../../../application/use-cases/student/CreateStudentUseCase";
-import { GetOneStudentUseCase } from "../../../application/use-cases/student/GetOneStudentUseCase";
-import { GetAllStudetsUseCase } from "../../../application/use-cases/student/GetAllStudetsUseCase";
-import { DeleteStudentUseCase } from "../../../application/use-cases/student/DeleteStudentUseCase";
-import { UpdateStatusStudentUseCase } from "../../../application/use-cases/student/UpdateStatusStudentUseCase";
-import { UpdateStudentUseCase } from "../../../application/use-cases/student/UpdateStudentUseCase";
+import { Handler } from "../statusHttp";
+import { GetAllUsersUserCase } from "../../../application/use-cases/user/getAll.usecase";
+import { UpdatePasswordUseCase } from "../../../application/use-cases/user/updatePassword.usecase";
+import { UpdateStatusUserUseCase } from "../../../application/use-cases/user/updateStatus.usecase";
+import { CreateStudentUseCase } from "../../../application/use-cases/student/createStudent.usecase";
+import { GetOneStudentUseCase } from "../../../application/use-cases/student/getOne.usecase";
+import { GetAllStudetsUseCase } from "../../../application/use-cases/student/getAll.usecase";
+import { DeleteStudentUseCase } from "../../../application/use-cases/student/deleteStudent.usecase";
+import { UpdateStatusStudentUseCase } from "../../../application/use-cases/student/updateStatus.usecase";
+import { UpdateStudentUseCase } from "../../../application/use-cases/student/updateStudent.usecase";
 
 export class StudentController {
   constructor(
@@ -25,18 +25,18 @@ export class StudentController {
       const body = req.body;
 
       const student = await this._create.execute(body);
-      return handler.created(res, student);
+      return Handler.created(res, student);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 
   async getAll(_: Request, res: Response) {
     try {
       const students = await this._getAll.execute();
-      return handler.ok(res, students);
+      return Handler.ok(res, students);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 
@@ -44,9 +44,9 @@ export class StudentController {
     try {
       const { uuid } = req.params;
       const student = await this._getOne.execute(uuid as string);
-      return handler.ok(res, student);
+      return Handler.ok(res, student);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 
@@ -54,9 +54,9 @@ export class StudentController {
     try {
       const { uuid } = req.params;
       const deleted = await this._delete.execute(uuid as string);
-      return handler.ok(res, deleted);
+      return Handler.ok(res, deleted);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 
@@ -65,9 +65,9 @@ export class StudentController {
       const { uuid } = req.params;
       const body = req.body;
       const updated = await this._update.execute(uuid as string, body);
-      return handler.ok(res, updated);
+      return Handler.ok(res, updated);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 
@@ -76,9 +76,9 @@ export class StudentController {
       const { uuid } = req.params;
       const { status } = req.body;
       const updated = await this._updateStatus.execute(uuid as string, status);
-      return handler.ok(res, updated);
+      return Handler.ok(res, updated);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 }

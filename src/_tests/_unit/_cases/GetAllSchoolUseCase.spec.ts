@@ -1,4 +1,4 @@
-import { GetAllSchoolUseCase } from "../../../application/use-cases/school/GetAllSchoolUseCase";
+import { GetAllSchoolUseCase } from "../../../application/use-cases/school/getAll.usecase";
 import { FakeCacheRepository } from "../mocks/FakeCacheRepository";
 import { FakeSchoolRepository } from "../mocks/FakeSchoolRepository";
 import { School } from "../../../domain/entities/School";

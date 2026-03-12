@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { makeProfileContainer } from "../../../main/container/profile.container";
+import { MakeProfileContainer } from "../../../main/container/profile.container";
 
 export const profileRoutes = Router();
 
-const controller = makeProfileContainer();
+const controller = MakeProfileContainer.inicialize();
 
 profileRoutes.post("/", (req, res) => controller.create(req, res));

@@ -1,5 +1,5 @@
-import { UpdateSchoolUseCase } from "../../../application/use-cases/school/UpdateSchoolUseCase";
-import { UpdateStatusSchoolUseCase } from "../../../application/use-cases/school/UpdateStatusSchoolUseCase";
+import { UpdateSchoolUseCase } from "../../../application/use-cases/school/update.usecase";
+import { UpdateStatusSchoolUseCase } from "../../../application/use-cases/school/updateStatus.usecase";
 import { StatusEnum } from "../../../utils/enum/status";
 import { FakeCacheRepository } from "../mocks/FakeCacheRepository";
 import { FakeSchoolRepository } from "../mocks/FakeSchoolRepository";

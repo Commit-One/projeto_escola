@@ -18,6 +18,7 @@ export class PeriodTypeOrmRepository implements IPeriodRepository {
 
   async existByName(name: string): Promise<boolean> {
     const exist = await this._repo.findOne({ where: { name } });
-    return !!exist?.uuid;
+    if (!exist) return false
+    return true
   }
 }

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { handler } from "../statusHttp";
-import { CreateClassStudentuUseCase } from "../../../application/use-cases/classStudent/CreateClassStudentUseCase";
-import { GetAllClassStudentUseCase } from "../../../application/use-cases/classStudent/GetAllClassStudentUseCase";
-import { GetOneClassStudentUseCase } from "../../../application/use-cases/classStudent/GetOneClassStudentUseCase";
-import { UpdateClassStudentUseCase } from "../../../application/use-cases/classStudent/UpdateClassStudentUseCase";
-import { DeleteClassStudentUseCase } from "../../../application/use-cases/classStudent/DeleteClassStudentUseCase";
+import { Handler } from "../statusHttp";
+import { CreateClassStudentuUseCase } from "../../../application/use-cases/classStudent/create.usecase";
+import { GetAllClassStudentUseCase } from "../../../application/use-cases/classStudent/getAll.usecase";
+import { GetOneClassStudentUseCase } from "../../../application/use-cases/classStudent/getOne.usecase";
+import { UpdateClassStudentUseCase } from "../../../application/use-cases/classStudent/update.usecase";
+import { DeleteClassStudentUseCase } from "../../../application/use-cases/classStudent/delete.usecase";
 
 export class ClassStudentController {
   constructor(
@@ -19,18 +19,18 @@ export class ClassStudentController {
     try {
       const { name, maxAge, minAge } = req.body;
       const created = await this._create.execute({ name, maxAge, minAge });
-      return handler.created(res, created);
+      return Handler.created(res, created);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 
   async getAll(_: Request, res: Response) {
     try {
       const getAll = await this._getAll.execute();
-      return handler.ok(res, getAll);
+      return Handler.ok(res, getAll);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 
@@ -38,9 +38,9 @@ export class ClassStudentController {
     try {
       const { uuid } = req.params;
       const getOne = await this._getOne.execute(uuid as string);
-      return handler.ok(res, getOne);
+      return Handler.ok(res, getOne);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 
@@ -48,9 +48,9 @@ export class ClassStudentController {
     try {
       const { uuid } = req.params;
       const deleted = await this._delete.execute(uuid as string);
-      return handler.ok(res, deleted);
+      return Handler.ok(res, deleted);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 
@@ -63,9 +63,9 @@ export class ClassStudentController {
         maxAge,
         minAge,
       });
-      return handler.ok(res, updated);
+      return Handler.ok(res, updated);
     } catch (err: unknown) {
-      return handler.error(res, err);
+      return Handler.error(res, err);
     }
   }
 }

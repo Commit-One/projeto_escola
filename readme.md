@@ -1,6 +1,4 @@
-Colcoar chace student
-
-Mensalidade
+TODO: Cria entity de mensalidades
 
 - studentUuid
 - schoolUuid
@@ -11,17 +9,7 @@ Mensalidade
 - status (pago, pendente, atradasa)
 - discountApplied
 
-- O criar o aluno, criar o boleto para o pŕoximo mês
 
----
+TODO: Ao criar o aluno, enviar para fila de mensalidade
 
-- Ao criar um estudando, vincular a classe e verificar se a idade está autorizada com a classe em questão;
-
-
-- classe
-
-
--- rabbitMQ
-http://localhost:15672
-user: guest
-password: guest
+TODO: Criar regra de classe. Ao criar um estudante, verificar regra.

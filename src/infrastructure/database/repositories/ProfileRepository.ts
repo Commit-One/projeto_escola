@@ -7,7 +7,7 @@ import { Profile } from "../../../domain/entities/Profile";
 export class ProfileTypeOrmRepository implements IProfileRepository {
   protected readonly _repo: Repository<ProfileEntity>;
 
-  constructor() {    
+  constructor() {
     this._repo = AppDataSource.getRepository(ProfileEntity);
   }
 
@@ -18,6 +18,7 @@ export class ProfileTypeOrmRepository implements IProfileRepository {
 
   async existByName(name: string): Promise<boolean> {
     const exist = await this._repo.findOne({ where: { name } });
-    return !!exist?.uuid;
+    if (!exist) return false
+    return true
   }
 }

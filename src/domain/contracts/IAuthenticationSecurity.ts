@@ -1,4 +1,4 @@
-import { LoginDTO } from "../../application/dtos/LoginDTO";
+import { LoginDTO } from "../../application/dtos/login.dto";
 
 export interface IAuthenticationSecurity {
   token(data: LoginDTO): Promise<string>;

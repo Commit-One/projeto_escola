@@ -1,5 +1,5 @@
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { ApplicationError, ValidationError } from "../../../utils/error";
+import { AppError } from "../../../utils/error";
 
 export class UpdatePasswordUseCase {
   constructor(private _repo: IUserRepository) {}
@@ -7,7 +7,7 @@ export class UpdatePasswordUseCase {
   async execute(password: string, email: string) {
     const saved = await this._repo.updatePassword(password, email);
 
-    if (!saved) throw new ValidationError(ApplicationError.user.updatePassword);
+    if (!saved) throw new AppError("Erro ao atualizar senha");
 
     return saved;
   }
