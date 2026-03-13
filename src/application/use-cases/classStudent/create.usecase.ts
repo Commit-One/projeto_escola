@@ -2,7 +2,7 @@ import { ICacheService } from "../../../domain/contracts/ICacheService";
 import { ClassStudent } from "../../../domain/entities/ClassStudent";
 import { IClassStudentRepository } from "../../../domain/repositories/IClassStudentRepository";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
-import { ClassStudentDTO } from "../../dtos/classStudent.dto";
+import { ClassIStudentDTO } from "../../dtos/classStudent.dto";
 
 export class CreateClassStudentuUseCase {
   constructor(
@@ -10,7 +10,7 @@ export class CreateClassStudentuUseCase {
     private readonly _cache: ICacheService,
   ) {}
 
-  async execute(data: ClassStudentDTO): Promise<ClassStudent> {
+  async execute(data: ClassIStudentDTO): Promise<ClassStudent> {
     const created = await this._classRepository.create(data);
     await this._cache.delete(cacheKeyEnum.CLASS);
     return created;

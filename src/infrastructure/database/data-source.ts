@@ -7,6 +7,7 @@ import { PeriodEntity } from "./entities/PeriodEntity";
 import { StudentEntity } from "./entities/StudentEntity";
 import { environmentConfig } from "../../main/instances";
 import { ClassStudentEntity } from "./entities/ClassStudentEntity";
+import { ClassPeriodEntity } from "./entities/ClassPeriodEntity";
 
 export const AppDataSource = new DataSource({
   type: "mysql",
@@ -24,6 +25,7 @@ export const AppDataSource = new DataSource({
     PeriodEntity,
     StudentEntity,
     ClassStudentEntity,
+    ClassPeriodEntity,
   ],
   migrations: [],
 });

@@ -13,6 +13,10 @@ export interface StudentResponseDTO {
     name: string;
     uuid: string;
   };
+  class: {
+    name: string;
+    uuid: string;
+  };
   name: string;
   matriculation: string;
   dateBirth: Date;
@@ -20,13 +24,13 @@ export interface StudentResponseDTO {
   nameMother: string;
   nameFather: string;
   phone: string;
-  classStudent: string;
+  classStudentUuid: string;
   dateMatriculation: Date;
   hasDiscount: boolean;
   discount: number;
   dayPayment: number;
   uuid: string;
-  id: number;
+  cpf: string;
 }
 
 export interface StudentDTO {
@@ -45,4 +49,30 @@ export interface StudentDTO {
   periodUuid: string;
   classStudentUuid: string;
   profileUuid: string;
+  cpf: string;
+}
+
+export interface StudentQuery {
+  schoolName: string;
+  schoolUuid: string;
+  periodName: string;
+  periodUuid: string;
+  profileName: string;
+  profileUuid: string;
+  className: string;
+  classUuid: string;
+  name: string;
+  matriculation: string;
+  dateBirth: Date;
+  status: StatusEnum;
+  nameMother: string;
+  nameFather: string;
+  phone: string;
+  classStudentUuid: string;
+  dateMatriculation: Date;
+  hasDiscount: boolean;
+  discount: number;
+  dayPayment: number;
+  uuid: string;
+  cpf: string;
 }

@@ -46,6 +46,9 @@ export class StudentEntity extends Base {
   @Column()
   dayPayment!: number;
 
+  @Column()
+  cpf!: string;
+
   @Column({
     type: "enum",
     enum: StatusEnum,

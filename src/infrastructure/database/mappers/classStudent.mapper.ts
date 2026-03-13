@@ -1,4 +1,4 @@
-import { ClassStudentDTO } from "../../../application/dtos/classStudent.dto";
+import { ClassIStudentDTO } from "../../../application/dtos/classStudent.dto";
 import { ClassStudent } from "../../../domain/entities/ClassStudent";
 import { ClassStudentEntity } from "../entities/ClassStudentEntity";
 
@@ -11,7 +11,7 @@ export class ClassStudentMapper {
     });
   }
 
-  static toEntity(data: ClassStudent | ClassStudentDTO): ClassStudentEntity {
+  static toEntity(data: ClassStudent | ClassIStudentDTO): ClassStudentEntity {
     const entity = new ClassStudentEntity();
 
     entity.name = data.name;

@@ -7,6 +7,10 @@ const createSchoolSchema = z.object({
       .string({ error: new ValidationEmpty("Nome da escola").response })
       .trim()
       .min(1, new ValidationEmpty("Nome da escola").response),
+    cnpj: z
+      .string({ error: new ValidationEmpty("CNPJ").response })
+      .trim()
+      .min(1, new ValidationEmpty("CNPJ").response),
     address: z
       .string({ error: new ValidationEmpty("Endereço").response })
       .trim()
@@ -69,6 +73,10 @@ const updateSchoolSchema = z.object({
       .trim()
       .email(new AppError("Formato inválido"))
       .min(1, new ValidationEmpty("E-mail").response),
+    cnpj: z
+      .string({ error: new ValidationEmpty("CNPJ").response })
+      .trim()
+      .min(1, new ValidationEmpty("CNPJ").response),
   }),
   params: z.object({
     uuid: z

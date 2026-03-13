@@ -10,13 +10,10 @@ import { ProfileEntity } from "../entities/ProfilesEntity";
 import { SchoolEntity } from "../entities/SchoolEntity";
 import { PeriodEntity } from "../entities/PeriodEntity";
 import { ProfileEnum } from "../../../utils/enum/profile";
-import { NotFoundError } from "../../../utils/error";
-import { PaymentEntity } from "../entities/Payment";
-import { Payment } from "../../../domain/entities/Payment";
+import { AppError, NotFoundError } from "../../../utils/error";
 import { ClassStudentEntity } from "../entities/ClassStudentEntity";
-import { ClassPeriodEntity } from "../entities/ClassPeriodEntity";
-import { StatusPayment } from "../../../utils/enum/payment";
 import { StudentMapper } from "../mappers/student.mapper";
+import { replace } from "../../../utils/functions/replace";
 
 export class StudentTypeOrmRepository implements IStudentRepository {
   protected readonly _repo: Repository<StudentEntity>;
@@ -24,7 +21,6 @@ export class StudentTypeOrmRepository implements IStudentRepository {
   private readonly _repoSchool: Repository<SchoolEntity>;
   private readonly _repoPeriod: Repository<PeriodEntity>;
   private readonly _repoClass: Repository<ClassStudentEntity>;
-  private readonly _repoClassPeriod: Repository<ClassPeriodEntity>;
 
   constructor() {
     this._repo = AppDataSource.getRepository(StudentEntity);
@@ -32,7 +28,6 @@ export class StudentTypeOrmRepository implements IStudentRepository {
     this._repoSchool = AppDataSource.getRepository(SchoolEntity);
     this._repoPeriod = AppDataSource.getRepository(PeriodEntity);
     this._repoClass = AppDataSource.getRepository(ClassStudentEntity);
-    this._repoClassPeriod = AppDataSource.getRepository(ClassPeriodEntity);
   }
 
   async updateStatus(uuid: string, status: string): Promise<boolean> {
@@ -57,78 +52,44 @@ export class StudentTypeOrmRepository implements IStudentRepository {
   }
 
   async create(data: StudentDTO): Promise<StudentResponseDTO> {
-    const queryRunner = AppDataSource.createQueryRunner();
+    const isExist = await this._repo.exists({
+      where: { cpf: replace(data.cpf) },
+    });
 
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
+    if (isExist) throw new AppError("Já possuimos um registro com esse CPF");
 
-    try {
-      const _repoPayment = queryRunner.manager.getRepository(PaymentEntity);
-      const _repoStudent = queryRunner.manager.getRepository(StudentEntity);
+    const profile = await this._repoProfile.findOne({
+      where: { name: ProfileEnum.STUDENT },
+    });
 
-      const profile = await this._repoProfile.findOne({
-        where: { name: ProfileEnum.STUDENT },
-      });
+    if (!profile) throw new NotFoundError("Perfil");
 
-      if (!profile) throw new NotFoundError("Perfil");
+    const school = await this._repoSchool.findOne({
+      where: { uuid: data.schoolUuid },
+    });
+    if (!school) throw new NotFoundError("Escola");
 
-      const school = await this._repoSchool.findOne({
-        where: { uuid: data.schoolUuid },
-      });
-      if (!school) throw new NotFoundError("Escola");
+    const classStudent = await this._repoClass.findOne({
+      where: { uuid: data.classStudentUuid },
+    });
+    if (!classStudent) throw new NotFoundError("Classe");
 
-      const classStudent = await this._repoClass.findOne({
-        where: { uuid: data.classStudentUuid },
-      });
-      if (!classStudent) throw new NotFoundError("Classe");
+    const period = await this._repoPeriod.findOne({
+      where: { uuid: data.periodUuid },
+    });
+    if (!period) throw new NotFoundError("Período");
 
-      const period = await this._repoPeriod.findOne({
-        where: { uuid: data.periodUuid },
-      });
-      if (!period) throw new NotFoundError("Período");
+    const student = StudentMapper.toDomain(data);
 
-      // const classPeriod = await this._repoClassPeriod.findOne({
-      //   where: { classStudentUuid: classStudent.uuid, periodUuid: period.uuid },
-      // });
-      // if (!classPeriod) throw new NotFoundError("Referencia classe/periodo");
+    await this._repo.save(student);
 
-      const student = StudentMapper.toDomain(data);
-
-      const date = new Date();
-
-      // TODO: Publicar fila
-      //  TODO: tipos de pagamentos: Anual / sementral
-      const payment = new Payment(
-        student.uuid,
-        school.uuid,
-        300,
-        date.getMonth() + 2,
-        data.dayPayment,
-        date.getFullYear(),
-        StatusPayment.PENDING,
-        data.hasDiscount,
-        data.discount,
-      );
-
-      console.log(payment, ">>> payment");
-
-      await _repoStudent.save(student);
-      await _repoPayment.save(payment);
-      // await queryRunner.commitTransaction();
-      await queryRunner.rollbackTransaction();
-
-      return StudentMapper.toResponse(
-        StudentMapper.toEntity(student),
-        school,
-        profile,
-        period,
-      );
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-      throw error;
-    } finally {
-      await queryRunner.release();
-    }
+    return StudentMapper.toResponse(
+      student,
+      school,
+      profile,
+      period,
+      classStudent,
+    );
   }
 
   async getOne(uuid: string): Promise<StudentResponseDTO> {
@@ -150,7 +111,18 @@ export class StudentTypeOrmRepository implements IStudentRepository {
     });
     if (!school) throw new NotFoundError("Escola");
 
-    return StudentMapper.toResponse(student, school, profile, period);
+    const classStudent = await this._repoClass.findOne({
+      where: { uuid: student!.classStudentUuid },
+    });
+    if (!classStudent) throw new NotFoundError("Classe");
+
+    return StudentMapper.toResponse(
+      student,
+      school,
+      profile,
+      period,
+      classStudent,
+    );
   }
 
   async getAll(): Promise<StudentResponseDTO[]> {
@@ -164,8 +136,7 @@ export class StudentTypeOrmRepository implements IStudentRepository {
         ts.dayPayment,
         ts.discount,
         ts.hasDiscount,
-        ts.dateMatriculation,
-        ts.classStudent,
+        ts.dateMatriculation,        
         ts.phone,
         ts.nameFather,
         ts.nameMother,
@@ -174,14 +145,17 @@ export class StudentTypeOrmRepository implements IStudentRepository {
         tp.uuid  as profileUuid,
         tp.name  as profileName,
         tp2.uuid as periodUuid,
-        tp2.name as periodName
+        tp2.name as periodName,
+        tc.name as className,
+        tc.uuid as classUuid
       FROM tb_student ts 
       inner join tb_school ts2 on ts2.uuid = ts.schoolUuid 
       inner join tb_profile tp on tp.uuid = ts.profileUuid 
       inner join tb_periodo tp2 on tp2.uuid = ts.periodUuid 
+      inner join tb_class tc on tc.uuid = ts.classStudentUuid 
   `;
 
     const students = await this._repo.query(query);
-    return students.map((e: any) => StudentMapper.toDto(e));
+    return students.map((e: any) => StudentMapper.toQuery(e));
   }
 }

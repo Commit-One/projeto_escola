@@ -19,6 +19,9 @@ export class SchoolEntity extends Base {
   @Column()
   nameDirector!: string;
 
+  @Column()
+  cnpj!: string;
+
   @Column({
     type: "enum",
     enum: StatusEnum,

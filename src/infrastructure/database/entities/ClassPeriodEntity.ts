@@ -7,7 +7,7 @@ export class ClassPeriodEntity extends Base {
   periodUuid!: string;
 
   @Column()
-  classStudentUuid!: string;
+  classUuid!: string;
 
   @Column()
   value!: number;

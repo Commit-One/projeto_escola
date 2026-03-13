@@ -1,5 +1,10 @@
-import { StudentResponseDTO } from "../../../application/dtos/student.dto";
+import {
+  StudentResponseDTO,
+  StudentQuery,
+} from "../../../application/dtos/student.dto";
 import { Student } from "../../../domain/entities/Student";
+import { StatusEnum } from "../../../utils/enum/status";
+import { ClassStudentEntity } from "../entities/ClassStudentEntity";
 import { PeriodEntity } from "../entities/PeriodEntity";
 import { ProfileEntity } from "../entities/ProfilesEntity";
 import { SchoolEntity } from "../entities/SchoolEntity";
@@ -11,7 +16,7 @@ export class StudentMapper {
       entity.schoolUuid,
       entity.matriculation,
       entity.dateBirth,
-      entity.status,
+      StatusEnum.ACTIVE,
       entity.nameMother,
       entity.nameFather,
       entity.name,
@@ -23,10 +28,12 @@ export class StudentMapper {
       entity.discount,
       entity.dayPayment,
       entity.profileUuid,
+      entity.cpf,
       {
         uuid: entity.uuid,
         createdAt: entity.createdAt,
         enable: entity.enable,
+        id: entity.id,
       },
     );
   }
@@ -50,15 +57,17 @@ export class StudentMapper {
     entity.dateBirth = domain.dateBirth;
     entity.createdAt = new Date();
     entity.uuid = crypto.randomUUID();
+    entity.cpf = domain.cpf;
 
     return entity;
   }
 
   static toResponse(
-    student: StudentEntity,
+    student: StudentEntity | Student,
     school: SchoolEntity,
     profile: ProfileEntity,
     period: PeriodEntity,
+    classStudent: ClassStudentEntity,
   ): StudentResponseDTO {
     const response: StudentResponseDTO = {
       escola: {
@@ -73,53 +82,61 @@ export class StudentMapper {
         name: profile.name,
         uuid: profile.uuid,
       },
+      class: {
+        name: classStudent.name,
+        uuid: classStudent.uuid,
+      },
       name: student.name,
       matriculation: student.matriculation,
       dateBirth: student.dateBirth,
-      status: student.status,
+      status: student.status as StatusEnum,
       nameMother: student.nameMother,
       nameFather: student.nameFather,
       phone: student.phone,
-      classStudent: student.classStudentUuid,
+      classStudentUuid: student.classStudentUuid,
       dateMatriculation: student.dateMatriculation,
       hasDiscount: student.hasDiscount,
       discount: student.discount,
       dayPayment: student.dayPayment,
       uuid: student.uuid,
-      id: student.id,
+      cpf: student.cpf,
     };
 
     return response;
   }
 
-  static toDto(data: any): StudentResponseDTO {
+  static toQuery(dataJoin: StudentQuery): StudentResponseDTO {
     const response: StudentResponseDTO = {
       escola: {
-        name: data.schoolName,
-        uuid: data.schoolUuid,
+        name: dataJoin.schoolName,
+        uuid: dataJoin.schoolUuid,
       },
       periodo: {
-        name: data.periodName,
-        uuid: data.periodUuid,
+        name: dataJoin.periodName,
+        uuid: dataJoin.periodUuid,
       },
       profile: {
-        name: data.profileName,
-        uuid: data.profileUuid,
+        name: dataJoin.profileName,
+        uuid: dataJoin.profileUuid,
       },
-      name: data.name,
-      matriculation: data.matriculation,
-      dateBirth: data.dateBirth,
-      status: data.studentStatus,
-      nameMother: data.nameMother,
-      nameFather: data.nameFather,
-      phone: data.phone,
-      classStudent: data.classStudent,
-      dateMatriculation: data.dateMatriculation,
-      hasDiscount: data.hasDiscount,
-      discount: data.discount,
-      dayPayment: data.dayPayment,
-      uuid: data.studentUuid,
-      id: data.id ?? 0,
+      class: {
+        name: dataJoin.className,
+        uuid: dataJoin.classUuid,
+      },
+      name: dataJoin.name,
+      matriculation: dataJoin.matriculation,
+      dateBirth: dataJoin.dateBirth,
+      status: dataJoin.status as StatusEnum,
+      nameMother: dataJoin.nameMother,
+      nameFather: dataJoin.nameFather,
+      phone: dataJoin.phone,
+      classStudentUuid: dataJoin.classStudentUuid,
+      dateMatriculation: dataJoin.dateMatriculation,
+      hasDiscount: dataJoin.hasDiscount,
+      discount: dataJoin.discount,
+      dayPayment: dataJoin.dayPayment,
+      uuid: dataJoin.uuid,
+      cpf: dataJoin.cpf,
     };
 
     return response;

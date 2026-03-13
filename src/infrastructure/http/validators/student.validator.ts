@@ -7,6 +7,10 @@ const createStudentSchemaValidator = z.object({
       .string({ error: new ValidationEmpty("Name").response })
       .trim()
       .min(1, new ValidationEmpty("Name").response),
+    cpf: z
+      .string({ error: new ValidationEmpty("CPF").response })
+      .trim()
+      .min(1, new ValidationEmpty("CPF").response),
 
     matriculation: z
       .string({

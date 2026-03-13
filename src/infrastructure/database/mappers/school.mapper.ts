@@ -9,6 +9,7 @@ export class SchoolMapper {
       entity.phone,
       entity.email,
       entity.nameDirector,
+      entity.cnpj,
       entity.status,
       {
         uuid: entity.uuid,

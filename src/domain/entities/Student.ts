@@ -22,15 +22,20 @@ export class Student extends Base {
     public discount: number,
     public dayPayment: number,
     public profileUuid: string,
+    public cpf: string,
     baseProps?: IBaseProps,
   ) {
     super(baseProps);
+    this.profileUuid = "b8509789-9180-4345-a19e-386b14b81a90";
+    this.validate();
+    this.formatFields();
+  }
 
+  private formatFields() {
+    this.cpf = replace(this.cpf);
     this.phone = replace(this.phone);
     this.dateBirth = dateForMySQL(this.dateBirth);
     this.dateMatriculation = dateForMySQL(this.dateMatriculation);
-    this.profileUuid = "b8509789-9180-4345-a19e-386b14b81a90";
-    this.validate();
   }
 
   private validate() {

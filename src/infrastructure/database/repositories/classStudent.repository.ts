@@ -4,7 +4,7 @@ import { IClassStudentRepository } from "../../../domain/repositories/IClassStud
 import { ClassStudent } from "../../../domain/entities/ClassStudent";
 import { ClassStudentEntity } from "../entities/ClassStudentEntity";
 import { NotFoundError } from "../../../utils/error";
-import { ClassStudentDTO } from "../../../application/dtos/classStudent.dto";
+import { ClassIStudentDTO } from "../../../application/dtos/classStudent.dto";
 import { ClassStudentMapper } from "../mappers/classStudent.mapper";
 
 export class ClassStudentTypeOrmRepository implements IClassStudentRepository {
@@ -30,7 +30,7 @@ export class ClassStudentTypeOrmRepository implements IClassStudentRepository {
     return (deleted.affected ?? 0) > 0;
   }
 
-  async update(uuid: string, data: ClassStudentDTO): Promise<ClassStudent> {
+  async update(uuid: string, data: ClassIStudentDTO): Promise<ClassStudent> {
     const entity = await this._repo.findOne({ where: { uuid } });
 
     if (!entity) throw new NotFoundError("Classe");
@@ -49,7 +49,7 @@ export class ClassStudentTypeOrmRepository implements IClassStudentRepository {
     return !!exist?.uuid;
   }
 
-  async create(data: ClassStudentDTO): Promise<ClassStudent> {
+  async create(data: ClassIStudentDTO): Promise<ClassStudent> {
     const entity = ClassStudentMapper.toEntity(data);
     await this._repo.save(entity);
     return ClassStudentMapper.toDomain(entity);

@@ -8,11 +8,12 @@ import { UserEntity } from "../entities/UserEntity";
 import { ProfileEntity } from "../entities/ProfilesEntity";
 import { ProfileEnum } from "../../../utils/enum/profile";
 import { BcryptSecurity } from "../../security/bcrypt";
-import { NotFoundError } from "../../../utils/error";
+import { AppError, NotFoundError } from "../../../utils/error";
 import { StatusEnum } from "../../../utils/enum/status";
 import { environmentConfig } from "../../../main/instances";
 import { SchoolDTO } from "../../../application/dtos/school.dto";
 import { SchoolMapper } from "../mappers/school.mapper";
+import { replace } from "../../../utils/functions/replace";
 
 export class SchoolTypeOrmRepository implements ISchoolRepository {
   protected readonly _repo: Repository<SchoolEntity>;
@@ -73,6 +74,13 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
 
     try {
       const schoolRepository = queryRunner.manager.getRepository(SchoolEntity);
+
+      const isExist = await schoolRepository.exists({
+        where: { cnpj: replace(data.cnpj) },
+      });
+
+      if (isExist) throw new AppError("Já possuimos um registro com esse CNPJ");
+
       const userRepository = queryRunner.manager.getRepository(UserEntity);
       const profileRepository =
         queryRunner.manager.getRepository(ProfileEntity);
@@ -81,28 +89,26 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
         where: { name: ProfileEnum.ADMIN },
       });
 
-      if (!profileAdmin) {
-        throw new NotFoundError("Perfil");
-      }
+      if (!profileAdmin) throw new NotFoundError("Perfil");
 
       const hashedPassword = await this._bcryp.hash(
         environmentConfig.PASSWORD_DEFAULT,
       );
 
-      const school = SchoolMapper.toDomain(data);
+      const domain = SchoolMapper.toDomain(data);
       const user = new User(
-        school.email,
+        domain.email,
         hashedPassword,
-        school.uuid,
+        domain.uuid,
         profileAdmin.uuid,
-        school.nameDirector,
+        domain.nameDirector,
       );
 
-      await schoolRepository.save(school);
+      await schoolRepository.save(domain);
       await userRepository.save(user);
       await queryRunner.commitTransaction();
 
-      return school;
+      return domain;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;

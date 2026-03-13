@@ -19,13 +19,14 @@ export class SchoolController {
 
   async create(req: Request, res: Response) {
     try {
-      const { address, email, name, phone, nameDirector } = req.body;
+      const { address, email, name, phone, nameDirector, cnpj } = req.body;
       const school = await this._create.execute({
         name,
         address,
         phone,
         email,
         nameDirector,
+        cnpj,
       });
       return Handler.created(res, school);
     } catch (err: unknown) {
@@ -54,7 +55,7 @@ export class SchoolController {
 
   async update(req: Request, res: Response) {
     try {
-      const { name, address, phone, email, nameDirector } = req.body;
+      const { name, address, phone, email, nameDirector, cnpj } = req.body;
       const { uuid } = req.params;
       const school = await this._update.execute(String(uuid), {
         name,
@@ -62,6 +63,7 @@ export class SchoolController {
         phone,
         email,
         nameDirector,
+        cnpj,
       });
       return Handler.ok(res, school);
     } catch (err: unknown) {

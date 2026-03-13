@@ -1,4 +1,4 @@
-export interface ClassStudentDTO {
+export interface ClassIStudentDTO {
   name: string;
   maxAge: number;
   minAge: number;

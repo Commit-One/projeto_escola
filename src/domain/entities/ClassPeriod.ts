@@ -5,9 +5,8 @@ import { Base } from "./Base";
 export class ClassPeriod extends Base {
   constructor(
     public value: number,
-    public classStudentUuid: string,
-    public perodUuid: string,
-    public status: string,
+    public classUuid: string,
+    public periodUuid: string,
     baseProps?: IBaseProps,
   ) {
     super(baseProps);
@@ -15,8 +14,8 @@ export class ClassPeriod extends Base {
   }
 
   private validate() {
-    if (!this.perodUuid) throw new ValidationEmpty("perodUuid");
-    if (!this.classStudentUuid) throw new ValidationEmpty("classStudentUuid");
-    if (!this.value || this.value === 0) throw new ValidationEmpty("value");
+    if (!this.periodUuid) throw new ValidationEmpty("periodUuid");
+    if (!this.classUuid) throw new ValidationEmpty("classStudentUuid");
+    if (!this.value) throw new ValidationEmpty("value");
   }
 }
