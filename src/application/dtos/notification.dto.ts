@@ -1,4 +1,4 @@
 export interface INotificationEmailDTO {
-    to: string
-    subject: string    
+  to: string;
+  subject: string;
 }

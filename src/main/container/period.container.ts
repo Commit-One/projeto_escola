@@ -1,5 +1,5 @@
 import { CreatePeriodUseCase } from "../../application/use-cases/period/create.usecase";
-import { PeriodTypeOrmRepository } from "../../infrastructure/database/repositories/PeriodRepository";
+import { PeriodTypeOrmRepository } from "../../infrastructure/database/repositories/period.repository";
 import { PeriodController } from "../../infrastructure/http/controllers/period.controller";
 import { cacheInstance } from "../instances";
 

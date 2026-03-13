@@ -10,17 +10,14 @@ export class CreateSchoolUseCase {
   constructor(
     private readonly _repo: ISchoolRepository,
     private readonly _cache: ICacheService,
-    private readonly _queue: IQueueService
-  ) { }
+    private readonly _queue: IQueueService,
+  ) {}
 
   async execute(dto: SchoolDTO): Promise<School> {
     const school = await this._repo.createSchoolUserTransaction(dto);
     await this._cache.delete(cacheKeyEnum.SCHOOLS);
 
-    await this._queue.sendToQueue<School>(
-      QueueEnum.NOTIFICATION,
-      school
-    )
+    await this._queue.sendToQueue<School>(QueueEnum.NOTIFICATION, school);
     return school;
   }
 }

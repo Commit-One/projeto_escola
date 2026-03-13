@@ -1,8 +1,5 @@
 import { Request, Response } from "express";
 import { Handler } from "../statusHttp";
-import { GetAllUsersUserCase } from "../../../application/use-cases/user/getAll.usecase";
-import { UpdatePasswordUseCase } from "../../../application/use-cases/user/updatePassword.usecase";
-import { UpdateStatusUserUseCase } from "../../../application/use-cases/user/updateStatus.usecase";
 import { CreateStudentUseCase } from "../../../application/use-cases/student/createStudent.usecase";
 import { GetOneStudentUseCase } from "../../../application/use-cases/student/getOne.usecase";
 import { GetAllStudetsUseCase } from "../../../application/use-cases/student/getAll.usecase";

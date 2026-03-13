@@ -7,9 +7,8 @@ import { User } from "../../../domain/entities/User";
 import { UserEntity } from "../entities/UserEntity";
 import { SchoolEntity } from "../entities/SchoolEntity";
 import { NotFoundError } from "../../../utils/error";
-import { UserMapper } from "../mappers/UserMapper";
-import { LoginMapper } from "../mappers/LoginMapper";
-
+import { UserMapper } from "../mappers/user.mapper";
+import { LoginMapper } from "../mappers/login.mapper";
 
 export class LoginTypeOrmRepository implements ILoginRepository {
   private readonly _repoProfile: Repository<ProfileEntity>;
@@ -44,6 +43,6 @@ export class LoginTypeOrmRepository implements ILoginRepository {
 
     if (!school) throw new NotFoundError("Escola");
 
-    return LoginMapper.toResponse(user, profile, school)
+    return LoginMapper.toResponse(user, profile, school);
   }
 }

@@ -15,9 +15,7 @@ export class SchoolController {
     private readonly _update: UpdateSchoolUseCase,
     private readonly _getByName: GetSchoolByNameUseCase,
     private readonly _updateStatus: UpdateStatusSchoolUseCase,
-  ) {
-
-  }
+  ) {}
 
   async create(req: Request, res: Response) {
     try {

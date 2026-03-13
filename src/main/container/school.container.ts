@@ -4,7 +4,7 @@ import { GetAllSchoolUseCase } from "../../application/use-cases/school/getAll.u
 import { GetSchoolByNameUseCase } from "../../application/use-cases/school/getByName.usecase";
 import { UpdateSchoolUseCase } from "../../application/use-cases/school/update.usecase";
 import { UpdateStatusSchoolUseCase } from "../../application/use-cases/school/updateStatus.usecase";
-import { SchoolTypeOrmRepository } from "../../infrastructure/database/repositories/SchoolRepository";
+import { SchoolTypeOrmRepository } from "../../infrastructure/database/repositories/school.repository";
 import { SchoolController } from "../../infrastructure/http/controllers/school.controller";
 import { cacheInstance, rabbitServiceInstance } from "../instances";
 
@@ -12,7 +12,11 @@ export class MakeSchoolContainer {
   public static inicialize() {
     const repo = new SchoolTypeOrmRepository();
 
-    const createUC = new CreateSchoolUseCase(repo, cacheInstance, rabbitServiceInstance);
+    const createUC = new CreateSchoolUseCase(
+      repo,
+      cacheInstance,
+      rabbitServiceInstance,
+    );
     const getAllUC = new GetAllSchoolUseCase(repo, cacheInstance);
     const deleteUC = new DeleteSchoolUseCase(repo, cacheInstance);
     const updateUC = new UpdateSchoolUseCase(repo, cacheInstance);

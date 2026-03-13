@@ -1,5 +1,5 @@
 import * as z from "zod";
-import {  ValidationEmpty } from "../../../utils/error";
+import { ValidationEmpty } from "../../../utils/error";
 
 const createClassSchemaValidator = z.object({
   body: z.object({

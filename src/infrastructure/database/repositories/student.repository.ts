@@ -2,7 +2,10 @@ import { Repository } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { IStudentRepository } from "../../../domain/repositories/IStudentRepository";
 import { StudentEntity } from "../entities/StudentEntity";
-import { StudentDTO, StudentResponseDTO } from "../../../application/dtos/student.dto";
+import {
+  StudentDTO,
+  StudentResponseDTO,
+} from "../../../application/dtos/student.dto";
 import { ProfileEntity } from "../entities/ProfilesEntity";
 import { SchoolEntity } from "../entities/SchoolEntity";
 import { PeriodEntity } from "../entities/PeriodEntity";
@@ -10,11 +13,10 @@ import { ProfileEnum } from "../../../utils/enum/profile";
 import { NotFoundError } from "../../../utils/error";
 import { PaymentEntity } from "../entities/Payment";
 import { Payment } from "../../../domain/entities/Payment";
-import { ClassStudent } from "../../../domain/entities/ClassStudent";
 import { ClassStudentEntity } from "../entities/ClassStudentEntity";
 import { ClassPeriodEntity } from "../entities/ClassPeriodEntity";
 import { StatusPayment } from "../../../utils/enum/payment";
-import { StudentMapper } from "../mappers/StudentMapper";
+import { StudentMapper } from "../mappers/student.mapper";
 
 export class StudentTypeOrmRepository implements IStudentRepository {
   protected readonly _repo: Repository<StudentEntity>;
@@ -67,31 +69,65 @@ export class StudentTypeOrmRepository implements IStudentRepository {
       const profile = await this._repoProfile.findOne({
         where: { name: ProfileEnum.STUDENT },
       });
+
       if (!profile) throw new NotFoundError("Perfil");
 
-      const school = await this._repoSchool.findOne({ where: { uuid: data.schoolUuid } });
+      const school = await this._repoSchool.findOne({
+        where: { uuid: data.schoolUuid },
+      });
       if (!school) throw new NotFoundError("Escola");
 
-      const classStudent = await this._repoClass.findOne({ where: { uuid: data.classStudentUuid } });
+      const classStudent = await this._repoClass.findOne({
+        where: { uuid: data.classStudentUuid },
+      });
       if (!classStudent) throw new NotFoundError("Classe");
 
-      const period = await this._repoClass.findOne({ where: { uuid: data.periodUuid } });
+      const period = await this._repoPeriod.findOne({
+        where: { uuid: data.periodUuid },
+      });
       if (!period) throw new NotFoundError("Período");
 
-      const classPeriod = await this._repoClassPeriod.findOne({ where: { classStudentUuid: classStudent.uuid, periodUuid: period.uuid } })
-      if (!classPeriod) throw new NotFoundError("Referencia classe/periodo");
+      // const classPeriod = await this._repoClassPeriod.findOne({
+      //   where: { classStudentUuid: classStudent.uuid, periodUuid: period.uuid },
+      // });
+      // if (!classPeriod) throw new NotFoundError("Referencia classe/periodo");
 
+      const student = StudentMapper.toDomain(data);
 
-      const student = StudentMapper.toDomain(data)
+      const date = new Date();
 
-      const date = new Date()
-      const payment = new Payment(student.uuid, school.uuid, classPeriod.value, date.getMonth() + 1, date.getDay(), date.getFullYear(), StatusPayment.PENDING, data.hasDiscount, data.discount)
+      // TODO: Publicar fila
+      //  TODO: tipos de pagamentos: Anual / sementral
+      const payment = new Payment(
+        student.uuid,
+        school.uuid,
+        300,
+        date.getMonth() + 2,
+        data.dayPayment,
+        date.getFullYear(),
+        StatusPayment.PENDING,
+        data.hasDiscount,
+        data.discount,
+      );
 
-      //TODO: fazer lógico de insert
+      console.log(payment, ">>> payment");
 
+      await _repoStudent.save(student);
+      await _repoPayment.save(payment);
+      // await queryRunner.commitTransaction();
+      await queryRunner.rollbackTransaction();
 
+      return StudentMapper.toResponse(
+        StudentMapper.toEntity(student),
+        school,
+        profile,
+        period,
+      );
     } catch (error) {
-
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -114,7 +150,7 @@ export class StudentTypeOrmRepository implements IStudentRepository {
     });
     if (!school) throw new NotFoundError("Escola");
 
-    return StudentMapper.toResponse(student, school, profile, period)
+    return StudentMapper.toResponse(student, school, profile, period);
   }
 
   async getAll(): Promise<StudentResponseDTO[]> {
@@ -125,7 +161,7 @@ export class StudentTypeOrmRepository implements IStudentRepository {
         ts.uuid as studentUuid,
         ts.dateBirth,
         ts.status as studentStatus,
-        ts.datePayment,
+        ts.dayPayment,
         ts.discount,
         ts.hasDiscount,
         ts.dateMatriculation,

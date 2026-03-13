@@ -1,5 +1,6 @@
 import { StatusEnum } from "../../utils/enum/status";
 import { ValidationEmpty } from "../../utils/error";
+import { IBaseProps } from "../contracts/IBaseProps";
 import { Base } from "./Base";
 
 export class User extends Base {
@@ -10,9 +11,10 @@ export class User extends Base {
     public profileUuid: string,
     public name: string,
     public status: StatusEnum = StatusEnum.ACTIVE,
+    baseProps?: IBaseProps,
   ) {
-    super();
-    this.validate()
+    super(baseProps);
+    this.validate();
   }
 
   private validate() {

@@ -24,8 +24,9 @@ export interface StudentResponseDTO {
   dateMatriculation: Date;
   hasDiscount: boolean;
   discount: number;
-  datePayment: Date;
+  dayPayment: number;
   uuid: string;
+  id: number;
 }
 
 export interface StudentDTO {
@@ -39,8 +40,9 @@ export interface StudentDTO {
   dateMatriculation: Date;
   hasDiscount: boolean;
   discount: number;
-  datePayment: Date;
+  dayPayment: number;
   schoolUuid: string;
   periodUuid: string;
-  classStudentUuid: string
+  classStudentUuid: string;
+  profileUuid: string;
 }

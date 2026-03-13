@@ -7,27 +7,23 @@ export class RabbitService implements IQueueService {
   }
 
   async sendToQueue(queueName: string, payload: any): Promise<void> {
-    const channel = await this.getChannel()
+    const channel = await this.getChannel();
 
     await channel.assertQueue(queueName, {
       durable: true,
     });
 
-    channel.sendToQueue(
-      queueName,
-      Buffer.from(JSON.stringify(payload)),
-      {
-        persistent: true,
-        contentType: "application/json",
-      }
-    );
+    channel.sendToQueue(queueName, Buffer.from(JSON.stringify(payload)), {
+      persistent: true,
+      contentType: "application/json",
+    });
   }
 
   async consumerQueue(
     queueName: string,
-    callback: (payload: any) => Promise<void>
+    callback: (payload: any) => Promise<void>,
   ): Promise<void> {
-    const channel = await this.getChannel()
+    const channel = await this.getChannel();
 
     await channel.assertQueue(queueName, {
       durable: true,

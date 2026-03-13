@@ -4,7 +4,7 @@ import { GetAllStudetsUseCase } from "../../application/use-cases/student/getAll
 import { GetOneStudentUseCase } from "../../application/use-cases/student/getOne.usecase";
 import { UpdateStatusStudentUseCase } from "../../application/use-cases/student/updateStatus.usecase";
 import { UpdateStudentUseCase } from "../../application/use-cases/student/updateStudent.usecase";
-import { StudentTypeOrmRepository } from "../../infrastructure/database/repositories/StudentRepository";
+import { StudentTypeOrmRepository } from "../../infrastructure/database/repositories/student.repository";
 import { StudentController } from "../../infrastructure/http/controllers/student.controller";
 import { cacheInstance } from "../instances";
 

@@ -23,8 +23,6 @@ export function authMiddleware(
 
     next();
   } catch {
-    return res
-      .status(401)
-      .json({ message: new AppError("Token inválido") });
+    return res.status(401).json({ message: new AppError("Token inválido") });
   }
 }

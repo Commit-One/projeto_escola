@@ -13,9 +13,9 @@ export class NotFoundError extends AppError {
   public response: string = "";
 
   constructor(field: string, message = "não encontrado(a)") {
-    const value = `${field} ${message}`
+    const value = `${field} ${message}`;
     super(value, 404);
-    this.response = value
+    this.response = value;
   }
 }
 
@@ -23,8 +23,8 @@ export class ValidationEmpty extends AppError {
   public response: string = "";
 
   constructor(field: string, message = "não pode ser vazio") {
-    const value = `${field} ${message}`
+    const value = `${field} ${message}`;
     super(value, 404);
-    this.response = value
+    this.response = value;
   }
 }

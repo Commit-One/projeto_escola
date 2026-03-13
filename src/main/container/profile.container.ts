@@ -1,5 +1,5 @@
 import { CreateProfileUseCase } from "../../application/use-cases/profile/create.usecase";
-import { ProfileTypeOrmRepository } from "../../infrastructure/database/repositories/ProfileRepository";
+import { ProfileTypeOrmRepository } from "../../infrastructure/database/repositories/profile.repository";
 import { ProfileController } from "../../infrastructure/http/controllers/profile.controller";
 import { cacheInstance } from "../instances";
 

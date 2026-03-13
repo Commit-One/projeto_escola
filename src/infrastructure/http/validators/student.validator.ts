@@ -1,7 +1,6 @@
 import * as z from "zod";
 import { ValidationEmpty } from "../../../utils/error";
 
-
 const createStudentSchemaValidator = z.object({
   body: z.object({
     name: z
@@ -17,7 +16,9 @@ const createStudentSchemaValidator = z.object({
       .min(1, new ValidationEmpty("Matriculation").response),
 
     dateBirth: z.coerce.date({
-      error: () => ({ message: new ValidationEmpty("Data aniversário").response }),
+      error: () => ({
+        message: new ValidationEmpty("Data aniversário").response,
+      }),
     }),
 
     status: z
@@ -40,10 +41,10 @@ const createStudentSchemaValidator = z.object({
       .trim()
       .min(1, new ValidationEmpty("Phone").response),
 
-    classStudent: z
-      .string({ error: new ValidationEmpty("ClassStudent").response })
+    classStudentUuid: z
+      .string({ error: new ValidationEmpty("classStudentUuid").response })
       .trim()
-      .min(1, new ValidationEmpty("ClassStudent").response),
+      .min(1, new ValidationEmpty("classStudentUuid").response),
 
     dateMatriculation: z.coerce.date({
       error: () => ({
@@ -55,9 +56,9 @@ const createStudentSchemaValidator = z.object({
 
     discount: z.number(),
 
-    datePayment: z.coerce.date({
+    dayPayment: z.number({
       error: () => ({
-        message: new ValidationEmpty("Data de pagamento").response,
+        message: new ValidationEmpty("Dia do pagamento").response,
       }),
     }),
 
@@ -112,9 +113,10 @@ const updateStudentSchemaValidator = z.object({
       .min(1, new ValidationEmpty("Matriculation").response),
 
     dateBirth: z.coerce.date({
-      error: () => ({ message: new ValidationEmpty("Data de aniversário").response }),
+      error: () => ({
+        message: new ValidationEmpty("Data de aniversário").response,
+      }),
     }),
-
     status: z
       .string({ error: new ValidationEmpty("Status").response })
       .trim()
@@ -150,9 +152,9 @@ const updateStudentSchemaValidator = z.object({
 
     discount: z.number(),
 
-    datePayment: z.coerce.date({
+    dayPayment: z.number({
       error: () => ({
-        message: new ValidationEmpty("Data de pagamento").response,
+        message: new ValidationEmpty("Dia do pagamento").response,
       }),
     }),
 

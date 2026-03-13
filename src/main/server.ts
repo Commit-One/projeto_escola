@@ -3,7 +3,7 @@ import { AppDataSource } from "../infrastructure/database/data-source";
 import { routes } from "../infrastructure/http/routes";
 import { connectRedis } from "../infrastructure/cache/cache.connection";
 import { setupRabbitMQ } from "../infrastructure/messaging/rabbit/setup";
-import { startWorkers } from "./instances";
+// import { startWorkers } from "./instances";
 
 export class ServerInitializer {
   private readonly app: express.Application;

@@ -29,11 +29,11 @@ export class FakeUserRepository implements IUserRepository {
     return user;
   }
 
-  async getAll(): Promise<{email: string, status: string}[]> {
+  async getAll(): Promise<{ email: string; status: string }[]> {
     return this.users.map((u) => {
       return {
         email: u.email,
-        status: u.status
+        status: u.status,
       };
     });
   }

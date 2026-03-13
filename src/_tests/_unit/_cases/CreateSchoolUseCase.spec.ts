@@ -1,13 +1,15 @@
 import { CreateSchoolUseCase } from "../../../application/use-cases/school/create.usecase";
 import { FakeCacheRepository } from "../mocks/FakeCacheRepository";
+import { FakeQueue } from "../mocks/FakeQueue";
 import { FakeSchoolRepository } from "../mocks/FakeSchoolRepository";
 
 const repository = new FakeSchoolRepository();
 const cache = new FakeCacheRepository();
+const queue = new FakeQueue();
 
 describe("CreateSchoolUseCase", () => {
   it("Deve criar uma escola com sucesso", async () => {
-    const useCase = new CreateSchoolUseCase(repository, cache);
+    const useCase = new CreateSchoolUseCase(repository, cache, queue);
 
     const result = await useCase.execute({
       name: "Escola teste",

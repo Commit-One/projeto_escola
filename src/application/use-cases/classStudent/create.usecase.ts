@@ -8,8 +8,7 @@ export class CreateClassStudentuUseCase {
   constructor(
     private _classRepository: IClassStudentRepository,
     private readonly _cache: ICacheService,
-
-  ) { }
+  ) {}
 
   async execute(data: ClassStudentDTO): Promise<ClassStudent> {
     const created = await this._classRepository.create(data);

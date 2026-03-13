@@ -6,12 +6,12 @@ export class GetAllUsersUserCase {
   constructor(
     private _repo: IUserRepository,
     private _cache: ICacheService,
-  ) { }
+  ) {}
 
   async execute() {
-    const cachedusers = await this._cache.get<{ email: string, status: string }[]>(
-      cacheKeyEnum.USERS,
-    );
+    const cachedusers = await this._cache.get<
+      { email: string; status: string }[]
+    >(cacheKeyEnum.USERS);
 
     if (cachedusers) return cachedusers;
 

@@ -14,8 +14,8 @@ describe("Valida a autenticação ", () => {
     new AuthenticationSecurity(),
     new BcryptSecurity(),
   );
-  const profileUuid = "123";
-  const schoolUuid = "312";
+  const profileUuid = crypto.randomUUID();
+  const schoolUuid = crypto.randomUUID();
 
   const initialValues = async () => {
     _repo.addProfile({

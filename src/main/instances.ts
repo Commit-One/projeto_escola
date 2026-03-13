@@ -1,4 +1,4 @@
-import { CacheService } from "../infrastructure/cache/ICacheService";
+import { CacheService } from "../infrastructure/cache/cache.service";
 import { EnvironmentConfig } from "../infrastructure/config";
 import { RabbitService } from "../infrastructure/messaging/rabbit/rabbitService";
 import { NotificationWorker } from "../infrastructure/worker/notification.worker";
@@ -8,5 +8,5 @@ export const rabbitServiceInstance = new RabbitService();
 export const environmentConfig = new EnvironmentConfig();
 
 export async function startWorkers() {
-    new NotificationWorker().execute()
+  new NotificationWorker().execute();
 }

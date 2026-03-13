@@ -1,3 +1,3 @@
 export const lower = (value: string) => {
-    return value.toLowerCase()
-}
+  return value.toLowerCase();
+};

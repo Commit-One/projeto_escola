@@ -1,6 +1,6 @@
-import { ICacheService } from "../../../infrastructure/cache/ICacheService";
+import { CacheService } from "../../../infrastructure/cache/cache.service";
 
-export class FakeCacheRepository implements ICacheService {
+export class FakeCacheRepository implements CacheService {
   private cache: Record<string, unknown> = {};
 
   async set(key: string, value: unknown): Promise<void> {

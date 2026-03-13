@@ -6,7 +6,7 @@ import { User } from "../../../domain/entities/User";
 import { NotFoundError } from "../../../utils/error";
 import { BcryptSecurity } from "../../security/bcrypt";
 import { StatusEnum } from "../../../utils/enum/status";
-import { UserMapper } from "../mappers/UserMapper";
+import { UserMapper } from "../mappers/user.mapper";
 
 export class UserTypeOrmRepository implements IUserRepository {
   protected readonly _repo: Repository<UserEntity>;
@@ -18,7 +18,7 @@ export class UserTypeOrmRepository implements IUserRepository {
 
   async create(data: User): Promise<User> {
     const user = await this._repo.save(data);
-    return UserMapper.toDomain(user)
+    return UserMapper.toDomain(user);
   }
 
   async delete(uuid: string): Promise<boolean> {
@@ -46,7 +46,7 @@ export class UserTypeOrmRepository implements IUserRepository {
     user.status = data.status;
 
     const userUpdate = await this._repo.save(user);
-    return UserMapper.toDomain(userUpdate)
+    return UserMapper.toDomain(userUpdate);
   }
 
   async updatePassword(password: string, email: string): Promise<boolean> {
@@ -60,7 +60,7 @@ export class UserTypeOrmRepository implements IUserRepository {
     return (updated.affected ?? 0) > 0;
   }
 
-  async getAll(): Promise<{ email: string, status: string }[]> {
+  async getAll(): Promise<{ email: string; status: string }[]> {
     const entities = await this._repo.find({
       where: { status: StatusEnum.ACTIVE },
     });
@@ -73,6 +73,6 @@ export class UserTypeOrmRepository implements IUserRepository {
 
     if (!user) throw new NotFoundError("Usuário");
 
-    return UserMapper.toDomain(user)
+    return UserMapper.toDomain(user);
   }
 }

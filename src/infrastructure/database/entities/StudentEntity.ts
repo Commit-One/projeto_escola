@@ -44,7 +44,7 @@ export class StudentEntity extends Base {
   discount!: number;
 
   @Column()
-  datePayment!: Date;
+  dayPayment!: number;
 
   @Column({
     type: "enum",

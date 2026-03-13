@@ -8,11 +8,11 @@ import { UserEntity } from "../entities/UserEntity";
 import { ProfileEntity } from "../entities/ProfilesEntity";
 import { ProfileEnum } from "../../../utils/enum/profile";
 import { BcryptSecurity } from "../../security/bcrypt";
-import {  NotFoundError } from "../../../utils/error";
+import { NotFoundError } from "../../../utils/error";
 import { StatusEnum } from "../../../utils/enum/status";
 import { environmentConfig } from "../../../main/instances";
 import { SchoolDTO } from "../../../application/dtos/school.dto";
-import { SchoolMapper } from "../mappers/SchoolMapper";
+import { SchoolMapper } from "../mappers/school.mapper";
 
 export class SchoolTypeOrmRepository implements ISchoolRepository {
   protected readonly _repo: Repository<SchoolEntity>;
@@ -34,10 +34,10 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
       throw new NotFoundError("Escola");
     }
 
-    await this._repo.update({ uuid }, { ...data })
+    await this._repo.update({ uuid }, { ...data });
     await this._repo.findOne({ where: { uuid } });
 
-    return SchoolMapper.toDomain(school)
+    return SchoolMapper.toDomain(school);
   }
 
   async updateStatus(uuid: string, status: StatusEnum): Promise<boolean> {
@@ -66,7 +66,6 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
   }
 
   async createSchoolUserTransaction(data: SchoolDTO): Promise<School> {
-
     const queryRunner = AppDataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -90,7 +89,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
         environmentConfig.PASSWORD_DEFAULT,
       );
 
-      const school = new School(data.name, data.address, data.phone, data.email, data.nameDirector)      
+      const school = SchoolMapper.toDomain(data);
       const user = new User(
         school.email,
         hashedPassword,
@@ -102,8 +101,8 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
       await schoolRepository.save(school);
       await userRepository.save(user);
       await queryRunner.commitTransaction();
-      
-      return school
+
+      return school;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;
@@ -113,9 +112,11 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
   }
 
   async findByName(name: string): Promise<School | null> {
-    const schoolEntity = await this._repo.findOne({ where: { name: ILike(name) } });
-    if (!schoolEntity) return null;
-    return SchoolMapper.toDomain(schoolEntity)
+    const schoolEntity = await this._repo.findOne({
+      where: { name: ILike(name) },
+    });
+    if (!schoolEntity) throw new NotFoundError("Escola");
+    return SchoolMapper.toDomain(schoolEntity);
   }
 
   async getAll(): Promise<School[]> {
@@ -123,8 +124,6 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
       where: { status: StatusEnum.ACTIVE },
     });
 
-    return entities.map(
-      (e) => SchoolMapper.toDomain(e),
-    );
+    return entities.map((e) => SchoolMapper.toDomain(e));
   }
 }
