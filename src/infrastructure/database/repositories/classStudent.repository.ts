@@ -34,8 +34,8 @@ export class ClassStudentTypeOrmRepository implements IClassStudentRepository {
     const entity = await this._repo.findOne({ where: { uuid } });
 
     if (!entity) throw new NotFoundError("Classe");
-    await this._repo.update({ uuid }, { ...data });
 
+    await this._repo.update({ uuid }, { ...data });
     return ClassStudentMapper.toDomain(entity);
   }
 
@@ -45,11 +45,13 @@ export class ClassStudentTypeOrmRepository implements IClassStudentRepository {
   }
 
   async existByName(name: string): Promise<boolean> {
-    const exist = await this._repo.findOne({ where: { name } });
-    return !!exist?.uuid;
+    const exist = await this._repo.exists({ where: { name } });
+    return exist;
   }
 
   async create(data: ClassIStudentDTO): Promise<ClassStudent> {
+    //TODO: Validar se já existe
+
     const entity = ClassStudentMapper.toEntity(data);
     await this._repo.save(entity);
     return ClassStudentMapper.toDomain(entity);

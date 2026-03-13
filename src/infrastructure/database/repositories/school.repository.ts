@@ -31,9 +31,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
   async update(uuid: string, data: SchoolDTO): Promise<School> {
     const school = await this._repo.findOne({ where: { uuid } });
 
-    if (!school) {
-      throw new NotFoundError("Escola");
-    }
+    if (!school) throw new NotFoundError("Escola");
 
     await this._repo.update({ uuid }, { ...data });
     await this._repo.findOne({ where: { uuid } });

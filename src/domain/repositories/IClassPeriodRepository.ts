@@ -6,5 +6,5 @@ export interface IClassPeriodRepository {
   delete(uuid: string): Promise<boolean>;
   getAll(): Promise<ClassPeriod[]>;
   create(data: ClassPeriodDTO): Promise<ClassPeriod>;
-  update(uuid: string, data: ClassPeriodDTO): Promise<boolean>;
+  update(uuid: string, data: ClassPeriodDTO): Promise<ClassPeriod>;
 }

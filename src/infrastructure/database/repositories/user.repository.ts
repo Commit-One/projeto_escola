@@ -34,19 +34,11 @@ export class UserTypeOrmRepository implements IUserRepository {
   async update(uuid: string, data: User): Promise<User> {
     const user = await this._repo.findOne({ where: { uuid } });
 
-    if (!user) {
-      throw new NotFoundError("Usuáiro");
-    }
+    if (!user) throw new NotFoundError("Usuáiro");
 
-    user.email = data.email;
-    user.password = data.password;
-    user.schoolUuid = data.schoolUuid;
-    user.profileUuid = data.profileUuid;
-    user.name = data.name;
-    user.status = data.status;
-
-    const userUpdate = await this._repo.save(user);
-    return UserMapper.toDomain(userUpdate);
+    await this._repo.update({ uuid }, { ...data });
+    const find = await this.findByEmail(user.email)!;
+    return find!;
   }
 
   async updatePassword(password: string, email: string): Promise<boolean> {

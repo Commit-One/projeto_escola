@@ -25,9 +25,9 @@ export class ClassPeriodTypeOrmRepository implements IClassPeriodRepository {
     return (deleted.affected ?? 0) > 0;
   }
 
-  async update(uuid: string, data: ClassPeriodDTO): Promise<boolean> {
-    const updated = await this._repo.update({ uuid }, { ...data });
-    return (updated.affected ?? 0) > 0;
+  async update(uuid: string, data: ClassPeriodDTO): Promise<ClassPeriod> {
+    await this._repo.update({ uuid }, { ...data });
+    return await this.getOne(uuid);
   }
 
   async getOne(uuid: string): Promise<ClassPeriod> {

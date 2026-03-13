@@ -43,9 +43,7 @@ export class StudentTypeOrmRepository implements IStudentRepository {
   async update(uuid: string, data: StudentDTO): Promise<StudentResponseDTO> {
     const student = await this._repo.findOne({ where: { uuid } });
 
-    if (!student) {
-      throw new NotFoundError("Aluno");
-    }
+    if (!student) throw new NotFoundError("Aluno");
 
     await this._repo.update({ uuid }, { ...data });
     return await this.getOne(uuid);
