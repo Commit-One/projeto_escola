@@ -3,7 +3,9 @@ import { AppDataSource } from "../data-source";
 import { ProfileEntity } from "../entities/ProfilesEntity";
 import { IProfileRepository } from "../../../domain/repositories/IProfileRepository";
 import { Profile } from "../../../domain/entities/Profile";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class ProfileTypeOrmRepository implements IProfileRepository {
   protected readonly _repo: Repository<ProfileEntity>;
 

@@ -7,7 +7,9 @@ import { NotFoundError } from "../../../utils/error";
 import { BcryptSecurity } from "../../security/bcrypt";
 import { StatusEnum } from "../../../utils/enum/status";
 import { UserMapper } from "../mappers/user.mapper";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class UserTypeOrmRepository implements IUserRepository {
   protected readonly _repo: Repository<UserEntity>;
   private readonly _bcryp = new BcryptSecurity();

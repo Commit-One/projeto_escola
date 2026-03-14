@@ -1,6 +1,6 @@
-import { CacheService } from "../../../infrastructure/cache/cache.service";
+import { RedisService } from "../../../infrastructure/redis/redis.service";
 
-export class FakeCacheRepository implements CacheService {
+export class FakeCacheRepository implements RedisService {
   private cache: Record<string, unknown> = {};
 
   async set(key: string, value: unknown): Promise<void> {

@@ -6,12 +6,12 @@ import {
   getOneClassPeriodSchemaValidator,
   updateClassPeriodSchemaValidator,
 } from "../validators/classPeriod.validator";
-import { MakeClassPeriodContainer } from "../../../main/container/classPeriod.container";
-// import { authMiddleware } from "../middleware/auth";
+import { container } from "tsyringe";
+import { ClassPeriodController } from "../controllers/classPeriod.controller";
 
 export const classPeriod = Router();
 
-const controller = MakeClassPeriodContainer.inicialize();
+const controller = container.resolve(ClassPeriodController);
 
 classPeriod.post(
   "/",

@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { Handler } from "../statusHttp";
 import { CreateProfileUseCase } from "../../../application/use-cases/profile/create.usecase";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class ProfileController {
   constructor(private readonly _create: CreateProfileUseCase) {}
 

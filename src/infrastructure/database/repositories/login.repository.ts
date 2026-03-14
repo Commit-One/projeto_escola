@@ -9,7 +9,9 @@ import { SchoolEntity } from "../entities/SchoolEntity";
 import { NotFoundError } from "../../../utils/error";
 import { UserMapper } from "../mappers/user.mapper";
 import { LoginMapper } from "../mappers/login.mapper";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class LoginTypeOrmRepository implements ILoginRepository {
   private readonly _repoProfile: Repository<ProfileEntity>;
   private readonly _repoUser: Repository<UserEntity>;

@@ -8,7 +8,9 @@ import { ClassPeriodMapper } from "../mappers/classPeriod.mapper";
 import { ClassPeriodDTO } from "../../../application/dtos/classPeriod.dto";
 import { ClassStudentEntity } from "../entities/ClassStudentEntity";
 import { PeriodEntity } from "../entities/PeriodEntity";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class ClassPeriodTypeOrmRepository implements IClassPeriodRepository {
   protected readonly _repo: Repository<ClassPeriodEntity>;
   protected readonly _repoClass: Repository<ClassStudentEntity>;
@@ -71,5 +73,18 @@ export class ClassPeriodTypeOrmRepository implements IClassPeriodRepository {
     const entity = ClassPeriodMapper.toEntity(data);
     await this._repo.save(entity);
     return ClassPeriodMapper.toDomain(entity);
+  }
+
+  async getByClassPeriodUuid(
+    classUuid: string,
+    periodUuid: string,
+  ): Promise<ClassPeriod> {
+    const classPeriod = await this._repo.findOne({
+      where: { classUuid, periodUuid },
+    });
+
+    if (!classPeriod) throw new AppError("Regra não encontrada");
+
+    return ClassPeriodMapper.toDomain(classPeriod);
   }
 }

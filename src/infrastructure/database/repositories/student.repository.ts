@@ -14,7 +14,9 @@ import { AppError, NotFoundError } from "../../../utils/error";
 import { ClassStudentEntity } from "../entities/ClassStudentEntity";
 import { StudentMapper } from "../mappers/student.mapper";
 import { replace } from "../../../utils/functions/replace";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class StudentTypeOrmRepository implements IStudentRepository {
   protected readonly _repo: Repository<StudentEntity>;
   private readonly _repoProfile: Repository<ProfileEntity>;
@@ -68,7 +70,7 @@ export class StudentTypeOrmRepository implements IStudentRepository {
     if (!school) throw new NotFoundError("Escola");
 
     const classStudent = await this._repoClass.findOne({
-      where: { uuid: data.classStudentUuid },
+      where: { uuid: data.classUuid },
     });
     if (!classStudent) throw new NotFoundError("Classe");
 
@@ -110,7 +112,7 @@ export class StudentTypeOrmRepository implements IStudentRepository {
     if (!school) throw new NotFoundError("Escola");
 
     const classStudent = await this._repoClass.findOne({
-      where: { uuid: student!.classStudentUuid },
+      where: { uuid: student!.classUuid },
     });
     if (!classStudent) throw new NotFoundError("Classe");
 

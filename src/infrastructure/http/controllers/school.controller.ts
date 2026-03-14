@@ -6,7 +6,9 @@ import { DeleteSchoolUseCase } from "../../../application/use-cases/school/delet
 import { UpdateSchoolUseCase } from "../../../application/use-cases/school/update.usecase";
 import { GetSchoolByNameUseCase } from "../../../application/use-cases/school/getByName.usecase";
 import { UpdateStatusSchoolUseCase } from "../../../application/use-cases/school/updateStatus.usecase";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class SchoolController {
   constructor(
     private readonly _create: CreateSchoolUseCase,

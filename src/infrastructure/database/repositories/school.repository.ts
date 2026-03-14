@@ -14,7 +14,9 @@ import { environmentConfig } from "../../../main/instances";
 import { SchoolDTO } from "../../../application/dtos/school.dto";
 import { SchoolMapper } from "../mappers/school.mapper";
 import { replace } from "../../../utils/functions/replace";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class SchoolTypeOrmRepository implements ISchoolRepository {
   protected readonly _repo: Repository<SchoolEntity>;
   private readonly _bcryp = new BcryptSecurity();

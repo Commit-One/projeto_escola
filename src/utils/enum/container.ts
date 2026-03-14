@@ -1,0 +1,15 @@
+export enum ContainerEnum {
+  LOGIN_REPOSITORY = "LoginTypeOrmRepository",
+  AUTHENTICATION_SECURITY = "AuthenticationSecurity",
+  BCRYPT_SECURITY = "BcryptSecurity",
+  CLASS_PERIOD_REPOSITORY = "ClassPeriodTypeOrmRepository",
+  REDIS_SERVICE = "RedisService",
+  CLASS_STUDENT_REPOSITORY = "ClassStudentTypeOrmRepository",
+  PAYMENT_REPOSITORY = "PaymentTypeOrmRepository",
+  PERIOD_REPOSITORY = "PeriodTypeOrmRepository",
+  PROFILE_REPOSITORY = "ProfileTypeOrmRepository",
+  SCHOOL_REPOSITORY = "SchoolTypeOrmRepository",
+  STUDENT_REPOSITORY = "StudentTypeOrmRepository",
+  USER_REPOSITORY = "UserTypeOrmRepository",
+  QUEUE_SERVICE = "RabbitService",
+}

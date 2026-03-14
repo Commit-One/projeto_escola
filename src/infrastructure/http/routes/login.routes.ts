@@ -4,12 +4,12 @@ import {
   loginSchemaDecoded,
   loginSchemaValidator,
 } from "../validators/login.validator";
-import { MakeLoginContainer } from "../../../main/container/login.container";
-// import { authMiddleware } from "../middleware/auth";
+import { container } from "tsyringe";
+import { LoginController } from "../controllers/login.controller";
 
 export const loginRoutes = Router();
 
-const controller = MakeLoginContainer.inicialize();
+const controller = container.resolve(LoginController);
 
 loginRoutes.post(
   "/",

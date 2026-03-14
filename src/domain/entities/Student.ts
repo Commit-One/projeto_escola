@@ -15,7 +15,7 @@ export class Student extends Base {
     public nameFather: string,
     public name: string,
     public phone: string,
-    public classStudentUuid: string,
+    public classUuid: string,
     public periodUuid: string,
     public dateMatriculation: Date,
     public hasDiscount: boolean = false,
@@ -46,7 +46,7 @@ export class Student extends Base {
     if (!this.nameFather) throw new ValidationEmpty("nameFather");
     if (!this.name) throw new ValidationEmpty("name");
     if (!this.phone) throw new ValidationEmpty("phone");
-    if (!this.classStudentUuid) throw new ValidationEmpty("classStudentUuid");
+    if (!this.classUuid) throw new ValidationEmpty("classUuid");
     if (!this.periodUuid) throw new ValidationEmpty("periodUuid");
     if (!this.dateMatriculation) throw new ValidationEmpty("dateMatriculation");
     if (!this.hasDiscount) throw new ValidationEmpty("hasDiscount");

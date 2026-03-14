@@ -9,7 +9,12 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2020",
-    "types": ["jest", "node"]
+    "types": [
+      "jest",
+      "node"
+    ]
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }

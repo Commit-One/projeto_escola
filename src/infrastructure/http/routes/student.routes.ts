@@ -1,7 +1,6 @@
 import { Router } from "express";
 
 import { validateMiddlewareSchema } from "../middleware/validateSchema";
-import { MakeStudentContainer } from "../../../main/container/student.container";
 import {
   createStudentSchemaValidator,
   deleteStudentSchemaValidator,
@@ -9,10 +8,12 @@ import {
   updateStatusStudentSchemaValidator,
   updateStudentSchemaValidator,
 } from "../validators/student.validator";
+import { container } from "tsyringe";
+import { StudentController } from "../controllers/student.controller";
 
 export const studentsRoutes = Router();
 
-const controller = MakeStudentContainer.inicialize();
+const controller = container.resolve(StudentController);
 
 studentsRoutes.get("/", (req, res) => controller.getAll(req, res));
 

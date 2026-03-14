@@ -6,11 +6,12 @@ import {
   getOneClassSchemaValidator,
   updateClassSchemaValidator,
 } from "../validators/classStudent.validator";
-import { MakeClassStudentContainer } from "../../../main/container/classStudent.container";
+import { container } from "tsyringe";
+import { ClassStudentController } from "../controllers/classStudent.controller";
 
 export const classStudents = Router();
 
-const controller = MakeClassStudentContainer.inicialize();
+const controller = container.resolve(ClassStudentController);
 
 classStudents.post(
   "/",

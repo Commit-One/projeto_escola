@@ -45,10 +45,10 @@ const createStudentSchemaValidator = z.object({
       .trim()
       .min(1, new ValidationEmpty("Phone").response),
 
-    classStudentUuid: z
-      .string({ error: new ValidationEmpty("classStudentUuid").response })
+    classUuid: z
+      .string({ error: new ValidationEmpty("classUuid").response })
       .trim()
-      .min(1, new ValidationEmpty("classStudentUuid").response),
+      .min(1, new ValidationEmpty("classUuid").response),
 
     dateMatriculation: z.coerce.date({
       error: () => ({

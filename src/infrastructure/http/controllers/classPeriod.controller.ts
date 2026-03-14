@@ -5,7 +5,9 @@ import { DeleteClassPeriodUseCase } from "../../../application/use-cases/classPe
 import { UpdateClassPeriodUseCase } from "../../../application/use-cases/classPeriod/update.usecase";
 import { GetAllClassPeriodUseCase } from "../../../application/use-cases/classPeriod/getAll.usecase";
 import { GetOneClassPeriodUseCase } from "../../../application/use-cases/classPeriod/getOne.usecase";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class ClassPeriodController {
   constructor(
     private readonly _create: CreateClassPeriodUseCase,

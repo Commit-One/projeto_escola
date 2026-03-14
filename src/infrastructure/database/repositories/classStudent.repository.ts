@@ -6,7 +6,9 @@ import { ClassStudentEntity } from "../entities/ClassStudentEntity";
 import { NotFoundError } from "../../../utils/error";
 import { ClassIStudentDTO } from "../../../application/dtos/classStudent.dto";
 import { ClassStudentMapper } from "../mappers/classStudent.mapper";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class ClassStudentTypeOrmRepository implements IClassStudentRepository {
   protected readonly _repo: Repository<ClassStudentEntity>;
 

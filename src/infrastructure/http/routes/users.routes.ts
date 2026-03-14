@@ -1,14 +1,15 @@
 import { Router } from "express";
-import { MakeUserContainer } from "../../../main/container/user.container";
 import { validateMiddlewareSchema } from "../middleware/validateSchema";
 import {
   updatePasswordUserSchema,
   updateStatusUserSchema,
 } from "../validators/user.validator";
+import { container } from "tsyringe";
+import { UserController } from "../controllers/user.controller";
 
 export const usersRoutes = Router();
 
-const controller = MakeUserContainer.inicialize();
+const controller = container.resolve(UserController);
 
 usersRoutes.get("/", (req, res) => controller.getAll(req, res));
 

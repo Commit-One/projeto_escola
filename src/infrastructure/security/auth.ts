@@ -1,7 +1,9 @@
 import { IAuthenticationSecurity } from "../../domain/contracts/IAuthenticationSecurity";
 import { LoginDTO } from "../../application/dtos/login.dto";
 import jwt from "jsonwebtoken";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class AuthenticationSecurity implements IAuthenticationSecurity {
   async decoded(token: string): Promise<unknown> {
     const decoded = await jwt.decode(token);

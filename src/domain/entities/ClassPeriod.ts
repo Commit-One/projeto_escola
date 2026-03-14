@@ -15,7 +15,7 @@ export class ClassPeriod extends Base {
 
   private validate() {
     if (!this.periodUuid) throw new ValidationEmpty("periodUuid");
-    if (!this.classUuid) throw new ValidationEmpty("classStudentUuid");
+    if (!this.classUuid) throw new ValidationEmpty("classUuid");
     if (!this.value) throw new ValidationEmpty("value");
   }
 }

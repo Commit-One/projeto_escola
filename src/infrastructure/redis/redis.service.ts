@@ -1,7 +1,9 @@
-import { ICacheService } from "../../domain/contracts/ICacheService";
-import { redisClient } from "./cache.connection";
+import { injectable } from "tsyringe";
+import { IRedisService } from "../../domain/contracts/IRedisService";
+import { redisClient } from "./redis.connection";
 
-export class CacheService implements ICacheService {
+@injectable()
+export class RedisService implements IRedisService {
   async set(key: string, value: unknown) {
     await redisClient.set(key, JSON.stringify(value));
   }

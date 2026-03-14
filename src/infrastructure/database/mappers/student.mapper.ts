@@ -21,7 +21,7 @@ export class StudentMapper {
       entity.nameFather,
       entity.name,
       entity.phone,
-      entity.classStudentUuid,
+      entity.classUuid,
       entity.periodUuid,
       entity.dateMatriculation,
       entity.hasDiscount,
@@ -53,7 +53,7 @@ export class StudentMapper {
     entity.dayPayment = domain.dayPayment;
     entity.dateMatriculation = domain.dateMatriculation;
     entity.name = domain.name;
-    entity.classStudentUuid = domain.classStudentUuid;
+    entity.classUuid = domain.classUuid;
     entity.dateBirth = domain.dateBirth;
     entity.createdAt = new Date();
     entity.uuid = crypto.randomUUID();
@@ -93,7 +93,7 @@ export class StudentMapper {
       nameMother: student.nameMother,
       nameFather: student.nameFather,
       phone: student.phone,
-      classStudentUuid: student.classStudentUuid,
+      classUuid: student.classUuid,
       dateMatriculation: student.dateMatriculation,
       hasDiscount: student.hasDiscount,
       discount: student.discount,
@@ -130,7 +130,7 @@ export class StudentMapper {
       nameMother: dataJoin.nameMother,
       nameFather: dataJoin.nameFather,
       phone: dataJoin.phone,
-      classStudentUuid: dataJoin.classStudentUuid,
+      classUuid: dataJoin.classUuid,
       dateMatriculation: dataJoin.dateMatriculation,
       hasDiscount: dataJoin.hasDiscount,
       discount: dataJoin.discount,

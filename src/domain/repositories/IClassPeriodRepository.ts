@@ -7,4 +7,8 @@ export interface IClassPeriodRepository {
   getAll(): Promise<ClassPeriod[]>;
   create(data: ClassPeriodDTO): Promise<ClassPeriod>;
   update(uuid: string, data: ClassPeriodDTO): Promise<ClassPeriod>;
+  getByClassPeriodUuid(
+    classUuid: string,
+    periodUuid: string,
+  ): Promise<ClassPeriod>;
 }

@@ -6,7 +6,9 @@ import { GetAllStudetsUseCase } from "../../../application/use-cases/student/get
 import { DeleteStudentUseCase } from "../../../application/use-cases/student/deleteStudent.usecase";
 import { UpdateStatusStudentUseCase } from "../../../application/use-cases/student/updateStatus.usecase";
 import { UpdateStudentUseCase } from "../../../application/use-cases/student/updateStudent.usecase";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class StudentController {
   constructor(
     private readonly _create: CreateStudentUseCase,

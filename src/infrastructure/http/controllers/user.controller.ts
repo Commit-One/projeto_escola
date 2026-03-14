@@ -3,7 +3,9 @@ import { Handler } from "../statusHttp";
 import { GetAllUsersUserCase } from "../../../application/use-cases/user/getAll.usecase";
 import { UpdatePasswordUseCase } from "../../../application/use-cases/user/updatePassword.usecase";
 import { UpdateStatusUserUseCase } from "../../../application/use-cases/user/updateStatus.usecase";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class UserController {
   constructor(
     private readonly _getAll: GetAllUsersUserCase,

@@ -1,11 +1,17 @@
-import { ICacheService } from "../../../domain/contracts/ICacheService";
+import { inject, injectable } from "tsyringe";
 import { IProfileRepository } from "../../../domain/repositories/IProfileRepository";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
+import { IRedisService } from "../../../domain/contracts/IRedisService";
+import { ContainerEnum } from "../../../utils/enum/container";
 
+@injectable()
 export class CreateProfileUseCase {
   constructor(
+    @inject(ContainerEnum.PROFILE_REPOSITORY)
     private _profileRepository: IProfileRepository,
-    private readonly _cache: ICacheService,
+
+    @inject(ContainerEnum.REDIS_SERVICE)
+    private readonly _cache: IRedisService,
   ) {}
 
   async execute(): Promise<boolean> {

@@ -10,6 +10,7 @@
     "nodemon": "^3.1.14",
     "redis": "^5.11.0",
     "reflect-metadata": "^0.2.2",
+    "tsyringe": "^4.10.0",
     "typeorm": "^0.3.28",
     "typescript": "^5.9.3",
     "zod": "^4.3.6"
@@ -42,7 +43,7 @@
     "lint": "eslint src --ext .ts",
     "fix": "eslint src --ext .ts --fix",
     "lint:fix": "yarn format && yarn fix && yarn lint",
-    "format": "prettier --write src"
+    "ok": "prettier --write src"
   },
   "version": "1.0.0"
 }

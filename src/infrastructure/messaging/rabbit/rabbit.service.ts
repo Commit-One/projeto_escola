@@ -1,6 +1,8 @@
 import { RabbitMQConnection } from "./connection";
 import { IQueueService } from "../../../domain/contracts/IQueueService";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class RabbitService implements IQueueService {
   private async getChannel() {
     return await RabbitMQConnection.getChannel();
@@ -8,6 +10,7 @@ export class RabbitService implements IQueueService {
 
   async sendToQueue(queueName: string, payload: any): Promise<void> {
     const channel = await this.getChannel();
+    console.log("Mensagem enviada");
 
     await channel.assertQueue(queueName, {
       durable: true,

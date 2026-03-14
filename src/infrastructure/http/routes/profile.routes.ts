@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { MakeProfileContainer } from "../../../main/container/profile.container";
+import { container } from "tsyringe";
+import { ProfileController } from "../controllers/profile.controller";
 
 export const profileRoutes = Router();
 
-const controller = MakeProfileContainer.inicialize();
+const controller = container.resolve(ProfileController);
 
 profileRoutes.post("/", (req, res) => controller.create(req, res));

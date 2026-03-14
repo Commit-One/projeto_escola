@@ -1,11 +1,17 @@
-import { ICacheService } from "../../../domain/contracts/ICacheService";
+import { inject, injectable } from "tsyringe";
+import { IRedisService } from "../../../domain/contracts/IRedisService";
 import { IPeriodRepository } from "../../../domain/repositories/IPeriodRepository";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
+import { ContainerEnum } from "../../../utils/enum/container";
 
+@injectable()
 export class CreatePeriodUseCase {
   constructor(
+    @inject(ContainerEnum.PERIOD_REPOSITORY)
     private _periodRepository: IPeriodRepository,
-    private readonly _cache: ICacheService,
+
+    @inject(ContainerEnum.REDIS_SERVICE)
+    private readonly _cache: IRedisService,
   ) {}
 
   async execute(): Promise<boolean> {

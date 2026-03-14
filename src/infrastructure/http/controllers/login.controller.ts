@@ -2,7 +2,9 @@ import { Request, Response } from "express";
 import { Handler } from "../statusHttp";
 import { SignInUseCase } from "../../../application/use-cases/login/signIn.usecase";
 import { DecodedUseCase } from "../../../application/use-cases/login/decoded.usecase";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class LoginController {
   constructor(
     private readonly _login: SignInUseCase,

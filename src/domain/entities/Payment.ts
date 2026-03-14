@@ -3,7 +3,7 @@ import { IBaseProps } from "../contracts/IBaseProps";
 import { Base } from "./Base";
 
 export class Payment extends Base {
-  public currentValue: number = 0;
+  public currentValueDiscountApplied: number = 0;
 
   constructor(
     public studentUuid: string,
@@ -19,17 +19,21 @@ export class Payment extends Base {
   ) {
     super(baseProps);
 
-    this.currentValue = this.valueDefault;
+    this.currentValueDiscountApplied = this.valueDefault;
     if (this.discountApplied) this.calculateDiscount(this.discount);
   }
 
-  private calculateDiscount(discount: number) {
-    if (this.discountApplied) {
-      const current = this.valueDefault - (this.valueDefault * discount) / 100;
-      this.currentValue = current;
-      return this.currentValue;
+  private calculateDiscount(discount: number): number {
+    const currentMonth = new Date().getMonth() + 1;
+    const remainingMonths = 12 - currentMonth;
+
+    if (!this.discountApplied) {
+      return this.valueDefault / remainingMonths;
     }
 
-    return this.valueDefault;
+    const totalWithDiscount =
+      this.valueDefault - (this.valueDefault * discount) / 100;
+
+    return totalWithDiscount / remainingMonths;
   }
 }

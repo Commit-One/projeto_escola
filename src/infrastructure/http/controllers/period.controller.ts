@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { Handler } from "../statusHttp";
 import { CreatePeriodUseCase } from "../../../application/use-cases/period/create.usecase";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class PeriodController {
   constructor(private readonly _create: CreatePeriodUseCase) {}
 

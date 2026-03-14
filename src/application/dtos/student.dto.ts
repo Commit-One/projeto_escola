@@ -24,7 +24,7 @@ export interface StudentResponseDTO {
   nameMother: string;
   nameFather: string;
   phone: string;
-  classStudentUuid: string;
+  classUuid: string;
   dateMatriculation: Date;
   hasDiscount: boolean;
   discount: number;
@@ -47,7 +47,7 @@ export interface StudentDTO {
   dayPayment: number;
   schoolUuid: string;
   periodUuid: string;
-  classStudentUuid: string;
+  classUuid: string;
   profileUuid: string;
   cpf: string;
 }
@@ -60,7 +60,6 @@ export interface StudentQuery {
   profileName: string;
   profileUuid: string;
   className: string;
-  classUuid: string;
   name: string;
   matriculation: string;
   dateBirth: Date;
@@ -68,7 +67,7 @@ export interface StudentQuery {
   nameMother: string;
   nameFather: string;
   phone: string;
-  classStudentUuid: string;
+  classUuid: string;
   dateMatriculation: Date;
   hasDiscount: boolean;
   discount: number;

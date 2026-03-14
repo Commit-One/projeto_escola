@@ -5,7 +5,7 @@ export class UserMapper {
   static toDomain(entity: UserEntity): User {
     return new User(
       entity.email,
-      "_",
+      entity.password,
       entity.schoolUuid,
       entity.profileUuid,
       entity.name,

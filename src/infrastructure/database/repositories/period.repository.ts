@@ -3,7 +3,9 @@ import { AppDataSource } from "../data-source";
 import { PeriodEntity } from "../entities/PeriodEntity";
 import { IPeriodRepository } from "../../../domain/repositories/IPeriodRepository";
 import { Period } from "../../../domain/entities/Period";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class PeriodTypeOrmRepository implements IPeriodRepository {
   protected readonly _repo: Repository<PeriodEntity>;
 
