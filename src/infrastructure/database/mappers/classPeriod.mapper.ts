@@ -17,8 +17,6 @@ export class ClassPeriodMapper {
     entity.classUuid = data.classUuid;
     entity.periodUuid = data.periodUuid;
     entity.value = data.value;
-    entity.createdAt = new Date();
-    entity.uuid = crypto.randomUUID();
 
     return entity;
   }

@@ -3,12 +3,13 @@ import { IBaseProps } from "../contracts/IBaseProps";
 import { Base } from "./Base";
 
 export class Payment extends Base {
-  public currentValueDiscountApplied: number = 0;
+  public monthlyValue: number = 0;
+  public datePayment: Date = new Date();
 
   constructor(
     public studentUuid: string,
     public schoolUuid: string,
-    public valueDefault: number,
+    public annualValue: number,
     public referenceMonth: number,
     public referenceDay: number,
     public referenceYear: number,
@@ -18,22 +19,31 @@ export class Payment extends Base {
     baseProps?: IBaseProps,
   ) {
     super(baseProps);
-
-    this.currentValueDiscountApplied = this.valueDefault;
-    if (this.discountApplied) this.calculateDiscount(this.discount);
+    this.calculateMonthlyValue(this.discount);
+    this.datePayment = new Date(
+      this.referenceDay,
+      this.referenceMonth,
+      this.referenceYear,
+    );
   }
 
-  private calculateDiscount(discount: number): number {
-    const currentMonth = new Date().getMonth() + 1;
-    const remainingMonths = 12 - currentMonth;
+  private getRemainingMonths(): number {
+    const month = new Date().getMonth() + 1;
+    return Math.max(1, 12 - month + 1);
+  }
 
-    if (!this.discountApplied) {
-      return this.valueDefault / remainingMonths;
-    }
+  private calculateMonthlyValue(discount: number): number {
+    const remainingMonths = this.getRemainingMonths();
 
-    const totalWithDiscount =
-      this.valueDefault - (this.valueDefault * discount) / 100;
+    const valueDefault = Number(this.annualValue);
+    const valueWithDiscountApplied = this.discountApplied
+      ? valueDefault - (valueDefault * discount) / 100
+      : valueDefault;
 
-    return totalWithDiscount / remainingMonths;
+    const monthlyValue = valueWithDiscountApplied / remainingMonths;
+
+    this.monthlyValue = Number(monthlyValue.toFixed(2));
+
+    return this.monthlyValue;
   }
 }

@@ -1,11 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Generated, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("tb_base")
 export class Base {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: "datetime" })
   createdAt!: Date;
 
   @Column({
@@ -14,5 +14,6 @@ export class Base {
   enable!: boolean;
 
   @Column()
+  @Generated("uuid")
   uuid!: string;
 }

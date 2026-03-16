@@ -5,19 +5,21 @@ import { UserEntity } from "./entities/UserEntity";
 import { ProfileEntity } from "./entities/ProfilesEntity";
 import { PeriodEntity } from "./entities/PeriodEntity";
 import { StudentEntity } from "./entities/StudentEntity";
-import { environmentConfig } from "../../main/instances";
 import { ClassStudentEntity } from "./entities/ClassStudentEntity";
 import { ClassPeriodEntity } from "./entities/ClassPeriodEntity";
+import { EnvironmentConfig } from "../config";
+import { PaymentEntity } from "./entities/PaymentEntity";
 
+const env = new EnvironmentConfig();
 export const AppDataSource = new DataSource({
   type: "mysql",
-  host: environmentConfig.DB_HOST,
-  port: environmentConfig.DB_PORT,
-  username: environmentConfig.DB_USERNAME,
-  password: environmentConfig.DB_PASSWORD,
-  database: environmentConfig.DB_NAME,
-  synchronize: environmentConfig.SYNCHRONIZE,
-  logging: environmentConfig.LOGGING,
+  host: env.DB_HOST,
+  port: env.DB_PORT,
+  username: env.DB_USERNAME,
+  password: env.DB_PASSWORD,
+  database: env.DB_NAME,
+  synchronize: env.SYNCHRONIZE,
+  logging: env.LOGGING,
   entities: [
     SchoolEntity,
     UserEntity,
@@ -26,6 +28,7 @@ export const AppDataSource = new DataSource({
     StudentEntity,
     ClassStudentEntity,
     ClassPeriodEntity,
+    PaymentEntity,
   ],
   migrations: [],
 });

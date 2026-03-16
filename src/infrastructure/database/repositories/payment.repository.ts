@@ -2,7 +2,7 @@ import { Repository } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { AppError } from "../../../utils/error";
 import { IPaymentRepository } from "../../../domain/repositories/IPaymentRepository";
-import { PaymentEntity } from "../entities/Payment";
+import { PaymentEntity } from "../entities/PaymentEntity";
 import { Payment } from "../../../domain/entities/Payment";
 import { PaymentMapper } from "../mappers/payment.mapper";
 import { StatusPayment } from "../../../utils/enum/payment";

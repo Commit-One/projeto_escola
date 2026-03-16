@@ -10,13 +10,11 @@ import { ProfileEnum } from "../../../utils/enum/profile";
 import { BcryptSecurity } from "../../security/bcrypt";
 import { AppError, NotFoundError } from "../../../utils/error";
 import { StatusEnum } from "../../../utils/enum/status";
-import { environmentConfig } from "../../../main/instances";
 import { SchoolDTO } from "../../../application/dtos/school.dto";
 import { SchoolMapper } from "../mappers/school.mapper";
 import { replace } from "../../../utils/functions/replace";
-import { injectable } from "tsyringe";
+import { environment } from "../../../main/register";
 
-@injectable()
 export class SchoolTypeOrmRepository implements ISchoolRepository {
   protected readonly _repo: Repository<SchoolEntity>;
   private readonly _bcryp = new BcryptSecurity();
@@ -92,7 +90,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
       if (!profileAdmin) throw new NotFoundError("Perfil");
 
       const hashedPassword = await this._bcryp.hash(
-        environmentConfig.PASSWORD_DEFAULT,
+        environment.PASSWORD_DEFAULT,
       );
 
       const domain = SchoolMapper.toDomain(data);

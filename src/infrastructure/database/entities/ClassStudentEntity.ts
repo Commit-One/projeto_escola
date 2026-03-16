@@ -3,12 +3,12 @@ import { Base } from "./BaseEntity";
 
 @Entity("tb_class")
 export class ClassStudentEntity extends Base {
-  @Column()
+  @Column({ type: "varchar", length: 150, nullable: false, unique: true })
   name!: string;
 
-  @Column()
+  @Column({ type: "int", nullable: false })
   maxAge!: number;
 
-  @Column()
+  @Column({ type: "int", nullable: false })
   minAge!: number;
 }

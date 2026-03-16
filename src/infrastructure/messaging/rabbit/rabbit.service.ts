@@ -10,7 +10,6 @@ export class RabbitService implements IQueueService {
 
   async sendToQueue(queueName: string, payload: any): Promise<void> {
     const channel = await this.getChannel();
-    console.log("Mensagem enviada");
 
     await channel.assertQueue(queueName, {
       durable: true,

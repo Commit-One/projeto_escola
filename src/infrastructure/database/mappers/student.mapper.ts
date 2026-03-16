@@ -55,8 +55,6 @@ export class StudentMapper {
     entity.name = domain.name;
     entity.classUuid = domain.classUuid;
     entity.dateBirth = domain.dateBirth;
-    entity.createdAt = new Date();
-    entity.uuid = crypto.randomUUID();
     entity.cpf = domain.cpf;
 
     return entity;

@@ -4,7 +4,7 @@ import { StatusPayment } from "../../utils/enum/payment";
 export interface PaymentDTO {
   studentUuid: string;
   schoolUuid: string;
-  valueDefault: number;
+  annualValue: number;
   referenceMonth: number;
   referenceDay: number;
   referenceYear: number;

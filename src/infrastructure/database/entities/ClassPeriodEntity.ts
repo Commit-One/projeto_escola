@@ -3,12 +3,12 @@ import { Base } from "./BaseEntity";
 
 @Entity("tb_class_period")
 export class ClassPeriodEntity extends Base {
-  @Column()
+  @Column({ type: "varchar", length: 100, nullable: false })
   periodUuid!: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 100, nullable: false })
   classUuid!: string;
 
-  @Column()
+  @Column("decimal", { precision: 10, scale: 2 })
   value!: number;
 }

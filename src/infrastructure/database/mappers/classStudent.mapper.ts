@@ -17,8 +17,6 @@ export class ClassStudentMapper {
     entity.name = data.name;
     entity.maxAge = data.maxAge;
     entity.minAge = data.minAge;
-    entity.createdAt = new Date();
-    entity.uuid = crypto.randomUUID();
 
     return entity;
   }

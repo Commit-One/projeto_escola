@@ -1,16 +1,23 @@
+import { inject, injectable } from "tsyringe";
 import { PaymentDTO } from "../../../../application/dtos/payment.dto";
 import { Payment } from "../../../../domain/entities/Payment";
 import { IPaymentRepository } from "../../../../domain/repositories/IPaymentRepository";
-import { notificationQueue } from "../queues/notification.queue";
-import { RabbitService } from "../rabbit.service";
+import { ContainerEnum } from "../../../../utils/enum/container";
+import { IQueueService } from "../../../../domain/contracts/IQueueService";
+import { paymentQueue } from "../queues/payment.queue";
+import { StatusPayment } from "../../../../utils/enum/payment";
 
 interface ICalculateRemaining {
   monthPending: number;
 }
 
+@injectable()
 export class PaymentConsumer {
   constructor(
-    private readonly rabbit: RabbitService,
+    @inject(ContainerEnum.QUEUE_SERVICE)
+    private readonly rabbit: IQueueService,
+
+    @inject(ContainerEnum.PAYMENT_REPOSITORY)
     private readonly _repo: IPaymentRepository,
   ) {}
 
@@ -29,7 +36,7 @@ export class PaymentConsumer {
 
   async execute() {
     await this.rabbit.consumerQueue(
-      notificationQueue.name,
+      paymentQueue.name,
       async (payload: PaymentDTO) => {
         const listMonths = this.calculateRemainingMonthsOfYear(
           payload.referenceMonth,
@@ -39,14 +46,15 @@ export class PaymentConsumer {
           const data = new Payment(
             payload.studentUuid,
             payload.schoolUuid,
-            payload.valueDefault,
+            payload.annualValue,
             month.monthPending,
             payload.referenceDay,
             payload.referenceYear,
-            payload.status,
+            StatusPayment.PENDING,
             payload.discountApplied,
             payload.discount,
           );
+
           await this._repo.create(data);
         }
       },

@@ -3,6 +3,6 @@ import { Base } from "./BaseEntity";
 
 @Entity("tb_periodo")
 export class PeriodEntity extends Base {
-  @Column()
+  @Column({ type: "varchar", length: 100, unique: true, nullable: false })
   name!: string;
 }

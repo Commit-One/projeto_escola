@@ -4,55 +4,56 @@ import { StatusEnum } from "../../../utils/enum/status";
 
 @Entity("tb_student")
 export class StudentEntity extends Base {
-  @Column()
+  @Column({ type: "varchar", length: 100, nullable: false })
   name!: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 100, nullable: false })
   matriculation!: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 100, nullable: false })
   schoolUuid!: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 100, nullable: false })
   profileUuid!: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 100, nullable: false })
   periodUuid!: string;
 
-  @Column()
+  @Column({ type: "date", nullable: false })
   dateBirth!: Date;
 
-  @Column()
+  @Column({ type: "varchar", length: 100, nullable: false })
   nameMother!: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 100, nullable: false })
   nameFather!: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 25, nullable: false })
   phone!: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 100, nullable: false })
   classUuid!: string;
 
-  @Column()
+  @Column({ type: "date", nullable: false })
   dateMatriculation!: Date;
 
-  @Column()
+  @Column({ type: "boolean", default: false })
   hasDiscount!: boolean;
 
-  @Column()
+  @Column({ type: "int", nullable: false })
   discount!: number;
 
-  @Column()
+  @Column({ type: "int", nullable: false })
   dayPayment!: number;
 
-  @Column()
+  @Column({ type: "varchar", length: 20, nullable: false })
   cpf!: string;
 
   @Column({
     type: "enum",
     enum: StatusEnum,
     default: StatusEnum.ACTIVE,
+    nullable: false,
   })
   status!: StatusEnum;
 }
