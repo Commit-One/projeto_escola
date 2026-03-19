@@ -2,8 +2,9 @@ import { dateForMySQL } from "./../../utils/functions/dateForMySQL";
 import { StatusEnum } from "../../utils/enum/status";
 import { replace } from "../../utils/functions/replace";
 import { Base } from "./Base";
-import { ValidationEmpty } from "../../utils/error";
+import { AppError, ValidationEmpty } from "../../utils/error";
 import { IBaseProps } from "../contracts/IBaseProps";
+import { CpfValidator } from "../validator/cpf.validator";
 
 export class Student extends Base {
   constructor(
@@ -53,5 +54,7 @@ export class Student extends Base {
     if (!this.discount) throw new ValidationEmpty("discount");
     if (!this.dayPayment) throw new ValidationEmpty("dayPayment");
     if (!this.profileUuid) throw new ValidationEmpty("profileUuid");
+    if (!this.cpf) throw new ValidationEmpty("cpf");
+    if (!CpfValidator.validate(this.cpf)) throw new AppError("CPF inválido");
   }
 }
