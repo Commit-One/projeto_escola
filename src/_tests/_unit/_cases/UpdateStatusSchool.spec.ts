@@ -17,15 +17,16 @@ describe("UpdateStatusSchool.spec", () => {
       "11999999999",
       "contato@escola.com",
       "Jhonatan",
+      "86.899.695/0001-00",
     );
 
     const school = await repository.createSchoolUserTransaction(schoolEntity);
 
     await useCase.execute(school.uuid, StatusEnum.DISABLED);
 
-    const shcoolUpdated = await repository.findByName(school.name);
-    const isUpdated = shcoolUpdated?.status !== school.status;
+    const schoolUpdated = await repository.findByName(school.name);
 
-    expect(isUpdated).toBe(true);
+    expect(schoolUpdated).toBeDefined();
+    expect(schoolUpdated?.status).toBe(StatusEnum.DISABLED);
   });
 });

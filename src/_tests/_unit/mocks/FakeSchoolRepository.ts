@@ -10,23 +10,10 @@ export class FakeSchoolRepository implements ISchoolRepository {
   private users: User[] = [];
 
   async updateStatus(uuid: string, status: StatusEnum): Promise<boolean> {
-    const findOne = this.schools.find((s) => s.uuid === uuid);
-
-    if (!findOne) throw new Error("School not found");
-
-    const updatedSchool = new School(
-      findOne.name,
-      findOne.address,
-      findOne.phone,
-      findOne.email,
-      findOne.nameDirector,
-      status,
-    );
-
-    const index = this.schools.indexOf(findOne);
-    this.schools[index] = updatedSchool;
-
-    return this.schools.find((s) => s.uuid === uuid)?.status === status;
+    const school = this.schools.find((item) => item.uuid === uuid);
+    if (!school) return false;
+    school.status = status;
+    return true;
   }
 
   async getAll(): Promise<School[]> {
@@ -50,6 +37,7 @@ export class FakeSchoolRepository implements ISchoolRepository {
       data.phone,
       data.email,
       data.nameDirector,
+      data.cnpj,
     );
 
     const index = this.schools.indexOf(findOne);

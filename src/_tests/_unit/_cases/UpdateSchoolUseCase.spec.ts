@@ -16,6 +16,7 @@ describe("UpdateSchoolUseCase", () => {
       "11999999999",
       "contato@escola.com",
       "Jhonatan",
+      "86.899.695/0001-00",
     );
 
     const school = await repository.createSchoolUserTransaction(schoolEntity);
@@ -26,6 +27,7 @@ describe("UpdateSchoolUseCase", () => {
       phone: school.phone,
       email: school.email,
       nameDirector: school.nameDirector,
+      cnpj: "86.899.695/0001-00",
     };
 
     const updated = await useCase.execute(school.uuid, newData);

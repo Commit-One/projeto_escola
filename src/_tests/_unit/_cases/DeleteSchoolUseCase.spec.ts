@@ -16,6 +16,7 @@ describe("DeleteSchoolUseCase", () => {
       "11999999999",
       "contato@escola.com",
       "Jhonatan",
+      "86.899.695/0001-00",
     );
 
     const school = await repository.createSchoolUserTransaction(schoolEntity);

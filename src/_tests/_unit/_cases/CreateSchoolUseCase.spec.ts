@@ -17,6 +17,7 @@ describe("CreateSchoolUseCase", () => {
       phone: "11999999999",
       email: "contato@escola.com",
       nameDirector: "Jhonatan",
+      cnpj: "86.899.695/0001-00",
     });
 
     expect(result).toHaveProperty("name", "Escola teste");

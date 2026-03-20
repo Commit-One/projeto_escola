@@ -15,6 +15,7 @@ describe("GetAllSchoolUseCase", () => {
       "11999999999",
       "contato@escola.com",
       "Jhonatan",
+      "86.899.695/0001-00",
     );
 
     await repository.createSchoolUserTransaction(schoolEntity);
