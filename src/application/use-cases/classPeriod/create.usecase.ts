@@ -5,6 +5,7 @@ import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { ClassPeriodDTO } from "../../dtos/classPeriod.dto";
 import { ContainerEnum } from "../../../utils/enum/container";
 import { IRedisService } from "../../../domain/contracts/IRedisService";
+import { logger } from "../../../infrastructure/logger";
 
 @injectable()
 export class CreateClassPeriodUseCase {
@@ -17,8 +18,14 @@ export class CreateClassPeriodUseCase {
   ) {}
 
   async execute(data: ClassPeriodDTO): Promise<ClassPeriod> {
-    const created = await this._repo.create(data);
+    const classPeriod = await this._repo.create(data);
     await this._cache.delete(cacheKeyEnum.CLASS_PERIOD);
-    return created;
+
+    logger.info({
+      message: "Regra de classe e período criado com sucesso",
+      schoolId: classPeriod.uuid,
+    });
+
+    return classPeriod;
   }
 }

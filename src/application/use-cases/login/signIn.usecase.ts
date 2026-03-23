@@ -4,6 +4,7 @@ import { IBcryptSecurity } from "../../../domain/contracts/IBcryptSecurity";
 import { AppError, NotFoundError } from "../../../utils/error";
 import { inject, injectable } from "tsyringe";
 import { ContainerEnum } from "../../../utils/enum/container";
+import { logger } from "../../../infrastructure/logger";
 
 @injectable()
 export class SignInUseCase {
@@ -21,16 +22,24 @@ export class SignInUseCase {
   async execute(email: string, password: string): Promise<{ token: string }> {
     const user = await this._loginRepository.findUserByEmail(email);
 
-    if (!user) throw new NotFoundError("Usuário");
+    if (!user) {
+      logger.error({ message: "Usuário não encontrado" });
+      throw new NotFoundError("Usuário");
+    }
 
     const isAuthorization = await this._bcryptSecurity.compare(
       password,
       user.password,
     );
 
-    if (!isAuthorization) throw new AppError("Senha inválida");
+    if (!isAuthorization) {
+      logger.warn({ message: "Senha inválida", date: new Date() });
+      throw new AppError("Senha inválida");
+    }
     const schemaDatabase = await this._loginRepository.schemaDatabase(email);
     const token = await this._authSecurity.token(schemaDatabase);
+
+    logger.info({ message: "Login realizado com sucesso", date: new Date() });
 
     return {
       token,

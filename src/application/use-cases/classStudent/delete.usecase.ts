@@ -3,6 +3,7 @@ import { IClassStudentRepository } from "../../../domain/repositories/IClassStud
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { ContainerEnum } from "../../../utils/enum/container";
 import { IRedisService } from "../../../domain/contracts/IRedisService";
+import { logger } from "../../../infrastructure/logger";
 
 @injectable()
 export class DeleteClassStudentUseCase {
@@ -16,7 +17,22 @@ export class DeleteClassStudentUseCase {
 
   async execute(uuid: string): Promise<boolean> {
     const deleted = await this._classRepository.delete(uuid);
+
+    if (!deleted) {
+      logger.warn({
+        message: "Ocorreu um erro ao deletar a relação de aluno e classe",
+        classStudent: uuid,
+      });
+      return false;
+    }
+
     await this._cache.delete(cacheKeyEnum.CLASS);
-    return deleted;
+
+    logger.info({
+      message: "Relação de aluno e classe deletada com sucesso",
+      classStudent: uuid,
+    });
+
+    return true;
   }
 }

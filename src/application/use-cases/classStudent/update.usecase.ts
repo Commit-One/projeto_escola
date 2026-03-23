@@ -5,6 +5,7 @@ import { IClassStudentRepository } from "../../../domain/repositories/IClassStud
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { ClassIStudentDTO } from "../../dtos/classStudent.dto";
 import { ContainerEnum } from "../../../utils/enum/container";
+import { logger } from "../../../infrastructure/logger";
 
 @injectable()
 export class UpdateClassStudentUseCase {
@@ -16,9 +17,27 @@ export class UpdateClassStudentUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string, data: ClassIStudentDTO): Promise<ClassStudent> {
+  async execute(
+    uuid: string,
+    data: ClassIStudentDTO,
+  ): Promise<ClassStudent | null> {
     const classStudent = await this._classRepository.update(uuid, data);
-    if (classStudent) await this._cache.delete(cacheKeyEnum.CLASS);
+
+    if (!classStudent) {
+      logger.warn({
+        message: "Ocorreu um erro ao atualizar a regra de classe e período",
+        classStudent: uuid,
+      });
+      return null;
+    }
+
+    await this._cache.delete(cacheKeyEnum.CLASS);
+
+    logger.info({
+      message: "Atualização da relação de classe e aluno feita com sucesso",
+      classStudent: uuid,
+    });
+
     return classStudent;
   }
 }

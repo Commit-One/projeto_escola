@@ -3,6 +3,7 @@ import { IRedisService } from "../../../domain/contracts/IRedisService";
 import { IPeriodRepository } from "../../../domain/repositories/IPeriodRepository";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { ContainerEnum } from "../../../utils/enum/container";
+import { logger } from "../../../infrastructure/logger";
 
 @injectable()
 export class CreatePeriodUseCase {
@@ -25,6 +26,8 @@ export class CreatePeriodUseCase {
     }
 
     await this._cache.set(cacheKeyEnum.PERIOD, listPeriod);
+
+    logger.info({ message: "Períodos criados com sucesso" });
 
     return true;
   }

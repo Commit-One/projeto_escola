@@ -4,6 +4,7 @@ import { ISchoolRepository } from "../../../domain/repositories/ISchoolRepositor
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { ContainerEnum } from "../../../utils/enum/container";
 import { StatusEnum } from "../../../utils/enum/status";
+import { logger } from "../../../infrastructure/logger";
 
 @injectable()
 export class UpdateStatusSchoolUseCase {
@@ -17,7 +18,23 @@ export class UpdateStatusSchoolUseCase {
 
   async execute(uuid: string, status: StatusEnum): Promise<boolean> {
     const updated = await this._repo.updateStatus(uuid, status);
-    if (updated) await this._cache.delete(cacheKeyEnum.SCHOOLS);
+
+    if (!updated) {
+      logger.warn({
+        message: "Status da escola não atualizado",
+        schoolId: uuid,
+      });
+
+      return false;
+    }
+
+    await this._cache.delete(cacheKeyEnum.SCHOOLS);
+
+    logger.info({
+      message: "Status da escola atualizado com sucesso",
+      schoolId: uuid,
+    });
+
     return updated;
   }
 }

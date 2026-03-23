@@ -2,6 +2,7 @@ import { injectable } from "tsyringe";
 import { RabbitMQConnection } from "./connection";
 import { IQueueService } from "../../../domain/contracts/IQueueService";
 import { IRabbitQueueConfig } from "./queues/interface";
+import { logger } from "../../logger";
 
 @injectable()
 export class RabbitService implements IQueueService {
@@ -20,6 +21,12 @@ export class RabbitService implements IQueueService {
       persistent: true,
       contentType: "application/json",
       headers,
+    });
+
+    logger.info({
+      message: "Mensagem enviada para fila",
+      queue: queueName,
+      payload,
     });
   }
 

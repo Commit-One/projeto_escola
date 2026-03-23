@@ -5,6 +5,7 @@ import { IClassStudentRepository } from "../../../domain/repositories/IClassStud
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { ClassIStudentDTO } from "../../dtos/classStudent.dto";
 import { ContainerEnum } from "../../../utils/enum/container";
+import { logger } from "../../../infrastructure/logger";
 
 @injectable()
 export class CreateClassStudentuUseCase {
@@ -17,8 +18,12 @@ export class CreateClassStudentuUseCase {
   ) {}
 
   async execute(data: ClassIStudentDTO): Promise<ClassStudent> {
-    const created = await this._classRepository.create(data);
+    const classStudent = await this._classRepository.create(data);
     await this._cache.delete(cacheKeyEnum.CLASS);
-    return created;
+    logger.info({
+      message: "Regra de classe e período criado com sucesso",
+      schoolId: classStudent.uuid,
+    });
+    return classStudent;
   }
 }

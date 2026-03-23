@@ -3,6 +3,7 @@ import { ISchoolRepository } from "../../../domain/repositories/ISchoolRepositor
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { ContainerEnum } from "../../../utils/enum/container";
 import { IRedisService } from "../../../domain/contracts/IRedisService";
+import { logger } from "../../../infrastructure/logger";
 
 @injectable()
 export class DeleteSchoolUseCase {
@@ -16,7 +17,23 @@ export class DeleteSchoolUseCase {
 
   async execute(uuid: string): Promise<boolean> {
     const deleted = await this._repo.delete(uuid);
-    if (deleted) await this._cache.delete(cacheKeyEnum.SCHOOLS);
-    return deleted;
+
+    if (!deleted) {
+      logger.warn({
+        message: "Escola não encontrada",
+        schoolId: uuid,
+      });
+
+      return false;
+    }
+
+    await this._cache.delete(cacheKeyEnum.SCHOOLS);
+
+    logger.info({
+      message: "Escola deletada com sucesso",
+      schoolId: uuid,
+    });
+
+    return true;
   }
 }

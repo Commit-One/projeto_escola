@@ -9,6 +9,7 @@ import { QueueEnum } from "../../../utils/enum/queue";
 import { StudentDTO, StudentResponseDTO } from "../../dtos/student.dto";
 import { inject, injectable } from "tsyringe";
 import { ContainerEnum } from "../../../utils/enum/container";
+import { logger } from "../../../infrastructure/logger";
 
 @injectable()
 export class CreateStudentUseCase {
@@ -26,10 +27,15 @@ export class CreateStudentUseCase {
     private readonly _queue: IQueueService,
   ) {}
 
-  async execute(data: StudentDTO): Promise<StudentResponseDTO> {
+  async execute(data: StudentDTO): Promise<StudentResponseDTO | null> {
     const student = await this._repo.create(data);
 
-    if (student) await this._cache.delete(cacheKeyEnum.STUDENTS);
+    if (!student) {
+      logger.error({ message: "Erro ao criar estudante" });
+      return null;
+    }
+
+    await this._cache.delete(cacheKeyEnum.STUDENTS);
 
     const classPeriod = await this._repoClassPeriod.getByClassPeriodUuid(
       student.class.uuid,
@@ -48,6 +54,11 @@ export class CreateStudentUseCase {
       data.hasDiscount,
       data.discount,
     );
+
+    logger.info({
+      message: "Estudante criado com sucesso",
+      studentUuid: student.uuid,
+    });
 
     await this._queue.sendToQueue(QueueEnum.PAYMENT_NAME, payment);
     return student;

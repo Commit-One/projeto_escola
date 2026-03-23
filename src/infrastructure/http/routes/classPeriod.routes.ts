@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { validateMiddlewareSchema } from "../middleware/validateSchema";
+import { validateMiddlewareSchema } from "../middleware/validateSchema.middleware";
 import {
   createClassPeriodSchemaValidator,
   deleteClassPeriodSchemaValidator,

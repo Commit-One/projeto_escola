@@ -3,6 +3,8 @@ import { AppDataSource } from "../infrastructure/database/data-source";
 import { routes } from "../infrastructure/http/routes";
 import { connectRedis } from "../infrastructure/redis/redis.connection";
 import { setupRabbitMQ } from "../infrastructure/messaging/rabbit/setup";
+import { requestLoggerMiddleware } from "../infrastructure/http/middleware/requestLogger.middleware";
+import { errorMiddleware } from "../infrastructure/http/middleware/errorLogger.middleware";
 
 export class ServerInitializer {
   private readonly app: express.Application;
@@ -21,8 +23,12 @@ export class ServerInitializer {
     await setupRabbitMQ();
     console.log("✅ Rabbit connected");
 
+    this.app.use(requestLoggerMiddleware);
+
     this.app.use(express.json());
     this.app.use(routes);
+
+    this.app.use(errorMiddleware);
 
     this.app.listen(process.env.PORT, () => {
       console.log(`🚀 Server running on http://localhost:${process.env.PORT}`);

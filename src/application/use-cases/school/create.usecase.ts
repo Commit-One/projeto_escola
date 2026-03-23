@@ -7,6 +7,7 @@ import { SchoolDTO } from "../../dtos/school.dto";
 import { inject, injectable } from "tsyringe";
 import { ContainerEnum } from "../../../utils/enum/container";
 import { IRedisService } from "../../../domain/contracts/IRedisService";
+import { logger } from "../../../infrastructure/logger";
 
 @injectable()
 export class CreateSchoolUseCase {
@@ -23,9 +24,15 @@ export class CreateSchoolUseCase {
 
   async execute(dto: SchoolDTO): Promise<School> {
     const school = await this._repo.createSchoolUserTransaction(dto);
-    await this._cache.delete(cacheKeyEnum.SCHOOLS);
 
+    await this._cache.delete(cacheKeyEnum.SCHOOLS);
     await this._queue.sendToQueue(QueueEnum.NOTIFICATION_NAME, school);
+
+    logger.info({
+      message: "Escola criada com sucesso!",
+      schoolUuid: school.uuid,
+    });
+
     return school;
   }
 }

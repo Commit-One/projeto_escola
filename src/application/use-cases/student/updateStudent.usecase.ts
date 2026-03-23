@@ -4,6 +4,7 @@ import { IStudentRepository } from "../../../domain/repositories/IStudentReposit
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { StudentDTO, StudentResponseDTO } from "../../dtos/student.dto";
 import { ContainerEnum } from "../../../utils/enum/container";
+import { logger } from "../../../infrastructure/logger";
 
 @injectable()
 export class UpdateStudentUseCase {
@@ -15,9 +16,28 @@ export class UpdateStudentUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string, data: StudentDTO): Promise<StudentResponseDTO> {
+  async execute(
+    uuid: string,
+    data: StudentDTO,
+  ): Promise<StudentResponseDTO | null> {
     const updated = await this._repo.update(uuid, data);
-    if (updated) await this._cache.delete(cacheKeyEnum.STUDENTS);
+
+    if (!updated) {
+      logger.warn({
+        message: "Aluno não atualizado",
+        schoolId: uuid,
+      });
+
+      return null;
+    }
+
+    await this._cache.delete(cacheKeyEnum.STUDENTS);
+
+    logger.info({
+      message: "Aluno atualizado com sucesso",
+      schoolId: uuid,
+    });
+
     return updated;
   }
 }
