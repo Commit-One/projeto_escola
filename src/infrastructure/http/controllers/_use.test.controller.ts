@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Handler } from "../statusHttp";
-import { TestUseCase } from "../../../application/use-cases/test";
+import { TestUseCase } from "../../../application/use-cases/_test";
 import { injectable } from "tsyringe";
 
 @injectable()

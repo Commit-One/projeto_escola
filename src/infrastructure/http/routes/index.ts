@@ -7,7 +7,7 @@ import { periodRoutes } from "./period.routes";
 import { studentsRoutes } from "./student.routes";
 import { classStudents } from "./classStudent.routes";
 import { classPeriod } from "./classPeriod.routes";
-import { teste } from "./teste.routes";
+import { teste } from "./_teste.routes";
 
 export const routes = Router();
 

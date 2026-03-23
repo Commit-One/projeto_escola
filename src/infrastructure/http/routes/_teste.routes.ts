@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { TesteController } from "../controllers/use.test.controller";
+import { TesteController } from "../controllers/_use.test.controller";
 import { container } from "tsyringe";
 
 export const teste = Router();
