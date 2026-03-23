@@ -12,7 +12,7 @@ import { AppError, NotFoundError } from "../../../utils/error";
 import { StatusEnum } from "../../../utils/enum/status";
 import { SchoolDTO } from "../../../application/dtos/school.dto";
 import { SchoolMapper } from "../mappers/school.mapper";
-import { replace } from "../../../utils/functions/replace";
+import { replace } from "../../../utils/helpers/replace";
 import { environment } from "../../../main/register";
 
 export class SchoolTypeOrmRepository implements ISchoolRepository {

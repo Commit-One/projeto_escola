@@ -13,7 +13,7 @@ import { ProfileEnum } from "../../../utils/enum/profile";
 import { AppError, NotFoundError } from "../../../utils/error";
 import { ClassStudentEntity } from "../entities/ClassStudentEntity";
 import { StudentMapper } from "../mappers/student.mapper";
-import { replace } from "../../../utils/functions/replace";
+import { replace } from "../../../utils/helpers/replace";
 import { injectable } from "tsyringe";
 
 @injectable()

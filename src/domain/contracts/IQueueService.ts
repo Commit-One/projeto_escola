@@ -1,7 +1,14 @@
+import { IRabbitQueueConfig } from "../../infrastructure/messaging/rabbit/queues/interface";
+
 export interface IQueueService {
-  sendToQueue<T>(queue: string, payload: T): Promise<void>;
+  sendToQueue(
+    queueName: string,
+    payload: any,
+    headers?: Record<string, unknown>,
+  ): Promise<void>;
+
   consumerQueue(
-    queue: string,
+    queue: IRabbitQueueConfig,
     callback: (payload: any) => Promise<void>,
   ): Promise<void>;
 }

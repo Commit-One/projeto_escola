@@ -49,7 +49,7 @@ export class CreateStudentUseCase {
       data.discount,
     );
 
-    await this._queue.sendToQueue(QueueEnum.PAYMENT, payment);
+    await this._queue.sendToQueue(QueueEnum.PAYMENT_NAME, payment);
     return student;
   }
 }

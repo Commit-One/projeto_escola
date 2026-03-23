@@ -1,6 +1,15 @@
-export interface IQueue {
+interface IQueueOptions {
+  durable: boolean;
+  arguments?: Record<string, unknown>;
+}
+
+interface IQueueConfig {
   name: string;
-  options: {
-    durable: boolean;
-  };
+  options: IQueueOptions;
+}
+
+export interface IRabbitQueueConfig {
+  main: IQueueConfig;
+  retry: IQueueConfig;
+  dlq: IQueueConfig;
 }

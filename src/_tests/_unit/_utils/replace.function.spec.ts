@@ -1,4 +1,4 @@
-import { replace } from "../../../utils/functions/replace";
+import { replace } from "../../../utils/helpers/replace";
 
 describe("Replace", () => {
   it("Removendo caracteres especiais do numero", () => {

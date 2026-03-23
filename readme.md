@@ -1,28 +1,3 @@
-TODO: Cria entity de mensalidades
-
-- studentUuid
-- schoolUuid
-- value
-- monthReference
-- dayReference
-- yearReference
-- status (pago, pendente, atradasa)
-- discountApplied
-
 TODO: Criar Fila DLQ / DL ou lógica de retry
 
-TODO: Ao criar o aluno, enviar para fila de mensalidade
-
-TODO: Criar regra de classe. Ao criar um estudante, verificar regra.
-
-server
-|
-controllher
-|
-useCase
-|
-Application / Domain
-|
-Infra (Filas, banco, worker)
-|
-Banco
+server > register > controller > useCase > application.repository.interface

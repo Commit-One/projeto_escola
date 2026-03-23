@@ -1,6 +1,6 @@
-import { dateForMySQL } from "./../../utils/functions/dateForMySQL";
+import { dateForMySQL } from "../../utils/helpers/dateForMySQL";
 import { StatusEnum } from "../../utils/enum/status";
-import { replace } from "../../utils/functions/replace";
+import { replace } from "../../utils/helpers/replace";
 import { Base } from "./Base";
 import { AppError, ValidationEmpty } from "../../utils/error";
 import { IBaseProps } from "../contracts/IBaseProps";

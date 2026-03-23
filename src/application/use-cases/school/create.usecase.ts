@@ -25,7 +25,7 @@ export class CreateSchoolUseCase {
     const school = await this._repo.createSchoolUserTransaction(dto);
     await this._cache.delete(cacheKeyEnum.SCHOOLS);
 
-    await this._queue.sendToQueue<School>(QueueEnum.NOTIFICATION, school);
+    await this._queue.sendToQueue(QueueEnum.NOTIFICATION_NAME, school);
     return school;
   }
 }

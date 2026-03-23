@@ -1,6 +1,6 @@
 import { StatusEnum } from "../../utils/enum/status";
 import { AppError, ValidationEmpty } from "../../utils/error";
-import { replace } from "../../utils/functions/replace";
+import { replace } from "../../utils/helpers/replace";
 import { IBaseProps } from "../contracts/IBaseProps";
 import { CnpjValidator } from "../validator/cnpj.validator";
 import { Base } from "./Base";

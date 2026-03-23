@@ -36,7 +36,7 @@ export class PaymentConsumer {
 
   async execute() {
     await this.rabbit.consumerQueue(
-      paymentQueue.name,
+      paymentQueue,
       async (payload: PaymentDTO) => {
         const listMonths = this.calculateRemainingMonthsOfYear(
           payload.referenceMonth,

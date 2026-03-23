@@ -1,14 +1,15 @@
 import { Request, Response } from "express";
 import { Handler } from "../statusHttp";
-import { CnpjValidator } from "../../../domain/validator/cnpj.validator";
+import { TestUseCase } from "../../../application/use-cases/test";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class TesteController {
-  constructor() {}
+  constructor(private readonly _case: TestUseCase) {}
 
   async execute(req: Request, res: Response) {
     try {
-      const { cnpj } = req.body;
-      const result = CnpjValidator.validate(cnpj);
+      const result = await this._case.execute();
       return Handler.ok(res, result);
     } catch (err: unknown) {
       return Handler.error(res, err);

@@ -1,6 +1,7 @@
+import { injectable } from "tsyringe";
 import { RabbitMQConnection } from "./connection";
 import { IQueueService } from "../../../domain/contracts/IQueueService";
-import { injectable } from "tsyringe";
+import { IRabbitQueueConfig } from "./queues/interface";
 
 @injectable()
 export class RabbitService implements IQueueService {
@@ -8,39 +9,66 @@ export class RabbitService implements IQueueService {
     return await RabbitMQConnection.getChannel();
   }
 
-  async sendToQueue(queueName: string, payload: any): Promise<void> {
+  async sendToQueue(
+    queueName: string,
+    payload: any,
+    headers: Record<string, unknown> = {},
+  ): Promise<void> {
     const channel = await this.getChannel();
-
-    await channel.assertQueue(queueName, {
-      durable: true,
-    });
 
     channel.sendToQueue(queueName, Buffer.from(JSON.stringify(payload)), {
       persistent: true,
       contentType: "application/json",
+      headers,
     });
   }
 
   async consumerQueue(
-    queueName: string,
+    queue: IRabbitQueueConfig,
     callback: (payload: any) => Promise<void>,
   ): Promise<void> {
     const channel = await this.getChannel();
 
-    await channel.assertQueue(queueName, {
-      durable: true,
-    });
-
-    await channel.consume(queueName, async (message) => {
-      if (!message) return null;
+    await channel.consume(queue.main.name, async (message) => {
+      if (!message) return;
 
       try {
         const payload = JSON.parse(message.content.toString());
+
         await callback(payload);
+
         channel.ack(message);
       } catch (error) {
-        console.error(`Erro ao consumir fila ${queueName}:`, error);
-        channel.nack(message, false, false);
+        const retryCount = Number(
+          message.properties.headers?.["x-retry-count"] || 0,
+        );
+
+        if (retryCount < 3) {
+          await this.sendToQueue(
+            queue.retry.name,
+            JSON.parse(message.content.toString()),
+            {
+              ...message.properties.headers,
+              "x-retry-count": retryCount + 1,
+            },
+          );
+
+          channel.ack(message);
+          return;
+        }
+
+        await this.sendToQueue(
+          queue.dlq.name,
+          JSON.parse(message.content.toString()),
+          {
+            ...message.properties.headers,
+            "x-retry-count": retryCount + 1,
+            "x-error-message":
+              error instanceof Error ? error.message : "Erro desconhecido",
+          },
+        );
+
+        channel.ack(message);
       }
     });
   }

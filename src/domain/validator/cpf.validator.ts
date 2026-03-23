@@ -1,4 +1,4 @@
-import { replace } from "../../utils/functions/replace";
+import { replace } from "../../utils/helpers/replace";
 
 export class CpfValidator {
   public static validate(value: string): boolean {

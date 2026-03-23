@@ -13,8 +13,6 @@ import { SchoolTypeOrmRepository } from "../infrastructure/database/repositories
 import { StudentTypeOrmRepository } from "../infrastructure/database/repositories/student.repository";
 import { UserTypeOrmRepository } from "../infrastructure/database/repositories/user.repository";
 import { RabbitService } from "../infrastructure/messaging/rabbit/rabbit.service";
-import { NotificationConsumer } from "../infrastructure/messaging/rabbit/consumers/notification.consumer";
-import { PaymentConsumer } from "../infrastructure/messaging/rabbit/consumers/payment.consumer";
 import { EnvironmentConfig } from "../infrastructure/config";
 
 export const environment = new EnvironmentConfig();
@@ -62,7 +60,3 @@ container.registerSingleton(
   UserTypeOrmRepository,
 );
 container.registerSingleton(ContainerEnum.QUEUE_SERVICE, RabbitService);
-
-// Consumers
-container.resolve(NotificationConsumer).execute();
-container.resolve(PaymentConsumer).execute();

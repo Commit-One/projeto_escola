@@ -11,8 +11,9 @@ export class NotificationConsumer {
   ) {}
 
   async execute() {
-    await this.rabbit.consumerQueue(notificationQueue.name, async (payload) => {
+    await this.rabbit.consumerQueue(notificationQueue, async (payload) => {
       console.log("Mensagem recebida:", payload);
+      throw new Error("Erro proposital para teste de retry");
     });
   }
 }

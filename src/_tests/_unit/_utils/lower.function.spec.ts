@@ -1,4 +1,4 @@
-import { lower } from "../../../utils/functions/lower";
+import { lower } from "../../../utils/helpers/lower";
 
 describe("Lower", () => {
   it("Convertendo uma string inteira em lowercase", () => {
