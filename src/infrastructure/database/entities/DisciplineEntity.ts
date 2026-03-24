@@ -1,0 +1,11 @@
+import { Column, Entity } from "typeorm";
+import { Base } from "./BaseEntity";
+
+@Entity("tb_discipline")
+export class DisciplineEntity extends Base {
+  @Column({ type: "varchar", length: 100, unique: true, nullable: false })
+  name!: string;
+
+  @Column({ type: "varchar", length: 100, nullable: false })
+  schoolUuid!: string;
+}

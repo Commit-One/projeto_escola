@@ -5,5 +5,6 @@ export enum cacheKeyEnum {
   PERIOD = "periods",
   USERS = "users",
   CLASS = "class",
+  DISCIPLINE = "discipline",
   CLASS_PERIOD = "class_period",
 }

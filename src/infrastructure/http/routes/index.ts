@@ -5,9 +5,10 @@ import { profileRoutes } from "./profile.routes";
 import { loginRoutes } from "./login.routes";
 import { periodRoutes } from "./period.routes";
 import { studentsRoutes } from "./student.routes";
-import { classStudents } from "./classStudent.routes";
-import { classPeriod } from "./classPeriod.routes";
+import { classStudentsRoutes } from "./classStudent.routes";
+import { classPeriodRoutes } from "./classPeriod.routes";
 import { teste } from "./_teste.routes";
+import { disciplineRoutes } from "./discipline.routes";
 
 export const routes = Router();
 
@@ -18,7 +19,8 @@ routes.use("/profile", profileRoutes);
 routes.use("/login", loginRoutes);
 routes.use("/periodo", periodRoutes);
 routes.use("/student", studentsRoutes);
-routes.use("/class", classStudents);
-routes.use("/classPeriod", classPeriod);
+routes.use("/class", classStudentsRoutes);
+routes.use("/classPeriod", classPeriodRoutes);
+routes.use("/discipline", disciplineRoutes);
 
 routes.use("/teste", teste);

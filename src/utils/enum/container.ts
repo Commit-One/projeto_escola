@@ -12,4 +12,6 @@ export enum ContainerEnum {
   STUDENT_REPOSITORY = "StudentTypeOrmRepository",
   USER_REPOSITORY = "UserTypeOrmRepository",
   QUEUE_SERVICE = "RabbitService",
+  DISCIPLINE_REPOSITORY = "DisciplineTypeOrmRepository",
+  STUDENT_DISCIPLINE_REPOSITORY = "StudentDisciplineTypeOrmRepository",
 }

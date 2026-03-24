@@ -9,32 +9,32 @@ import {
 import { container } from "tsyringe";
 import { ClassPeriodController } from "../controllers/classPeriod.controller";
 
-export const classPeriod = Router();
+export const classPeriodRoutes = Router();
 
 const controller = container.resolve(ClassPeriodController);
 
-classPeriod.post(
+classPeriodRoutes.post(
   "/",
   validateMiddlewareSchema(createClassPeriodSchemaValidator),
   (req, res) => controller.create(req, res),
 );
 
-classPeriod.put(
+classPeriodRoutes.put(
   "/:uuid",
   validateMiddlewareSchema(updateClassPeriodSchemaValidator),
   (req, res) => controller.update(req, res),
 );
 
-classPeriod.get(
+classPeriodRoutes.get(
   "/uuid/:uuid",
   validateMiddlewareSchema(getOneClassPeriodSchemaValidator),
   (req, res) => controller.getOne(req, res),
 );
 
-classPeriod.delete(
+classPeriodRoutes.delete(
   "/:uuid",
   validateMiddlewareSchema(deleteClassPeriodSchemaValidator),
   (req, res) => controller.delete(req, res),
 );
 
-classPeriod.get("/", (req, res) => controller.getAll(req, res));
+classPeriodRoutes.get("/", (req, res) => controller.getAll(req, res));

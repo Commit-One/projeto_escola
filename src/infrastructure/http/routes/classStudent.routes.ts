@@ -9,32 +9,32 @@ import {
 import { container } from "tsyringe";
 import { ClassStudentController } from "../controllers/classStudent.controller";
 
-export const classStudents = Router();
+export const classStudentsRoutes = Router();
 
 const controller = container.resolve(ClassStudentController);
 
-classStudents.post(
+classStudentsRoutes.post(
   "/",
   validateMiddlewareSchema(createClassSchemaValidator),
   (req, res) => controller.create(req, res),
 );
 
-classStudents.put(
+classStudentsRoutes.put(
   "/:uuid",
   validateMiddlewareSchema(updateClassSchemaValidator),
   (req, res) => controller.update(req, res),
 );
 
-classStudents.get(
+classStudentsRoutes.get(
   "/uuid/:uuid",
   validateMiddlewareSchema(getOneClassSchemaValidator),
   (req, res) => controller.geByUuid(req, res),
 );
 
-classStudents.delete(
+classStudentsRoutes.delete(
   "/:uuid",
   validateMiddlewareSchema(deleteClassSchemaValidator),
   (req, res) => controller.delete(req, res),
 );
 
-classStudents.get("/", (req, res) => controller.getAll(req, res));
+classStudentsRoutes.get("/", (req, res) => controller.getAll(req, res));

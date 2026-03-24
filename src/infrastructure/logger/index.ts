@@ -12,7 +12,7 @@ const logFilePath = path.join(logDir, "app.log");
 
 const stream = pino.destination({
   dest: logFilePath,
-  sync: false,
+  sync: true,
 });
 
 export const logger = pino(

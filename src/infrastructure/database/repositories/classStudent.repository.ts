@@ -52,8 +52,6 @@ export class ClassStudentTypeOrmRepository implements IClassStudentRepository {
   }
 
   async create(data: ClassIStudentDTO): Promise<ClassStudent> {
-    //TODO: Validar se já existe
-
     const entity = ClassStudentMapper.toEntity(data);
     await this._repo.save(entity);
     return ClassStudentMapper.toDomain(entity);

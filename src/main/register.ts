@@ -14,6 +14,8 @@ import { StudentTypeOrmRepository } from "../infrastructure/database/repositorie
 import { UserTypeOrmRepository } from "../infrastructure/database/repositories/user.repository";
 import { RabbitService } from "../infrastructure/messaging/rabbit/rabbit.service";
 import { EnvironmentConfig } from "../infrastructure/config";
+import { DisciplineTypeOrmRepository } from "../infrastructure/database/repositories/discipline.repository";
+import { StudentDisciplineTypeOrmRepository } from "../infrastructure/database/repositories/studentDiscipline.repository";
 
 export const environment = new EnvironmentConfig();
 
@@ -29,6 +31,14 @@ container.registerSingleton(ContainerEnum.BCRYPT_SECURITY, BcryptSecurity);
 container.registerSingleton(
   ContainerEnum.CLASS_PERIOD_REPOSITORY,
   ClassPeriodTypeOrmRepository,
+);
+container.registerSingleton(
+  ContainerEnum.DISCIPLINE_REPOSITORY,
+  DisciplineTypeOrmRepository,
+);
+container.registerSingleton(
+  ContainerEnum.STUDENT_DISCIPLINE_REPOSITORY,
+  StudentDisciplineTypeOrmRepository,
 );
 container.registerSingleton(ContainerEnum.REDIS_SERVICE, RedisService);
 container.registerSingleton(
