@@ -45,7 +45,8 @@
     "lint": "eslint src --ext .ts",
     "fix": "eslint src --ext .ts --fix",
     "lint:fix": "yarn format && yarn fix && yarn lint",
-    "ok": "prettier --write src"
+    "ok": "prettier --write src",
+    "generate:module": "ts-node scripts/generate-module.ts"
   },
   "version": "1.0.0"
 }
