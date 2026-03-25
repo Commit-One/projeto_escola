@@ -4,9 +4,7 @@ import path from "path";
 const moduleName = process.argv[2];
 
 if (!moduleName) {
-  console.error(
-    "Informe o nome do módulo. Ex: yarn generate:module classPeriod",
-  );
+  console.error("Informe o nome do módulo. Ex: yarn generate:module school");
   process.exit(1);
 }
 
@@ -48,6 +46,9 @@ const name = {
 const basePath = path.resolve("src");
 const enumPath = path.resolve("src/utils/enum/container.ts");
 const containerIndexPath = path.resolve("src/main/container/index.ts");
+
+const entityIdKey = `${name.raw}Id`;
+const cacheEnumKey = `${name.upper}S`;
 
 type FileDef = {
   filepath: string;
@@ -97,7 +98,7 @@ export interface I${name.pascal}Repository {
   delete(uuid: string): Promise<boolean>;
   getAll(): Promise<${name.pascal}[]>;
   create(data: ${name.pascal}DTO): Promise<${name.pascal}>;
-  update(uuid: string, data: ${name.pascal}DTO): Promise<${name.pascal}>;
+  update(uuid: string, data: ${name.pascal}DTO): Promise<${name.pascal} | null>;
 }
 `,
   },
@@ -127,7 +128,7 @@ export class Create${name.pascal}UseCase {
 
     logger.info({
       message: "${name.pascal} criado com sucesso",
-      uuid: created.uuid,
+      ${entityIdKey}: created.uuid,
     });
 
     return created;
@@ -195,26 +196,42 @@ export class GetAll${name.pascal}UseCase {
     content: `import { inject, injectable } from "tsyringe";
 import { ${name.pascal} } from "../../../domain/entities/${name.pascal}";
 import { I${name.pascal}Repository } from "../../../domain/repositories/I${name.pascal}Repository";
+import { IRedisService } from "../../../domain/contracts/IRedisService";
 import { ${name.pascal}DTO } from "../../dtos/${name.raw}.dto";
-import { ContainerEnum } from "../../../utils/enum/container";
 import { logger } from "../../../infrastructure/logger";
+import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
+import { ContainerEnum } from "../../../utils/enum/container";
 
 @injectable()
 export class Update${name.pascal}UseCase {
   constructor(
     @inject(ContainerEnum.${name.upper}_REPOSITORY)
     private readonly _repo: I${name.pascal}Repository,
+
+    @inject(ContainerEnum.REDIS_SERVICE)
+    private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string, data: ${name.pascal}DTO): Promise<${name.pascal}> {
-    const updated = await this._repo.update(uuid, data);
+  async execute(uuid: string, data: ${name.pascal}DTO): Promise<${name.pascal} | null> {
+    const item = await this._repo.update(uuid, data);
+
+    if (!item) {
+      logger.warn({
+        message: "Ocorreu um erro ao realizar o update de ${name.raw}. Registro não encontrado",
+        ${entityIdKey}: uuid,
+      });
+
+      return item;
+    }
+
+    await this._cache.delete(cacheKeyEnum.${cacheEnumKey});
 
     logger.info({
       message: "${name.pascal} atualizado com sucesso",
-      uuid: updated.uuid,
+      ${entityIdKey}: uuid,
     });
 
-    return updated;
+    return item;
   }
 }
 `,
@@ -228,25 +245,41 @@ export class Update${name.pascal}UseCase {
     ),
     content: `import { inject, injectable } from "tsyringe";
 import { I${name.pascal}Repository } from "../../../domain/repositories/I${name.pascal}Repository";
-import { ContainerEnum } from "../../../utils/enum/container";
+import { IRedisService } from "../../../domain/contracts/IRedisService";
 import { logger } from "../../../infrastructure/logger";
+import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
+import { ContainerEnum } from "../../../utils/enum/container";
 
 @injectable()
 export class Delete${name.pascal}UseCase {
   constructor(
     @inject(ContainerEnum.${name.upper}_REPOSITORY)
     private readonly _repo: I${name.pascal}Repository,
+
+    @inject(ContainerEnum.REDIS_SERVICE)
+    private readonly _cache: IRedisService,
   ) {}
 
   async execute(uuid: string): Promise<boolean> {
     const deleted = await this._repo.delete(uuid);
 
+    if (!deleted) {
+      logger.warn({
+        message: "${name.pascal} não encontrado",
+        ${entityIdKey}: uuid,
+      });
+
+      return false;
+    }
+
+    await this._cache.delete(cacheKeyEnum.${cacheEnumKey});
+
     logger.info({
-      message: "${name.pascal} removido com sucesso",
-      uuid,
+      message: "${name.pascal} deletado com sucesso",
+      ${entityIdKey}: uuid,
     });
 
-    return deleted;
+    return true;
   }
 }
 `,
@@ -383,7 +416,13 @@ export class ${name.pascal}TypeOrmRepository implements I${name.pascal}Repositor
     return ${name.pascal}Mapper.toDomain(entity);
   }
 
-  async update(uuid: string, data: ${name.pascal}DTO): Promise<${name.pascal}> {
+  async update(uuid: string, data: ${name.pascal}DTO): Promise<${name.pascal} | null> {
+    const exists = await this._repo.exists({
+      where: { uuid },
+    });
+
+    if (!exists) return null;
+
     await this._repo.update({ uuid }, { ...data });
     return await this.getOne(uuid);
   }
@@ -496,12 +535,12 @@ for (const file of files) {
   }
 
   if (fs.existsSync(file.filepath)) {
-    console.log(`Arquivo já existe: \${file.filepath}\``);
+    console.log(`Arquivo já existe: ${file.filepath}`);
     continue;
   }
 
   fs.writeFileSync(file.filepath, file.content, "utf-8");
-  console.log(`Criado: \${file.filepath}\``);
+  console.log(`Criado: ${file.filepath}`);
 }
 
 if (fs.existsSync(enumPath)) {
@@ -517,9 +556,9 @@ if (fs.existsSync(enumPath)) {
     );
 
     fs.writeFileSync(enumPath, enumContent, "utf-8");
-    console.log(`Criado: \${file.filepath}\``);
+    console.log(`Enum adicionado: ${enumKey}`);
   } else {
-    console.log(`Enum já existe: \${file.filepath}\``);
+    console.log(`Enum já existe: ${enumKey}`);
   }
 } else {
   console.log("Arquivo ContainerEnum não encontrado.");
@@ -545,11 +584,11 @@ container.registerSingleton(
   }
 
   fs.writeFileSync(containerIndexPath, containerContent, "utf-8");
-  console.log(`Container registrado: \${name.pascal}TypeOrmRepository\``);
+  console.log(`Container registrado: ${name.pascal}TypeOrmRepository`);
 } else {
   console.log(
     "Arquivo de container não encontrado. Ajuste o caminho em containerIndexPath.",
   );
 }
 
-console.log(`Módulo "\${name.raw}" gerado com sucesso.\``);
+console.log(`Módulo "${name.raw}" gerado com sucesso.`);
