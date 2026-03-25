@@ -4,28 +4,50 @@ import path from "path";
 const moduleName = process.argv[2];
 
 if (!moduleName) {
-  console.error("Informe o nome do módulo. Ex: yarn generate:module student");
+  console.error(
+    "Informe o nome do módulo. Ex: yarn generate:module classPeriod",
+  );
   process.exit(1);
 }
 
 const pascalCase = (text: string) =>
-  text.replace(/(^\w|-\w|_\w)/g, (match) =>
-    match.replace(/[-_]/, "").toUpperCase(),
-  );
+  text
+    .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+    .replace(/[_\s]+/g, "-")
+    .split("-")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join("");
 
 const camelCase = (text: string) => {
   const pascal = pascalCase(text);
   return pascal.charAt(0).toLowerCase() + pascal.slice(1);
 };
 
+const upperSnakeCase = (text: string) =>
+  text
+    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
+    .replace(/[-\s]+/g, "_")
+    .replace(/__+/g, "_")
+    .toUpperCase();
+
+const tableCase = (text: string) =>
+  text
+    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
+    .replace(/[-\s]+/g, "_")
+    .replace(/__+/g, "_")
+    .toLowerCase();
+
 const name = {
-  raw: moduleName,
+  raw: camelCase(moduleName),
   pascal: pascalCase(moduleName),
-  camel: camelCase(moduleName),
-  upper: moduleName.toUpperCase(),
+  upper: upperSnakeCase(moduleName),
+  table: tableCase(moduleName),
 };
 
 const basePath = path.resolve("src");
+const enumPath = path.resolve("src/utils/enum/container.ts");
+const containerIndexPath = path.resolve("src/main/container/index.ts");
 
 type FileDef = {
   filepath: string;
@@ -34,19 +56,29 @@ type FileDef = {
 
 const files: FileDef[] = [
   {
+    filepath: path.join(basePath, "application/dtos", `${name.raw}.dto.ts`),
+    content: `export interface ${name.pascal}DTO {
+  name: string;
+}
+`,
+  },
+  {
     filepath: path.join(basePath, "domain/entities", `${name.pascal}.ts`),
-    content: `
-    import { ValidationEmpty } from "../../utils/error";
-    
-    export class ${name.pascal} {
+    content: `import { ValidationEmpty } from "../../utils/error";
+import { IBaseProps } from "../contracts/IBaseProps";
+import { Base } from "./Base";
+
+export class ${name.pascal} extends Base {
   constructor(
-    public readonly name: string,
+    public name: string,
+    baseProps?: IBaseProps,
   ) {
-    this.validate()  
+    super(baseProps);
+    this.validate();
   }
 
   private validate() {
-    if (!this.name) throw new ValidationEmpty("name")
+    if (!this.name) throw new ValidationEmpty("name");
   }
 }
 `,
@@ -57,21 +89,15 @@ const files: FileDef[] = [
       "domain/repositories",
       `I${name.pascal}Repository.ts`,
     ),
-    content: `import { ${name.pascal} } from "../entities/${name.pascal}";
+    content: `import { ${name.pascal}DTO } from "../../application/dtos/${name.raw}.dto";
+import { ${name.pascal} } from "../entities/${name.pascal}";
 
 export interface I${name.pascal}Repository {
-  create(data: ${name.pascal}): Promise<${name.pascal}>;
   getOne(uuid: string): Promise<${name.pascal} | null>;
-  getAll(): Promise<${name.pascal}[]>;
-  update(uuid: string, data: Partial<${name.pascal}>): Promise<boolean>;
   delete(uuid: string): Promise<boolean>;
-}
-`,
-  },
-  {
-    filepath: path.join(basePath, "application/dtos", `${name.raw}.dto.ts`),
-    content: `export interface ${name.pascal}DTO {
-  name: string;
+  getAll(): Promise<${name.pascal}[]>;
+  create(data: ${name.pascal}DTO): Promise<${name.pascal}>;
+  update(uuid: string, data: ${name.pascal}DTO): Promise<${name.pascal}>;
 }
 `,
   },
@@ -80,24 +106,31 @@ export interface I${name.pascal}Repository {
       basePath,
       "application/use-cases",
       name.raw,
-      `create.usecase.ts`,
+      "create.usecase.ts",
     ),
     content: `import { inject, injectable } from "tsyringe";
-import { I${name.pascal}Repository } from "../../../domain/repositories/I${name.pascal}Repository";
 import { ${name.pascal} } from "../../../domain/entities/${name.pascal}";
+import { I${name.pascal}Repository } from "../../../domain/repositories/I${name.pascal}Repository";
 import { ${name.pascal}DTO } from "../../dtos/${name.raw}.dto";
 import { ContainerEnum } from "../../../utils/enum/container";
+import { logger } from "../../../infrastructure/logger";
 
 @injectable()
 export class Create${name.pascal}UseCase {
   constructor(
     @inject(ContainerEnum.${name.upper}_REPOSITORY)
-    private readonly repository: I${name.pascal}Repository,
+    private readonly _repo: I${name.pascal}Repository,
   ) {}
 
   async execute(data: ${name.pascal}DTO): Promise<${name.pascal}> {
-    const entity = new ${name.pascal}(data.name);
-    return await this.repository.create(entity);
+    const created = await this._repo.create(data);
+
+    logger.info({
+      message: "${name.pascal} criado com sucesso",
+      uuid: created.uuid,
+    });
+
+    return created;
   }
 }
 `,
@@ -107,21 +140,22 @@ export class Create${name.pascal}UseCase {
       basePath,
       "application/use-cases",
       name.raw,
-      `getOne.usecase.ts`,
+      "getOne.usecase.ts",
     ),
     content: `import { inject, injectable } from "tsyringe";
+import { ${name.pascal} } from "../../../domain/entities/${name.pascal}";
 import { I${name.pascal}Repository } from "../../../domain/repositories/I${name.pascal}Repository";
 import { ContainerEnum } from "../../../utils/enum/container";
 
 @injectable()
-export class GteOne${name.pascal}UseCase {
+export class GetOne${name.pascal}UseCase {
   constructor(
     @inject(ContainerEnum.${name.upper}_REPOSITORY)
-    private readonly repository: I${name.pascal}Repository,
+    private readonly _repo: I${name.pascal}Repository,
   ) {}
 
-  async execute(uuid: string) {
-    return await this.repository.getOne(uuid);
+  async execute(uuid: string): Promise<${name.pascal} | null> {
+    return await this._repo.getOne(uuid);
   }
 }
 `,
@@ -131,9 +165,10 @@ export class GteOne${name.pascal}UseCase {
       basePath,
       "application/use-cases",
       name.raw,
-      `getAll.usecase.ts`,
+      "getAll.usecase.ts",
     ),
     content: `import { inject, injectable } from "tsyringe";
+import { ${name.pascal} } from "../../../domain/entities/${name.pascal}";
 import { I${name.pascal}Repository } from "../../../domain/repositories/I${name.pascal}Repository";
 import { ContainerEnum } from "../../../utils/enum/container";
 
@@ -141,11 +176,11 @@ import { ContainerEnum } from "../../../utils/enum/container";
 export class GetAll${name.pascal}UseCase {
   constructor(
     @inject(ContainerEnum.${name.upper}_REPOSITORY)
-    private readonly repository: I${name.pascal}Repository,
+    private readonly _repo: I${name.pascal}Repository,
   ) {}
-  
-  async execute() {
-    return await this.repository.getAll();
+
+  async execute(): Promise<${name.pascal}[]> {
+    return await this._repo.getAll();
   }
 }
 `,
@@ -155,22 +190,31 @@ export class GetAll${name.pascal}UseCase {
       basePath,
       "application/use-cases",
       name.raw,
-      `update.usecase.ts`,
+      "update.usecase.ts",
     ),
     content: `import { inject, injectable } from "tsyringe";
+import { ${name.pascal} } from "../../../domain/entities/${name.pascal}";
 import { I${name.pascal}Repository } from "../../../domain/repositories/I${name.pascal}Repository";
-import { Update${name.pascal}DTO } from "../../dtos/${name.raw}.dto";
+import { ${name.pascal}DTO } from "../../dtos/${name.raw}.dto";
 import { ContainerEnum } from "../../../utils/enum/container";
+import { logger } from "../../../infrastructure/logger";
 
 @injectable()
 export class Update${name.pascal}UseCase {
   constructor(
     @inject(ContainerEnum.${name.upper}_REPOSITORY)
-    private readonly repository: I${name.pascal}Repository,
+    private readonly _repo: I${name.pascal}Repository,
   ) {}
 
-  async execute(uuid: string, data: Update${name.pascal}DTO): Promise<void> {
-    await this.repository.update(uuid, data);
+  async execute(uuid: string, data: ${name.pascal}DTO): Promise<${name.pascal}> {
+    const updated = await this._repo.update(uuid, data);
+
+    logger.info({
+      message: "${name.pascal} atualizado com sucesso",
+      uuid: updated.uuid,
+    });
+
+    return updated;
   }
 }
 `,
@@ -180,21 +224,29 @@ export class Update${name.pascal}UseCase {
       basePath,
       "application/use-cases",
       name.raw,
-      `delete.usecase.ts`,
+      "delete.usecase.ts",
     ),
     content: `import { inject, injectable } from "tsyringe";
 import { I${name.pascal}Repository } from "../../../domain/repositories/I${name.pascal}Repository";
 import { ContainerEnum } from "../../../utils/enum/container";
+import { logger } from "../../../infrastructure/logger";
 
 @injectable()
 export class Delete${name.pascal}UseCase {
   constructor(
     @inject(ContainerEnum.${name.upper}_REPOSITORY)
-    private readonly repository: I${name.pascal}Repository,
+    private readonly _repo: I${name.pascal}Repository,
   ) {}
 
-  async execute(uuid: string): Promise<void> {
-    await this.repository.delete(uuid);
+  async execute(uuid: string): Promise<boolean> {
+    const deleted = await this._repo.delete(uuid);
+
+    logger.info({
+      message: "${name.pascal} removido com sucesso",
+      uuid,
+    });
+
+    return deleted;
   }
 }
 `,
@@ -206,8 +258,7 @@ export class Delete${name.pascal}UseCase {
       `${name.raw}.validator.ts`,
     ),
     content: `import * as z from "zod";
-    import { ValidationEmpty } from "../../../utils/error";
-
+import { ValidationEmpty } from "../../../utils/error";
 
 export const create${name.pascal}Schema = z.object({
   body: z.object({
@@ -217,22 +268,22 @@ export const create${name.pascal}Schema = z.object({
 
 export const update${name.pascal}Schema = z.object({
   params: z.object({
-    uuid: z.string().trim().min(1, new ValidationEmpty("uuid").response)),
+    uuid: z.string().trim().min(1, new ValidationEmpty("uuid").response),
   }),
   body: z.object({
-    name: z.string().trim().min(1).optional(),
+    name: z.string().trim().min(1, new ValidationEmpty("name").response),
   }),
 });
 
 export const delete${name.pascal}Schema = z.object({
   params: z.object({
-    uuid: z.string().trim().min(1,new ValidationEmpty("uuid").response)),
+    uuid: z.string().trim().min(1, new ValidationEmpty("uuid").response),
   }),
 });
 
 export const getOne${name.pascal}Schema = z.object({
   params: z.object({
-    uuid: z.string().trim().min(1,new ValidationEmpty("uuid").response)),
+    uuid: z.string().trim().min(1, new ValidationEmpty("uuid").response),
   }),
 });
 `,
@@ -246,7 +297,7 @@ export const getOne${name.pascal}Schema = z.object({
     content: `import { Column, Entity } from "typeorm";
 import { Base } from "./BaseEntity";
 
-@Entity("tb_${name.raw}")
+@Entity("tb_${name.table}")
 export class ${name.pascal}Entity extends Base {
   @Column({ type: "varchar", length: 150, nullable: false })
   name!: string;
@@ -256,22 +307,28 @@ export class ${name.pascal}Entity extends Base {
   {
     filepath: path.join(
       basePath,
-      "infrastructure/mappers",
+      "infrastructure/database/mappers",
       `${name.raw}.mapper.ts`,
     ),
-    content: `import { ${name.pascal} } from "../../../domain/entities/${name.pascal}";
+    content: `import { ${name.pascal}DTO } from "../../../application/dtos/${name.raw}.dto";
+import { ${name.pascal} } from "../../../domain/entities/${name.pascal}";
 import { ${name.pascal}Entity } from "../entities/${name.pascal}Entity";
-import { Create${name.pascal}DTO } from "../../../application/dtos/${name.raw}.dto";
 
 export class ${name.pascal}Mapper {
-  static toEntity(data: ${name.pascal} | Create${name.pascal}DTO): ${name.pascal}Entity {
-    const entity = new ${name.pascal}Entity();
-    entity.name = data.name;
-    return entity;
+  static toDomain(entity: ${name.pascal}Entity): ${name.pascal} {
+    return new ${name.pascal}(entity.name, {
+      createdAt: entity.createdAt,
+      enable: entity.enable,
+      uuid: entity.uuid,
+    });
   }
 
-  static toDomain(entity: ${name.pascal}Entity): ${name.pascal} {
-    return new ${name.pascal}(entity.name);
+  static toEntity(data: ${name.pascal} | ${name.pascal}DTO): ${name.pascal}Entity {
+    const entity = new ${name.pascal}Entity();
+
+    entity.name = data.name;
+
+    return entity;
   }
 }
 `,
@@ -280,46 +337,55 @@ export class ${name.pascal}Mapper {
     filepath: path.join(
       basePath,
       "infrastructure/database/repositories",
-      `${name.raw}.typeorm.repository.ts`,
+      `${name.raw}.repository.ts`,
     ),
-    content: `import { Repository } from "typeorm";
-import { injectable } from "tsyringe";
-import { AppDataSource } from "../data-source";
-import { I${name.pascal}Repository } from "../../../domain/repositories/I${name.pascal}Repository";
+    content: `import { injectable } from "tsyringe";
+import { Repository } from "typeorm";
+import { ${name.pascal}DTO } from "../../../application/dtos/${name.raw}.dto";
 import { ${name.pascal} } from "../../../domain/entities/${name.pascal}";
+import { I${name.pascal}Repository } from "../../../domain/repositories/I${name.pascal}Repository";
+import { NotFoundError } from "../../../utils/error";
+import { AppDataSource } from "../data-source";
 import { ${name.pascal}Entity } from "../entities/${name.pascal}Entity";
 import { ${name.pascal}Mapper } from "../mappers/${name.raw}.mapper";
 
 @injectable()
 export class ${name.pascal}TypeOrmRepository implements I${name.pascal}Repository {
-  private readonly repo: Repository<${name.pascal}Entity>;
+  protected readonly _repo: Repository<${name.pascal}Entity>;
 
   constructor() {
-    this.repo = AppDataSource.getRepository(${name.pascal}Entity);
+    this._repo = AppDataSource.getRepository(${name.pascal}Entity);
   }
 
-  async create(data: ${name.pascal}): Promise<${name.pascal}> {
-    const entity = this.repo.create(${name.pascal}Mapper.toEntity(data));
-    await this.repo.save(entity);
+  async getOne(uuid: string): Promise<${name.pascal}> {
+    const result = await this._repo.findOne({
+      where: { uuid },
+    });
+
+    if (!result) throw new NotFoundError("${name.pascal}");
+
+    return ${name.pascal}Mapper.toDomain(result);
+  }
+
+  async delete(uuid: string): Promise<boolean> {
+    const deleted = await this._repo.delete({ uuid });
+    return (deleted.affected ?? 0) > 0;
+  }
+
+  async getAll(): Promise<${name.pascal}[]> {
+    const list = await this._repo.find();
+    return list.map((item) => ${name.pascal}Mapper.toDomain(item));
+  }
+
+  async create(data: ${name.pascal}DTO): Promise<${name.pascal}> {
+    const entity = this._repo.create(${name.pascal}Mapper.toEntity(data));
+    await this._repo.save(entity);
     return ${name.pascal}Mapper.toDomain(entity);
   }
 
-  async findById(uuid: string): Promise<${name.pascal} | null> {
-    const entity = await this.repo.findOne({ where: { uuid } as any });
-    return entity ? ${name.pascal}Mapper.toDomain(entity) : null;
-  }
-
-  async findAll(): Promise<${name.pascal}[]> {
-    const entities = await this.repo.find();
-    return entities.map(${name.pascal}Mapper.toDomain);
-  }
-
-  async update(uuid: string, data: Partial<${name.pascal}>): Promise<void> {
-    await this.repo.update({ uuid } as any, data);
-  }
-
-  async delete(uuid: string): Promise<void> {
-    await this.repo.delete({ uuid } as any);
+  async update(uuid: string, data: ${name.pascal}DTO): Promise<${name.pascal}> {
+    await this._repo.update({ uuid }, { ...data });
+    return await this.getOne(uuid);
   }
 }
 `,
@@ -332,12 +398,12 @@ export class ${name.pascal}TypeOrmRepository implements I${name.pascal}Repositor
     ),
     content: `import { Request, Response } from "express";
 import { injectable } from "tsyringe";
+import { Create${name.pascal}UseCase } from "../../../application/use-cases/${name.raw}/create.usecase";
+import { Delete${name.pascal}UseCase } from "../../../application/use-cases/${name.raw}/delete.usecase";
+import { GetAll${name.pascal}UseCase } from "../../../application/use-cases/${name.raw}/getAll.usecase";
+import { GetOne${name.pascal}UseCase } from "../../../application/use-cases/${name.raw}/getOne.usecase";
+import { Update${name.pascal}UseCase } from "../../../application/use-cases/${name.raw}/update.usecase";
 import { Handler } from "../statusHttp";
-import { Create${name.pascal}UseCase } from "../../../application/use-cases/${name.camel}/create.usecase";
-import { Delete${name.pascal}UseCase } from "../../../application/use-cases/${name.camel}/delete.usecase";
-import { Update${name.pascal}UseCase } from "../../../application/use-cases/${name.camel}/update.usecase";
-import { GetAll${name.pascal}UseCase } from "../../../application/use-cases/${name.camel}/getAll.usecase";
-import { GetOne${name.pascal}UseCase } from "../../../application/use-cases/${name.camel}/getOne.usecase";
 
 @injectable()
 export class ${name.pascal}Controller {
@@ -380,8 +446,8 @@ export class ${name.pascal}Controller {
 
   async getAll(_: Request, res: Response) {
     try {
-      const getAll = await this._getAll.execute();
-      return Handler.ok(res, getAll);
+      const list = await this._getAll.execute();
+      return Handler.ok(res, list);
     } catch (err: unknown) {
       return Handler.error(res, err);
     }
@@ -390,8 +456,8 @@ export class ${name.pascal}Controller {
   async getOne(req: Request, res: Response) {
     try {
       const { uuid } = req.params;
-      const getOne = await this._getOne.execute(uuid as string);
-      return Handler.ok(res, getOne);
+      const item = await this._getOne.execute(uuid as string);
+      return Handler.ok(res, item);
     } catch (err: unknown) {
       return Handler.error(res, err);
     }
@@ -409,15 +475,15 @@ export class ${name.pascal}Controller {
 import { container } from "tsyringe";
 import { ${name.pascal}Controller } from "../controllers/${name.raw}.controller";
 
-export const ${name.camel}Routes = Router();
+export const ${name.raw}Routes = Router();
 
 const controller = container.resolve(${name.pascal}Controller);
 
-${name.camel}Routes.post("/", (req, res) => controller.create(req, res));
-${name.camel}Routes.get("/", (req, res) => controller.getAll(req, res));
-${name.camel}Routes.get("/:uuid", (req, res) => controller.getOne(req, res));
-${name.camel}Routes.put("/:uuid", (req, res) => controller.update(req, res));
-${name.camel}Routes.delete("/:uuid", (req, res) => controller.delete(req, res));
+${name.raw}Routes.post("/", (req, res) => controller.create(req, res));
+${name.raw}Routes.get("/", (req, res) => controller.getAll(req, res));
+${name.raw}Routes.get("/:uuid", (req, res) => controller.getOne(req, res));
+${name.raw}Routes.put("/:uuid", (req, res) => controller.update(req, res));
+${name.raw}Routes.delete("/:uuid", (req, res) => controller.delete(req, res));
 `,
   },
 ];
@@ -436,6 +502,54 @@ for (const file of files) {
 
   fs.writeFileSync(file.filepath, file.content, "utf-8");
   console.log(`Criado: \${file.filepath}\``);
+}
+
+if (fs.existsSync(enumPath)) {
+  let enumContent = fs.readFileSync(enumPath, "utf-8");
+
+  const enumKey = `${name.upper}_REPOSITORY`;
+  const enumValue = `${name.pascal}TypeOrmRepository`;
+
+  if (!enumContent.includes(enumKey)) {
+    enumContent = enumContent.replace(
+      /}\s*$/,
+      `  ${enumKey} = "${enumValue}",\n}`,
+    );
+
+    fs.writeFileSync(enumPath, enumContent, "utf-8");
+    console.log(`Criado: \${file.filepath}\``);
+  } else {
+    console.log(`Enum já existe: \${file.filepath}\``);
+  }
+} else {
+  console.log("Arquivo ContainerEnum não encontrado.");
+}
+
+if (fs.existsSync(containerIndexPath)) {
+  let containerContent = fs.readFileSync(containerIndexPath, "utf-8");
+
+  const importLine = `import { ${name.pascal}TypeOrmRepository } from "../../infrastructure/database/repositories/${name.raw}.repository";`;
+  const registerBlock = `
+container.registerSingleton(
+  ContainerEnum.${name.upper}_REPOSITORY,
+  ${name.pascal}TypeOrmRepository,
+);
+`;
+
+  if (!containerContent.includes(importLine)) {
+    containerContent = importLine + "\n" + containerContent;
+  }
+
+  if (!containerContent.includes(`ContainerEnum.${name.upper}_REPOSITORY`)) {
+    containerContent += registerBlock;
+  }
+
+  fs.writeFileSync(containerIndexPath, containerContent, "utf-8");
+  console.log(`Container registrado: \${name.pascal}TypeOrmRepository\``);
+} else {
+  console.log(
+    "Arquivo de container não encontrado. Ajuste o caminho em containerIndexPath.",
+  );
 }
 
 console.log(`Módulo "\${name.raw}" gerado com sucesso.\``);
