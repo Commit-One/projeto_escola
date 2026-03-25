@@ -9,6 +9,7 @@ export class StudentDisciplineMapper {
       entity.disciplineUuid,
       entity.classUuid,
       entity.schoolUuid,
+      entity.note,
       {
         uuid: entity.uuid,
         createdAt: entity.createdAt,
@@ -24,6 +25,7 @@ export class StudentDisciplineMapper {
     entity.schoolUuid = data.schoolUuid;
     entity.classUuid = data.classUuid;
     entity.disciplineUuid = data.disciplineUuid;
+    entity.note = data.note;
 
     return entity;
   }

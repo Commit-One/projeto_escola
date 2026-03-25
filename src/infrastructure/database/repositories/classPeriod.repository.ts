@@ -70,7 +70,7 @@ export class ClassPeriodTypeOrmRepository implements IClassPeriodRepository {
     if (classPeriod)
       throw new AppError("Já existe uma regra com essas informações");
 
-    const entity = ClassPeriodMapper.toEntity(data);
+    const entity = await this._repo.create(ClassPeriodMapper.toEntity(data));
     await this._repo.save(entity);
     return ClassPeriodMapper.toDomain(entity);
   }

@@ -7,13 +7,22 @@ import { StudentDisciplineDTO } from "../../../application/dtos/studentDisciplin
 import { StudentDiscipline } from "../../../domain/entities/StudentDiscipline";
 import { StudentDisciplineEntity } from "../entities/StudentDisciplineEntity";
 import { StudentDisciplineMapper } from "../mappers/studentDiscipline.mapper";
+import { ClassStudentEntity } from "../entities/ClassStudentEntity";
+import { StudentEntity } from "../entities/StudentEntity";
+import { DisciplineEntity } from "../entities/DisciplineEntity";
 
 @injectable()
 export class StudentDisciplineTypeOrmRepository implements IStudentDisciplineRepository {
   protected readonly _repo: Repository<StudentDisciplineEntity>;
+  protected readonly _repoClassStudent: Repository<ClassStudentEntity>;
+  protected readonly _repoStudent: Repository<StudentEntity>;
+  protected readonly _repoDiscipline: Repository<DisciplineEntity>;
 
   constructor() {
     this._repo = AppDataSource.getRepository(StudentDisciplineEntity);
+    this._repoClassStudent = AppDataSource.getRepository(ClassStudentEntity);
+    this._repoStudent = AppDataSource.getRepository(StudentEntity);
+    this._repoDiscipline = AppDataSource.getRepository(DisciplineEntity);
   }
 
   async getAll(): Promise<StudentDiscipline[]> {
@@ -22,7 +31,25 @@ export class StudentDisciplineTypeOrmRepository implements IStudentDisciplineRep
   }
 
   async create(data: StudentDisciplineDTO): Promise<StudentDiscipline> {
-    const entity = StudentDisciplineMapper.toEntity(data);
+    const classStudent = await this._repoClassStudent.findOne({
+      where: { uuid: data.classUuid },
+    });
+    const student = await this._repoStudent.findOne({
+      where: { uuid: data.studentUuid },
+    });
+    const discipline = await this._repoDiscipline.findOne({
+      where: { uuid: data.disciplineUuid },
+    });
+
+    if (!classStudent) throw new NotFoundError("Classe não encontrada");
+
+    if (!student) throw new NotFoundError("Estudante não encontrado");
+
+    if (!discipline) throw new NotFoundError("Disciplina não encontrada");
+
+    const entity = await this._repo.create(
+      StudentDisciplineMapper.toEntity(data),
+    );
     await this._repo.save(entity);
     return StudentDisciplineMapper.toDomain(entity);
   }

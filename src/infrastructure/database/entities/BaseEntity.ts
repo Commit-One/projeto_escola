@@ -1,16 +1,20 @@
-import { Column, Entity, Generated, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Generated,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
 @Entity("tb_base")
 export class Base {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ type: "datetime" })
+  @CreateDateColumn({ type: "datetime" })
   createdAt!: Date;
 
-  @Column({
-    default: true,
-  })
+  @Column({ default: true })
   enable!: boolean;
 
   @Column()

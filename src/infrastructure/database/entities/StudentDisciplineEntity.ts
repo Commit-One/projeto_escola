@@ -14,4 +14,7 @@ export class StudentDisciplineEntity extends Base {
 
   @Column({ type: "varchar", length: 100, nullable: false })
   schoolUuid!: string;
+
+  @Column({ type: "int", nullable: false })
+  note!: number;
 }

@@ -8,6 +8,7 @@ export class StudentDiscipline extends Base {
     public disciplineUuid: string,
     public classUuid: string,
     public schoolUuid: string,
+    public note: number,
     baseProps?: IBaseProps,
   ) {
     super(baseProps);

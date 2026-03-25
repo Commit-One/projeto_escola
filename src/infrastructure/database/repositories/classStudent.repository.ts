@@ -52,7 +52,7 @@ export class ClassStudentTypeOrmRepository implements IClassStudentRepository {
   }
 
   async create(data: ClassIStudentDTO): Promise<ClassStudent> {
-    const entity = ClassStudentMapper.toEntity(data);
+    const entity = await this._repo.create(ClassStudentMapper.toEntity(data));
     await this._repo.save(entity);
     return ClassStudentMapper.toDomain(entity);
   }

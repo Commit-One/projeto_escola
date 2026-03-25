@@ -3,4 +3,5 @@ export interface StudentDisciplineDTO {
   studentUuid: string;
   disciplineUuid: string;
   schoolUuid: string;
+  note: number;
 }

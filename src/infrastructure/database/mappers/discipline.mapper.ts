@@ -15,9 +15,6 @@ export class DisciplineMapper {
 
     entity.name = data.name;
     entity.schoolUuid = data.schoolUuid;
-    entity.uuid = data.uuid;
-    entity.createdAt = data.createdAt;
-    entity.enable = data.enable;
 
     return entity;
   }

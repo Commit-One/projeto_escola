@@ -7,7 +7,7 @@ const createDisciplineSchemaValidator = z.object({
       .string({ error: new ValidationEmpty("Nome").response })
       .trim()
       .min(1, new ValidationEmpty("Nome").response),
-    schoolUuid: z.number({ error: new ValidationEmpty("SchoolUuid").response }),
+    schoolUuid: z.string({ error: new ValidationEmpty("SchoolUuid").response }),
   }),
 });
 
@@ -19,7 +19,7 @@ const updateDisciplineSchemaValidator = z.object({
       .min(1, new ValidationEmpty("Nome").response),
   }),
   params: z.object({
-    uuid: z.number({ error: new ValidationEmpty("Uuid").response }),
+    uuid: z.string({ error: new ValidationEmpty("Uuid").response }),
   }),
 });
 

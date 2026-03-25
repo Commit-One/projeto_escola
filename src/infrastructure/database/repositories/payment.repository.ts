@@ -17,7 +17,7 @@ export class PaymentTypeOrmRepository implements IPaymentRepository {
   }
 
   async create(data: Payment): Promise<boolean> {
-    const entity = PaymentMapper.toEntity(data);
+    const entity = await this._repo.create(PaymentMapper.toEntity(data));
     await this._repo.save(entity);
     return true;
   }

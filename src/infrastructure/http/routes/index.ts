@@ -9,6 +9,7 @@ import { classStudentsRoutes } from "./classStudent.routes";
 import { classPeriodRoutes } from "./classPeriod.routes";
 import { teste } from "./_teste.routes";
 import { disciplineRoutes } from "./discipline.routes";
+import { studentDisciplineRoutes } from "./studentDiscipline.routes";
 
 export const routes = Router();
 
@@ -22,5 +23,6 @@ routes.use("/student", studentsRoutes);
 routes.use("/class", classStudentsRoutes);
 routes.use("/classPeriod", classPeriodRoutes);
 routes.use("/discipline", disciplineRoutes);
+routes.use("/studentdiscipline", studentDisciplineRoutes);
 
 routes.use("/teste", teste);
