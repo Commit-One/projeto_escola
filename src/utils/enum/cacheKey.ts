@@ -6,6 +6,7 @@ export enum cacheKeyEnum {
   USERS = "users",
   CLASS = "class",
   DISCIPLINE = "discipline",
-  STUDENT_DISCIPLINE = "studentDiscipline",
+  NOTES = "Notes",
   CLASS_PERIOD = "class_period",
+  ACADEMIC_CYCLE = "academic_cycle",
 }

@@ -3,20 +3,20 @@ import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { ContainerEnum } from "../../../utils/enum/container";
 import { IRedisService } from "../../../domain/contracts/IRedisService";
 import { logger } from "../../../infrastructure/logger";
-import { IStudentDisciplineRepository } from "../../../domain/repositories/IStudentDisciplineRepository";
-import { StudentDisciplineDTO } from "../../dtos/studentDiscipline.dto";
+import { INotesRepository } from "../../../domain/repositories/INotesRepository";
+import { NotesDTO } from "../../dtos/notes.dto";
 
 @injectable()
-export class UpdateStudentDisciplineUseCase {
+export class UpdateNotesUseCase {
   constructor(
     @inject(ContainerEnum.DISCIPLINE_REPOSITORY)
-    private _repo: IStudentDisciplineRepository,
+    private _repo: INotesRepository,
 
     @inject(ContainerEnum.REDIS_SERVICE)
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string, data: StudentDisciplineDTO): Promise<boolean> {
+  async execute(uuid: string, data: NotesDTO): Promise<boolean> {
     const discipline = await this._repo.update(uuid, data);
 
     if (!discipline) {
@@ -27,7 +27,7 @@ export class UpdateStudentDisciplineUseCase {
       return false;
     }
 
-    await this._cache.delete(cacheKeyEnum.STUDENT_DISCIPLINE);
+    await this._cache.delete(cacheKeyEnum.NOTES);
 
     logger.info({
       message: "Atualização realizada com sucesso",

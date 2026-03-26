@@ -19,8 +19,13 @@ export class ClassStudentController {
 
   async create(req: Request, res: Response) {
     try {
-      const { name, maxAge, minAge } = req.body;
-      const created = await this._create.execute({ name, maxAge, minAge });
+      const { name, maxAge, minAge, schoolUuid } = req.body;
+      const created = await this._create.execute({
+        name,
+        maxAge,
+        minAge,
+        schoolUuid,
+      });
       return Handler.created(res, created);
     } catch (err: unknown) {
       return Handler.error(res, err);
@@ -58,12 +63,13 @@ export class ClassStudentController {
 
   async update(req: Request, res: Response) {
     try {
-      const { name, maxAge, minAge } = req.body;
+      const { name, maxAge, minAge, schoolUuid } = req.body;
       const { uuid } = req.params;
       const updated = await this._update.execute(uuid as string, {
         name,
         maxAge,
         minAge,
+        schoolUuid,
       });
       return Handler.ok(res, updated);
     } catch (err: unknown) {

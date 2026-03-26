@@ -3,7 +3,7 @@ import { IRedisService } from "../../../domain/contracts/IRedisService";
 import { ClassStudent } from "../../../domain/entities/ClassStudent";
 import { IClassStudentRepository } from "../../../domain/repositories/IClassStudentRepository";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
-import { ClassIStudentDTO } from "../../dtos/classStudent.dto";
+import { IClassStudentDTO } from "../../dtos/classStudent.dto";
 import { ContainerEnum } from "../../../utils/enum/container";
 import { logger } from "../../../infrastructure/logger";
 
@@ -17,7 +17,7 @@ export class CreateClassStudentuUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(data: ClassIStudentDTO): Promise<ClassStudent> {
+  async execute(data: IClassStudentDTO): Promise<ClassStudent> {
     const classStudent = await this._classRepository.create(data);
     await this._cache.delete(cacheKeyEnum.CLASS);
     logger.info({

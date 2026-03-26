@@ -79,7 +79,7 @@ export class StudentTypeOrmRepository implements IStudentRepository {
     });
     if (!period) throw new NotFoundError("Período");
 
-    const student = await this._repo.create(StudentMapper.toDomain(data));
+    const student = StudentMapper.toDomain(data);
 
     await this._repo.save(student);
 

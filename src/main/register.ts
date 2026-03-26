@@ -15,7 +15,8 @@ import { UserTypeOrmRepository } from "../infrastructure/database/repositories/u
 import { RabbitService } from "../infrastructure/messaging/rabbit/rabbit.service";
 import { EnvironmentConfig } from "../infrastructure/config";
 import { DisciplineTypeOrmRepository } from "../infrastructure/database/repositories/discipline.repository";
-import { StudentDisciplineTypeOrmRepository } from "../infrastructure/database/repositories/studentDiscipline.repository";
+import { NotesTypeOrmRepository } from "../infrastructure/database/repositories/notes.repository";
+import { AcademicCycleTypeOrmRepository } from "../infrastructure/database/repositories/academicCycle.repository";
 
 export const environment = new EnvironmentConfig();
 
@@ -37,8 +38,12 @@ container.registerSingleton(
   DisciplineTypeOrmRepository,
 );
 container.registerSingleton(
-  ContainerEnum.STUDENT_DISCIPLINE_REPOSITORY,
-  StudentDisciplineTypeOrmRepository,
+  ContainerEnum.NOTES_REPOSITORY,
+  NotesTypeOrmRepository,
+);
+container.registerSingleton(
+  ContainerEnum.ACADEMIC_CYCLE_REPOSITORY,
+  AcademicCycleTypeOrmRepository,
 );
 container.registerSingleton(ContainerEnum.REDIS_SERVICE, RedisService);
 container.registerSingleton(

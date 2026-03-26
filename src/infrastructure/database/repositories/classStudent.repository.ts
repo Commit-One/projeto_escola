@@ -4,16 +4,19 @@ import { IClassStudentRepository } from "../../../domain/repositories/IClassStud
 import { ClassStudent } from "../../../domain/entities/ClassStudent";
 import { ClassStudentEntity } from "../entities/ClassStudentEntity";
 import { NotFoundError } from "../../../utils/error";
-import { ClassIStudentDTO } from "../../../application/dtos/classStudent.dto";
+import { IClassStudentDTO } from "../../../application/dtos/classStudent.dto";
 import { ClassStudentMapper } from "../mappers/classStudent.mapper";
 import { injectable } from "tsyringe";
+import { SchoolEntity } from "../entities/SchoolEntity";
 
 @injectable()
 export class ClassStudentTypeOrmRepository implements IClassStudentRepository {
   protected readonly _repo: Repository<ClassStudentEntity>;
+  protected readonly _repoSchool: Repository<SchoolEntity>;
 
   constructor() {
     this._repo = AppDataSource.getRepository(ClassStudentEntity);
+    this._repoSchool = AppDataSource.getRepository(SchoolEntity);
   }
 
   async getOne(uuid: string): Promise<ClassStudent | null> {
@@ -32,7 +35,7 @@ export class ClassStudentTypeOrmRepository implements IClassStudentRepository {
     return (deleted.affected ?? 0) > 0;
   }
 
-  async update(uuid: string, data: ClassIStudentDTO): Promise<ClassStudent> {
+  async update(uuid: string, data: IClassStudentDTO): Promise<ClassStudent> {
     const entity = await this._repo.findOne({ where: { uuid } });
 
     if (!entity) throw new NotFoundError("Classe");
@@ -51,8 +54,15 @@ export class ClassStudentTypeOrmRepository implements IClassStudentRepository {
     return exist;
   }
 
-  async create(data: ClassIStudentDTO): Promise<ClassStudent> {
-    const entity = await this._repo.create(ClassStudentMapper.toEntity(data));
+  async create(data: IClassStudentDTO): Promise<ClassStudent> {
+    const school = await this._repoSchool.findOne({
+      where: { uuid: data.schoolUuid },
+    });
+
+    if (!school) throw new NotFoundError("Escola");
+
+    const entity = ClassStudentMapper.toEntity(data);
+
     await this._repo.save(entity);
     return ClassStudentMapper.toDomain(entity);
   }

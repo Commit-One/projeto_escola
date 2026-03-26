@@ -411,7 +411,7 @@ export class ${name.pascal}TypeOrmRepository implements I${name.pascal}Repositor
   }
 
   async create(data: ${name.pascal}DTO): Promise<${name.pascal}> {
-    const entity = this._repo.create(${name.pascal}Mapper.toEntity(data));
+    const entity = ${name.pascal}Mapper.toEntity(data);
     await this._repo.save(entity);
     return ${name.pascal}Mapper.toDomain(entity);
   }

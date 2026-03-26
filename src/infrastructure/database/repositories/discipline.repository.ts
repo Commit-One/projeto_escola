@@ -31,9 +31,7 @@ export class DisciplineTypeOrmRepository implements IDisciplineRepository {
 
     if (!school) throw new NotFoundError("Escola");
 
-    const entity = await this._repo.create(
-      DisciplineMapper.toEntity(discipline),
-    );
+    const entity = DisciplineMapper.toEntity(discipline);
     await this._repo.save(entity);
     return DisciplineMapper.toDomain(entity);
   }

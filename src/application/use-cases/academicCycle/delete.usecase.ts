@@ -1,15 +1,15 @@
 import { inject, injectable } from "tsyringe";
+import { IAcademicCycleRepository } from "../../../domain/repositories/IAcademicCycleRepository";
 import { IRedisService } from "../../../domain/contracts/IRedisService";
-import { ContainerEnum } from "../../../utils/enum/container";
 import { logger } from "../../../infrastructure/logger";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
-import { IStudentDisciplineRepository } from "../../../domain/repositories/IStudentDisciplineRepository";
+import { ContainerEnum } from "../../../utils/enum/container";
 
 @injectable()
-export class DeleteStudentDisciplineUseCase {
+export class DeleteAcademicCycleUseCase {
   constructor(
-    @inject(ContainerEnum.STUDENT_DISCIPLINE_REPOSITORY)
-    private readonly _repo: IStudentDisciplineRepository,
+    @inject(ContainerEnum.ACADEMIC_CYCLE_REPOSITORY)
+    private readonly _repo: IAcademicCycleRepository,
 
     @inject(ContainerEnum.REDIS_SERVICE)
     private readonly _cache: IRedisService,
@@ -20,17 +20,20 @@ export class DeleteStudentDisciplineUseCase {
 
     if (!deleted) {
       logger.warn({
-        message: "Ocorreu um erro ao deletar relação",
-        studentDiscipline: uuid,
+        message: "AcademicCycle não encontrado",
+        academicCycleId: uuid,
       });
+
       return false;
     }
 
-    await this._cache.delete(cacheKeyEnum.STUDENT_DISCIPLINE);
+    await this._cache.delete(cacheKeyEnum.ACADEMIC_CYCLE);
+
     logger.info({
-      message: "Relação deletada com sucesso",
-      studentDiscipline: uuid,
+      message: "AcademicCycle deletado com sucesso",
+      academicCycleId: uuid,
     });
+
     return true;
   }
 }

@@ -1,21 +1,21 @@
 import { Request, Response } from "express";
 import { Handler } from "../statusHttp";
 import { injectable } from "tsyringe";
-import { CreateStudentDisciplineUseCase } from "../../../application/use-cases/studentDiscipline/create.usecase";
-import { GetAllStudentDisciplineUseCase } from "../../../application/use-cases/studentDiscipline/getAll.usecase";
-import { GetOneStudentDisciplineUseCase } from "../../../application/use-cases/studentDiscipline/getOne.usecase";
-import { DeleteStudentDisciplineUseCase } from "../../../application/use-cases/studentDiscipline/delete.usecase";
-import { UpdateStudentDisciplineUseCase } from "../../../application/use-cases/studentDiscipline/update.usecase";
-import { StudentDisciplineDTO } from "../../../application/dtos/studentDiscipline.dto";
+import { CreateNotesUseCase } from "../../../application/use-cases/notes/create.usecase";
+import { GetAllNotesUseCase } from "../../../application/use-cases/notes/getAll.usecase";
+import { GetOneNotesUseCase } from "../../../application/use-cases/notes/getOne.usecase";
+import { DeleteNotesUseCase } from "../../../application/use-cases/notes/delete.usecase";
+import { UpdateNotesUseCase } from "../../../application/use-cases/notes/update.usecase";
+import { NotesDTO } from "../../../application/dtos/notes.dto";
 
 @injectable()
-export class StudentDisciplineController {
+export class NotesController {
   constructor(
-    private readonly _create: CreateStudentDisciplineUseCase,
-    private readonly _getAll: GetAllStudentDisciplineUseCase,
-    private readonly _getOne: GetOneStudentDisciplineUseCase,
-    private readonly _delete: DeleteStudentDisciplineUseCase,
-    private readonly _update: UpdateStudentDisciplineUseCase,
+    private readonly _create: CreateNotesUseCase,
+    private readonly _getAll: GetAllNotesUseCase,
+    private readonly _getOne: GetOneNotesUseCase,
+    private readonly _delete: DeleteNotesUseCase,
+    private readonly _update: UpdateNotesUseCase,
   ) {}
 
   async getAll(_: Request, res: Response) {
@@ -29,14 +29,23 @@ export class StudentDisciplineController {
 
   async create(req: Request, res: Response) {
     try {
-      const { classUuid, disciplineUuid, note, schoolUuid, studentUuid } =
-        req.body;
-
-      const data: StudentDisciplineDTO = {
+      const {
         classUuid,
         disciplineUuid,
         note,
         schoolUuid,
+        studentUuid,
+        periodUuid,
+        academiccycleUuid,
+      } = req.body;
+
+      const data: NotesDTO = {
+        classUuid,
+        disciplineUuid,
+        note,
+        academiccycleUuid,
+        schoolUuid,
+        periodUuid,
         studentUuid,
       };
 
@@ -71,12 +80,21 @@ export class StudentDisciplineController {
     try {
       const { uuid } = req.params;
 
-      const { classUuid, disciplineUuid, note, schoolUuid, studentUuid } =
-        req.body;
-
-      const data: StudentDisciplineDTO = {
+      const {
         classUuid,
         disciplineUuid,
+        note,
+        schoolUuid,
+        studentUuid,
+        periodUuid,
+        academiccycleUuid,
+      } = req.body;
+
+      const data: NotesDTO = {
+        classUuid,
+        periodUuid,
+        disciplineUuid,
+        academiccycleUuid,
         note,
         schoolUuid,
         studentUuid,

@@ -10,6 +10,8 @@ import { ClassPeriodEntity } from "./entities/ClassPeriodEntity";
 import { EnvironmentConfig } from "../config";
 import { PaymentEntity } from "./entities/PaymentEntity";
 import { DisciplineEntity } from "./entities/DisciplineEntity";
+import { NotesEntity } from "./entities/NotesEntity";
+import { AcademicCycleEntity } from "./entities/AcademicCycleEntity";
 
 const env = new EnvironmentConfig();
 export const AppDataSource = new DataSource({
@@ -31,6 +33,8 @@ export const AppDataSource = new DataSource({
     ClassPeriodEntity,
     PaymentEntity,
     DisciplineEntity,
+    NotesEntity,
+    AcademicCycleEntity,
   ],
   migrations: [],
 });
