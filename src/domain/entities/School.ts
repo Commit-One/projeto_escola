@@ -2,7 +2,7 @@ import { StatusEnum } from "../../utils/enum/status";
 import { AppError, ValidationEmpty } from "../../utils/error";
 import { replace } from "../../utils/helpers/replace";
 import { IBaseProps } from "../contracts/IBaseProps";
-import { CnpjValidator } from "../validator/cnpj.validator";
+import { CnpjValueObject } from "../valuesObject/cnpj";
 import { Base } from "./Base";
 
 export class School extends Base {
@@ -34,6 +34,7 @@ export class School extends Base {
     if (!this.phone) throw new ValidationEmpty("phone");
     if (!this.nameDirector) throw new ValidationEmpty("nameDirector");
     if (!this.cnpj) throw new ValidationEmpty("cnpj");
-    if (!CnpjValidator.validate(this.cnpj)) throw new AppError("CNPJ inválido");
+    if (!CnpjValueObject.validate(this.cnpj))
+      throw new AppError("CNPJ inválido");
   }
 }

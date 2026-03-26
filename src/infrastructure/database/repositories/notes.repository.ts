@@ -16,6 +16,7 @@ import { NotesMapper } from "../mappers/notes.mapper";
 import { SchoolEntity } from "../entities/SchoolEntity";
 import { PeriodEntity } from "../entities/PeriodEntity";
 import { AcademicCycleEntity } from "../entities/AcademicCycleEntity";
+import { GradeReporDTO } from "../../../application/dtos/gradeReport.dto";
 
 @injectable()
 export class NotesTypeOrmRepository implements INotesRepository {
@@ -76,6 +77,7 @@ export class NotesTypeOrmRepository implements INotesRepository {
         disciplineUuid: data.disciplineUuid,
         classUuid: data.classUuid,
         academiccycleUuid: data.academiccycleUuid,
+        studentUuid: data.studentUuid,
       },
     });
 
@@ -107,5 +109,34 @@ export class NotesTypeOrmRepository implements INotesRepository {
 
     await this._repo.update({ uuid }, { ...data });
     return NotesMapper.toDomain(entity);
+  }
+
+  async gradeReport(studentUuid: string): Promise<GradeReporDTO[]> {
+    const query = `
+      select 
+        ts.name as name,
+        ts.matriculation,
+        ts.cpf,
+        tc.name as className,
+        tp.name as periodName,
+        ts2.name as schoolName,
+        ts2.uuid as schoolUuid,
+        tac.name  as academyCycle,
+        tac.uuid  as academyCycleUuid,
+        td.name as disciplineName,
+        td.uuid as disciplineUuid,
+        tn.note 
+      from tb_notes tn 
+      inner join tb_student ts on tn.studentUuid = ts.uuid 
+      inner join tb_discipline td on tn.disciplineUuid = td.uuid 
+      inner join tb_class tc on tn.classUuid = tc.uuid 
+      inner join tb_periodo tp on tn.periodUuid = tp.uuid 
+      inner join tb_school ts2 on tn.schoolUuid  = ts2.uuid 
+      inner join tb_academic_cycle tac on  tn.academiccycleUuid = tac.uuid 
+      where tn.studentUuid = "${studentUuid}"
+    `;
+
+    const executeSQL = await this._repo.query(query);
+    return executeSQL;
   }
 }

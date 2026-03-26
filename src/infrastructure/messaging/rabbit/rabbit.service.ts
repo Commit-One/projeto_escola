@@ -24,7 +24,7 @@ export class RabbitService implements IQueueService {
     });
 
     logger.info({
-      message: "Mensagem enviada para fila",
+      message: `Mensagem enviada para fila: ${queueName}`,
       queue: queueName,
       payload,
     });

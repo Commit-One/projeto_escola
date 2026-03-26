@@ -78,12 +78,12 @@ export class ClassPeriodTypeOrmRepository implements IClassPeriodRepository {
   async getByClassPeriodUuid(
     classUuid: string,
     periodUuid: string,
-  ): Promise<ClassPeriod> {
+  ): Promise<ClassPeriod | null> {
     const classPeriod = await this._repo.findOne({
       where: { classUuid, periodUuid },
     });
 
-    if (!classPeriod) throw new AppError("Regra não encontrada");
+    if (!classPeriod) return null;
 
     return ClassPeriodMapper.toDomain(classPeriod);
   }

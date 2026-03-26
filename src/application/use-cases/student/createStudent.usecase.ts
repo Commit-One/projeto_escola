@@ -10,6 +10,7 @@ import { StudentDTO, StudentResponseDTO } from "../../dtos/student.dto";
 import { inject, injectable } from "tsyringe";
 import { ContainerEnum } from "../../../utils/enum/container";
 import { logger } from "../../../infrastructure/logger";
+import { NotFoundError } from "../../../utils/error";
 
 @injectable()
 export class CreateStudentUseCase {
@@ -28,6 +29,16 @@ export class CreateStudentUseCase {
   ) {}
 
   async execute(data: StudentDTO): Promise<StudentResponseDTO | null> {
+    const classPeriod = await this._repoClassPeriod.getByClassPeriodUuid(
+      data.classUuid,
+      data.periodUuid,
+    );
+
+    if (!classPeriod) {
+      logger.warn({ message: "Regra não encontrada" });
+      throw new NotFoundError("Regra");
+    }
+
     const student = await this._repo.create(data);
 
     if (!student) {
@@ -36,11 +47,6 @@ export class CreateStudentUseCase {
     }
 
     await this._cache.delete(cacheKeyEnum.STUDENTS);
-
-    const classPeriod = await this._repoClassPeriod.getByClassPeriodUuid(
-      student.class.uuid,
-      student.periodo.uuid,
-    );
 
     const date = new Date();
     const payment = new Payment(
@@ -61,6 +67,7 @@ export class CreateStudentUseCase {
     });
 
     await this._queue.sendToQueue(QueueEnum.PAYMENT_NAME, payment);
+
     return student;
   }
 }

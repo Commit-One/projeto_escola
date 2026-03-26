@@ -7,6 +7,7 @@ import { GetOneNotesUseCase } from "../../../application/use-cases/notes/getOne.
 import { DeleteNotesUseCase } from "../../../application/use-cases/notes/delete.usecase";
 import { UpdateNotesUseCase } from "../../../application/use-cases/notes/update.usecase";
 import { NotesDTO } from "../../../application/dtos/notes.dto";
+import { CreateGradeReportByStudentUuidUseCase } from "../../../application/use-cases/notes/createGradeReportByStudentUuid.usecase";
 
 @injectable()
 export class NotesController {
@@ -16,6 +17,7 @@ export class NotesController {
     private readonly _getOne: GetOneNotesUseCase,
     private readonly _delete: DeleteNotesUseCase,
     private readonly _update: UpdateNotesUseCase,
+    private readonly _gradeByStudent: CreateGradeReportByStudentUuidUseCase,
   ) {}
 
   async getAll(_: Request, res: Response) {
@@ -70,6 +72,16 @@ export class NotesController {
     try {
       const { uuid } = req.params;
       const deleted = await this._delete.execute(uuid as string);
+      return Handler.ok(res, deleted);
+    } catch (err: unknown) {
+      return Handler.error(res, err);
+    }
+  }
+
+  async createGradeByStudentUuid(req: Request, res: Response) {
+    try {
+      const { studentUuid } = req.params;
+      const deleted = await this._gradeByStudent.execute(studentUuid as string);
       return Handler.ok(res, deleted);
     } catch (err: unknown) {
       return Handler.error(res, err);

@@ -4,7 +4,7 @@ import { replace } from "../../utils/helpers/replace";
 import { Base } from "./Base";
 import { AppError, ValidationEmpty } from "../../utils/error";
 import { IBaseProps } from "../contracts/IBaseProps";
-import { CpfValidator } from "../validator/cpf.validator";
+import { CpfValueObject } from "../valuesObject/cpf";
 
 export class Student extends Base {
   constructor(
@@ -55,6 +55,6 @@ export class Student extends Base {
     if (!this.dayPayment) throw new ValidationEmpty("dayPayment");
     if (!this.profileUuid) throw new ValidationEmpty("profileUuid");
     if (!this.cpf) throw new ValidationEmpty("cpf");
-    if (!CpfValidator.validate(this.cpf)) throw new AppError("CPF inválido");
+    if (!CpfValueObject.validate(this.cpf)) throw new AppError("CPF inválido");
   }
 }

@@ -10,5 +10,5 @@ export interface IClassPeriodRepository {
   getByClassPeriodUuid(
     classUuid: string,
     periodUuid: string,
-  ): Promise<ClassPeriod>;
+  ): Promise<ClassPeriod | null>;
 }

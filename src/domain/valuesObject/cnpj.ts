@@ -1,6 +1,6 @@
 import { replace } from "../../utils/helpers/replace";
 
-export class CnpjValidator {
+export class CnpjValueObject {
   static validate(cnpj: string): boolean {
     const cleaned = replace(cnpj);
 

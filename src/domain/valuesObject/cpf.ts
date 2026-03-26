@@ -1,6 +1,6 @@
 import { replace } from "../../utils/helpers/replace";
 
-export class CpfValidator {
+export class CpfValueObject {
   public static validate(value: string): boolean {
     let soma = 0;
     let resto;

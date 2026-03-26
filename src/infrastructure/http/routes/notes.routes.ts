@@ -2,6 +2,7 @@ import { Router } from "express";
 import { container } from "tsyringe";
 import { validateMiddlewareSchema } from "../middleware/validateSchema.middleware";
 import {
+  createGradeReportByStudentUuid,
   createNotesSchemaValidator,
   deleteNotesSchemaValidator,
   getOneNotesSchemaValidator,
@@ -33,4 +34,9 @@ notesRoutes.get(
   "/uuid/:uuid",
   validateMiddlewareSchema(getOneNotesSchemaValidator),
   (req, res) => controller.getOne(req, res),
+);
+notesRoutes.get(
+  "/gradereport/:studentUuid",
+  validateMiddlewareSchema(createGradeReportByStudentUuid),
+  (req, res) => controller.createGradeByStudentUuid(req, res),
 );

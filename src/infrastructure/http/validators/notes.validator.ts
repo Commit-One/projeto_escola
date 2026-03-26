@@ -58,9 +58,19 @@ const getOneNotesSchemaValidator = z.object({
   }),
 });
 
+const createGradeReportByStudentUuid = z.object({
+  params: z.object({
+    studentUuid: z
+      .string({ error: new ValidationEmpty("studentUuid").response })
+      .trim()
+      .min(1, new ValidationEmpty("studentUuid").response),
+  }),
+});
+
 export {
   createNotesSchemaValidator,
   deleteNotesSchemaValidator,
   getOneNotesSchemaValidator,
   updateNotesSchemaValidator,
+  createGradeReportByStudentUuid,
 };
