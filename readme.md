@@ -1,3 +1,4 @@
-TODO: Criar Fila DLQ / DL ou lógica de retry
-
-server > register > controller > useCase > application.repository.interface
+//TODO: Cadastro de colaborador;
+//TODO: Criar dashboard financeiro;
+//TODO: Criar middleare de profile;
+//TODO: Criar middleare de permissão;

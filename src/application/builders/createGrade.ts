@@ -3,7 +3,7 @@ import {
   GradeReporResponseDTO,
 } from "../../application/dtos/gradeReport.dto";
 
-export class CreateGradeValeuObject {
+export class CreateGradeBuilders {
   public static execute(data: GradeReporDTO[]): GradeReporResponseDTO {
     const response: GradeReporResponseDTO[] = [];
 

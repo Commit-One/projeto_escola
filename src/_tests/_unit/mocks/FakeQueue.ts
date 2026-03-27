@@ -1,4 +1,5 @@
 import { IQueueService } from "../../../domain/contracts/IQueueService";
+import { IRabbitQueueConfig } from "../../../infrastructure/messaging/rabbit/queues/interface";
 
 export class FakeQueue implements IQueueService {
   public messages: { queue: string; payload: unknown }[] = [];
@@ -8,10 +9,12 @@ export class FakeQueue implements IQueueService {
   }
 
   async consumerQueue(
-    queue: string,
+    queue: IRabbitQueueConfig,
     callback: (payload: any) => Promise<void>,
   ): Promise<void> {
-    const message = this.messages.find((item) => item.queue === queue);
+    const message = this.messages.find(
+      (item) => item.queue === queue.main.name,
+    );
 
     if (message) {
       await callback(message.payload);
