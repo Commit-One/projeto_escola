@@ -10,6 +10,7 @@ import { classPeriodRoutes } from "./classPeriod.routes";
 import { disciplineRoutes } from "./discipline.routes";
 import { notesRoutes } from "./notes.routes";
 import { academicCycleRoutes } from "./academicCycle.routes";
+import { mediaRoutes } from "./media.routes";
 
 export const routes = Router();
 
@@ -25,3 +26,4 @@ routes.use("/classPeriod", classPeriodRoutes);
 routes.use("/discipline", disciplineRoutes);
 routes.use("/notes", notesRoutes);
 routes.use("/academiccycle", academicCycleRoutes);
+routes.use("/media", mediaRoutes);

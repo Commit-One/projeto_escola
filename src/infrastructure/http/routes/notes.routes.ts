@@ -2,10 +2,10 @@ import { Router } from "express";
 import { container } from "tsyringe";
 import {
   createGradeReportByStudentUuid,
-  createNotesSchemaValidator,
-  deleteNotesSchemaValidator,
-  getOneNotesSchemaValidator,
-  updateNotesSchemaValidator,
+  createNotesSchema,
+  deleteNotesSchema,
+  getOneNotesSchema,
+  updateNotesSchema,
 } from "../validators/notes.validator";
 import { NotesController } from "../controllers/notes.controller";
 import { createApi } from "../../../utils/helpers/createApi";
@@ -20,7 +20,7 @@ createApi(notesRoutes, {
   path: "/",
   fullPath: "/notes",
   summary: "Criar notas",
-  body: createNotesSchemaValidator,
+  body: createNotesSchema,
   tags: [tagName],
   controller: controller.create.bind(controller),
 });
@@ -30,7 +30,7 @@ createApi(notesRoutes, {
   path: "/:uuid",
   fullPath: "/notes/:uuid",
   summary: "Deletar notas",
-  params: deleteNotesSchemaValidator,
+  params: deleteNotesSchema,
   tags: [tagName],
   controller: controller.delete.bind(controller),
 });
@@ -40,8 +40,8 @@ createApi(notesRoutes, {
   path: "/:uuid",
   fullPath: "/notes/:uuid",
   summary: "Atualizar nota",
-  body: updateNotesSchemaValidator.body,
-  params: updateNotesSchemaValidator.params,
+  body: updateNotesSchema.body,
+  params: updateNotesSchema.params,
   tags: [tagName],
   controller: controller.update.bind(controller),
 });
@@ -60,7 +60,7 @@ createApi(notesRoutes, {
   path: "/uuid/:uuid",
   fullPath: "/notes/uuid/:uuid",
   summary: "Buscar uma nota em específico",
-  params: getOneNotesSchemaValidator,
+  params: getOneNotesSchema,
   tags: [tagName],
   controller: controller.getOne.bind(controller),
 });

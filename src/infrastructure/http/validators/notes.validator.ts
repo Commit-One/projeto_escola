@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { ValidationEmpty } from "../../../utils/error";
 
-const createNotesSchemaValidator = z.object({
+const createNotesSchema = z.object({
   classUuid: z.string({ error: new ValidationEmpty("classUuid").response }),
   studentUuid: z.string({
     error: new ValidationEmpty("studentUuid").response,
@@ -17,7 +17,7 @@ const createNotesSchemaValidator = z.object({
   note: z.number({ error: new ValidationEmpty("Nota").response }),
 });
 
-const updateNotesSchemaValidator = {
+const updateNotesSchema = {
   body: z.object({
     classUuid: z.string({ error: new ValidationEmpty("SchoolUuid").response }),
     studentUuid: z.string({
@@ -38,14 +38,14 @@ const updateNotesSchemaValidator = {
   }),
 };
 
-const deleteNotesSchemaValidator = z.object({
+const deleteNotesSchema = z.object({
   uuid: z
     .string({ error: new ValidationEmpty("Uuid").response })
     .trim()
     .min(1, new ValidationEmpty("Uuid").response),
 });
 
-const getOneNotesSchemaValidator = z.object({
+const getOneNotesSchema = z.object({
   uuid: z
     .string({ error: new ValidationEmpty("Uuid").response })
     .trim()
@@ -60,9 +60,9 @@ const createGradeReportByStudentUuid = z.object({
 });
 
 export {
-  createNotesSchemaValidator,
-  deleteNotesSchemaValidator,
-  getOneNotesSchemaValidator,
-  updateNotesSchemaValidator,
+  createNotesSchema,
+  deleteNotesSchema,
+  getOneNotesSchema,
+  updateNotesSchema,
   createGradeReportByStudentUuid,
 };

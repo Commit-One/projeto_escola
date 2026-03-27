@@ -20,6 +20,7 @@ export interface GradeReporResponseDTO {
           disciplineName: string;
           disciplineUuid: string;
           note: number;
+          isApproved: boolean;
         },
       ];
     },
@@ -40,4 +41,5 @@ export interface GradeReporDTO {
   disciplineName: string;
   disciplineUuid: string;
   note: number;
+  isApproved: boolean;
 }

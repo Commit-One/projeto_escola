@@ -1,11 +1,11 @@
 import * as z from "zod";
 import { ValidationEmpty } from "../../../utils/error";
 
-const createAcademicCycleSchemaValidator = z.object({
+const createAcademicCycleSchema = z.object({
   name: z.string().trim().min(1, new ValidationEmpty("name").response),
 });
 
-const updateAcademicCycleSchemaValidator = {
+const updateAcademicCycleSchema = {
   body: z.object({
     name: z.string().trim().min(1, new ValidationEmpty("name").response),
   }),
@@ -14,17 +14,17 @@ const updateAcademicCycleSchemaValidator = {
   }),
 };
 
-const deleteAcademicCycleSchemaValidator = z.object({
+const deleteAcademicCycleSchema = z.object({
   uuid: z.string().trim().min(1, new ValidationEmpty("uuid").response),
 });
 
-const getOneAcademicCycleSchemaValidator = z.object({
+const getOneAcademicCycleSchema = z.object({
   uuid: z.string().trim().min(1, new ValidationEmpty("uuid").response),
 });
 
 export {
-  createAcademicCycleSchemaValidator,
-  getOneAcademicCycleSchemaValidator,
-  updateAcademicCycleSchemaValidator,
-  deleteAcademicCycleSchemaValidator,
+  createAcademicCycleSchema,
+  getOneAcademicCycleSchema,
+  updateAcademicCycleSchema,
+  deleteAcademicCycleSchema,
 };

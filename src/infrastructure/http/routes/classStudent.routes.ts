@@ -1,9 +1,9 @@
 import { Router } from "express";
 import {
-  createClassSchemaValidator,
-  deleteClassSchemaValidator,
-  getOneClassSchemaValidator,
-  updateClassSchemaValidator,
+  createClassSchema,
+  deleteClassSchema,
+  getOneClassSchema,
+  updateClassSchema,
 } from "../validators/classStudent.validator";
 import { container } from "tsyringe";
 import { ClassStudentController } from "../controllers/classStudent.controller";
@@ -20,7 +20,7 @@ createApi(classStudentsRoutes, {
   fullPath: "/class",
   summary: "Criar uma turma",
   tags: [tagName],
-  body: createClassSchemaValidator,
+  body: createClassSchema,
 });
 
 createApi(classStudentsRoutes, {
@@ -30,7 +30,7 @@ createApi(classStudentsRoutes, {
   fullPath: "/class/:uuid",
   summary: "Atualizar uma turma",
   tags: [tagName],
-  body: updateClassSchemaValidator,
+  body: updateClassSchema,
 });
 
 createApi(classStudentsRoutes, {
@@ -40,7 +40,7 @@ createApi(classStudentsRoutes, {
   fullPath: "/class/uuid/:uuid",
   summary: "Buscar uma turma",
   tags: [tagName],
-  body: getOneClassSchemaValidator,
+  body: getOneClassSchema,
 });
 
 createApi(classStudentsRoutes, {
@@ -50,7 +50,7 @@ createApi(classStudentsRoutes, {
   fullPath: "/class/:uuid",
   summary: "Deletar uma turma",
   tags: [tagName],
-  body: deleteClassSchemaValidator,
+  body: deleteClassSchema,
 });
 
 createApi(classStudentsRoutes, {

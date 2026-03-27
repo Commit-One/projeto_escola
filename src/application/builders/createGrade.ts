@@ -22,6 +22,7 @@ export class CreateGradeBuilders {
             disciplineName: item.disciplineName,
             disciplineUuid: item.disciplineUuid,
             note: item.note,
+            isApproved: item.isApproved,
           });
         } else {
           studentGroup.grade.push({
@@ -32,6 +33,7 @@ export class CreateGradeBuilders {
                 disciplineUuid: item.disciplineUuid,
                 disciplineName: item.disciplineName,
                 note: item.note,
+                isApproved: item.isApproved,
               },
             ],
           });
@@ -47,6 +49,7 @@ export class CreateGradeBuilders {
                   disciplineUuid: item.disciplineUuid,
                   disciplineName: item.disciplineName,
                   note: item.note,
+                  isApproved: item.isApproved,
                 },
               ],
             },

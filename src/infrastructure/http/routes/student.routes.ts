@@ -1,10 +1,10 @@
 import { Router } from "express";
 import {
-  createStudentSchemaValidator,
-  deleteStudentSchemaValidator,
-  getOneStudentSchemaValidator,
-  updateStatusStudentSchemaValidator,
-  updateStudentSchemaValidator,
+  createStudentSchema,
+  deleteStudentSchema,
+  getOneStudentSchema,
+  updateStatusStudentSchema,
+  updateStudentSchema,
 } from "../validators/student.validator";
 import { container } from "tsyringe";
 import { StudentController } from "../controllers/student.controller";
@@ -30,7 +30,7 @@ createApi(studentsRoutes, {
   summary: "Cria um aluno",
   tags: [tagName],
   controller: controller.create.bind(controller),
-  body: createStudentSchemaValidator,
+  body: createStudentSchema,
 });
 
 createApi(studentsRoutes, {
@@ -40,7 +40,7 @@ createApi(studentsRoutes, {
   summary: "Busca um aluno com base no id",
   tags: [tagName],
   controller: controller.getOne.bind(controller),
-  body: getOneStudentSchemaValidator,
+  body: getOneStudentSchema,
 });
 
 createApi(studentsRoutes, {
@@ -50,7 +50,7 @@ createApi(studentsRoutes, {
   summary: "Deleta um aluno com base no id",
   tags: [tagName],
   controller: controller.delete.bind(controller),
-  body: deleteStudentSchemaValidator,
+  body: deleteStudentSchema,
 });
 
 createApi(studentsRoutes, {
@@ -60,8 +60,8 @@ createApi(studentsRoutes, {
   summary: "Atualiza um aluno com base no id",
   tags: [tagName],
   controller: controller.update.bind(controller),
-  body: updateStudentSchemaValidator.body,
-  params: updateStudentSchemaValidator.params,
+  body: updateStudentSchema.body,
+  params: updateStudentSchema.params,
 });
 
 createApi(studentsRoutes, {
@@ -71,5 +71,5 @@ createApi(studentsRoutes, {
   summary: "Atualiza o status do aluno com base no id",
   tags: [tagName],
   controller: controller.updateStatus.bind(controller),
-  params: updateStatusStudentSchemaValidator,
+  params: updateStatusStudentSchema,
 });

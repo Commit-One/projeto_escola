@@ -1,9 +1,9 @@
 import { Router } from "express";
 import {
-  createClassPeriodSchemaValidator,
-  deleteClassPeriodSchemaValidator,
-  getOneClassPeriodSchemaValidator,
-  updateClassPeriodSchemaValidator,
+  createClassPeriodSchema,
+  deleteClassPeriodSchema,
+  getOneClassPeriodSchema,
+  updateClassPeriodSchema,
 } from "../validators/classPeriod.validator";
 import { container } from "tsyringe";
 import { ClassPeriodController } from "../controllers/classPeriod.controller";
@@ -21,7 +21,7 @@ createApi(classPeriodRoutes, {
   fullPath: "/classPeriod",
   summary: "Criar um regra de classe e período",
   tags: [tagName],
-  body: createClassPeriodSchemaValidator,
+  body: createClassPeriodSchema,
 });
 
 createApi(classPeriodRoutes, {
@@ -31,7 +31,7 @@ createApi(classPeriodRoutes, {
   fullPath: "/classPeriod/:uuid",
   summary: "Atualizar regra de classe e período",
   tags: [tagName],
-  body: updateClassPeriodSchemaValidator,
+  body: updateClassPeriodSchema,
 });
 
 createApi(classPeriodRoutes, {
@@ -41,7 +41,7 @@ createApi(classPeriodRoutes, {
   fullPath: "/classPeriod/:uuid",
   tags: [tagName],
   summary: "Buscar uma regra de classe e período",
-  body: getOneClassPeriodSchemaValidator,
+  body: getOneClassPeriodSchema,
 });
 
 createApi(classPeriodRoutes, {
@@ -51,7 +51,7 @@ createApi(classPeriodRoutes, {
   fullPath: "/classPeriod/:uuid",
   tags: [tagName],
   summary: "Deletar uma regra de classe e período",
-  body: deleteClassPeriodSchemaValidator,
+  body: deleteClassPeriodSchema,
 });
 
 createApi(classPeriodRoutes, {

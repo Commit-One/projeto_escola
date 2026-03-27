@@ -1,8 +1,5 @@
 import { Router } from "express";
-import {
-  loginSchemaDecoded,
-  loginSchemaValidator,
-} from "../validators/login.validator";
+import { loginSchemaDecoded, loginSchema } from "../validators/login.validator";
 import { container } from "tsyringe";
 import { LoginController } from "../controllers/login.controller";
 import { createApi } from "../../../utils/helpers/createApi";
@@ -17,7 +14,7 @@ createApi(loginRoutes, {
   path: "/",
   fullPath: "/login",
   summary: "Login",
-  body: loginSchemaValidator,
+  body: loginSchema,
   tags: [tagName],
   controller: controller.signIn.bind(controller),
 });

@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { ValidationEmpty } from "../../../utils/error";
 
-const createStudentSchemaValidator = z.object({
+const createStudentSchema = z.object({
   name: z
     .string({ error: new ValidationEmpty("Name").response })
     .trim()
@@ -76,25 +76,25 @@ const createStudentSchemaValidator = z.object({
     .min(1, new ValidationEmpty("PeriodUuid").response),
 });
 
-const deleteStudentSchemaValidator = z.object({
+const deleteStudentSchema = z.object({
   uuid: z
     .string({ error: new ValidationEmpty("Uuid").response })
     .min(1, new ValidationEmpty("Uuid").response),
 });
 
-const getOneStudentSchemaValidator = z.object({
+const getOneStudentSchema = z.object({
   uuid: z
     .string({ error: new ValidationEmpty("Uuid").response })
     .min(1, new ValidationEmpty("Uuid").response),
 });
 
-const updateStatusStudentSchemaValidator = z.object({
+const updateStatusStudentSchema = z.object({
   uuid: z
     .string({ error: new ValidationEmpty("Uuid").response })
     .min(1, new ValidationEmpty("Uuid").response),
 });
 
-const updateStudentSchemaValidator = {
+const updateStudentSchema = {
   body: z.object({
     name: z
       .string({ error: new ValidationEmpty("Name").response })
@@ -173,9 +173,9 @@ const updateStudentSchemaValidator = {
 };
 
 export {
-  createStudentSchemaValidator,
-  updateStudentSchemaValidator,
-  getOneStudentSchemaValidator,
-  deleteStudentSchemaValidator,
-  updateStatusStudentSchemaValidator,
+  createStudentSchema,
+  updateStudentSchema,
+  getOneStudentSchema,
+  deleteStudentSchema,
+  updateStatusStudentSchema,
 };

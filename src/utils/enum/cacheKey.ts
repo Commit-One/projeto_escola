@@ -9,4 +9,5 @@ export enum cacheKeyEnum {
   NOTES = "Notes",
   CLASS_PERIOD = "class_period",
   ACADEMIC_CYCLE = "academic_cycle",
+  MEDIAS = "medias",
 }

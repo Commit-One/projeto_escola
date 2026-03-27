@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { ValidationEmpty } from "../../../utils/error";
 
-const createDisciplineSchemaValidator = z.object({
+const createDisciplineSchema = z.object({
   name: z
     .string({ error: new ValidationEmpty("Nome").response })
     .trim()
@@ -9,7 +9,7 @@ const createDisciplineSchemaValidator = z.object({
   schoolUuid: z.string({ error: new ValidationEmpty("SchoolUuid").response }),
 });
 
-const updateDisciplineSchemaValidator = {
+const updateDisciplineSchema = {
   body: z.object({
     name: z
       .string({ error: new ValidationEmpty("Nome").response })
@@ -21,14 +21,14 @@ const updateDisciplineSchemaValidator = {
   }),
 };
 
-const deleteDisciplineSchemaValidator = z.object({
+const deleteDisciplineSchema = z.object({
   uuid: z
     .string({ error: new ValidationEmpty("Uuid").response })
     .trim()
     .min(1, new ValidationEmpty("Uuid").response),
 });
 
-const getOneDisciplineSchemaValidator = z.object({
+const getOneDisciplineSchema = z.object({
   uuid: z
     .string({ error: new ValidationEmpty("Uuid").response })
     .trim()
@@ -36,8 +36,8 @@ const getOneDisciplineSchemaValidator = z.object({
 });
 
 export {
-  createDisciplineSchemaValidator,
-  deleteDisciplineSchemaValidator,
-  getOneDisciplineSchemaValidator,
-  updateDisciplineSchemaValidator,
+  createDisciplineSchema,
+  deleteDisciplineSchema,
+  getOneDisciplineSchema,
+  updateDisciplineSchema,
 };

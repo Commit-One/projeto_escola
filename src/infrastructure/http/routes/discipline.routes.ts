@@ -2,10 +2,10 @@ import { Router } from "express";
 import { container } from "tsyringe";
 import { DisciplineController } from "../controllers/discipline.controller";
 import {
-  createDisciplineSchemaValidator,
-  deleteDisciplineSchemaValidator,
-  getOneDisciplineSchemaValidator,
-  updateDisciplineSchemaValidator,
+  createDisciplineSchema,
+  deleteDisciplineSchema,
+  getOneDisciplineSchema,
+  updateDisciplineSchema,
 } from "../validators/discipline.validator";
 import { createApi } from "../../../utils/helpers/createApi";
 
@@ -21,7 +21,7 @@ createApi(disciplineRoutes, {
   fullPath: "/discipline",
   summary: "Cria disciplina",
   tags: [tagName],
-  body: createDisciplineSchemaValidator,
+  body: createDisciplineSchema,
 });
 
 createApi(disciplineRoutes, {
@@ -31,7 +31,7 @@ createApi(disciplineRoutes, {
   fullPath: "/discipline/:uuid",
   summary: "Deleta disciplina",
   tags: [tagName],
-  body: deleteDisciplineSchemaValidator,
+  body: deleteDisciplineSchema,
 });
 
 createApi(disciplineRoutes, {
@@ -41,8 +41,8 @@ createApi(disciplineRoutes, {
   fullPath: "/discipline/:uuid",
   summary: "Atualiza disciplina",
   tags: [tagName],
-  body: updateDisciplineSchemaValidator.body,
-  params: updateDisciplineSchemaValidator.params,
+  body: updateDisciplineSchema.body,
+  params: updateDisciplineSchema.params,
 });
 
 createApi(disciplineRoutes, {
@@ -61,5 +61,5 @@ createApi(disciplineRoutes, {
   fullPath: "/discipline/:uuid",
   summary: "Busca uma disciplina",
   tags: [tagName],
-  params: getOneDisciplineSchemaValidator,
+  params: getOneDisciplineSchema,
 });

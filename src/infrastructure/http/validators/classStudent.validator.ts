@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { ValidationEmpty } from "../../../utils/error";
 
-const createClassSchemaValidator = z.object({
+const createClassSchema = z.object({
   name: z
     .string({ error: new ValidationEmpty("Nome").response })
     .trim()
@@ -14,7 +14,7 @@ const createClassSchemaValidator = z.object({
   minAge: z.number({ error: new ValidationEmpty("Idade mínima").response }),
 });
 
-const updateClassSchemaValidator = z.object({
+const updateClassSchema = z.object({
   name: z
     .string({ error: new ValidationEmpty("Nome").response })
     .trim()
@@ -27,14 +27,14 @@ const updateClassSchemaValidator = z.object({
   minAge: z.number({ error: new ValidationEmpty("Idade mínima").response }),
 });
 
-const deleteClassSchemaValidator = z.object({
+const deleteClassSchema = z.object({
   uuid: z
     .string({ error: new ValidationEmpty("Uuid").response })
     .trim()
     .min(1, new ValidationEmpty("Uuid").response),
 });
 
-const getOneClassSchemaValidator = z.object({
+const getOneClassSchema = z.object({
   uuid: z
     .string({ error: new ValidationEmpty("Uuid").response })
     .trim()
@@ -42,8 +42,8 @@ const getOneClassSchemaValidator = z.object({
 });
 
 export {
-  createClassSchemaValidator,
-  deleteClassSchemaValidator,
-  getOneClassSchemaValidator,
-  updateClassSchemaValidator,
+  createClassSchema,
+  deleteClassSchema,
+  getOneClassSchema,
+  updateClassSchema,
 };

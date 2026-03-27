@@ -3,10 +3,10 @@ import { container } from "tsyringe";
 import { AcademicCycleController } from "../controllers/academicCycle.controller";
 import { createApi } from "../../../utils/helpers/createApi";
 import {
-  createAcademicCycleSchemaValidator,
-  deleteAcademicCycleSchemaValidator,
-  getOneAcademicCycleSchemaValidator,
-  updateAcademicCycleSchemaValidator,
+  createAcademicCycleSchema,
+  deleteAcademicCycleSchema,
+  getOneAcademicCycleSchema,
+  updateAcademicCycleSchema,
 } from "../validators/academicCycle.validator";
 
 export const academicCycleRoutes = Router();
@@ -18,7 +18,7 @@ createApi(academicCycleRoutes, {
   path: "/",
   fullPath: "/academiccycle",
   summary: "Criar ciclo acadêmico",
-  body: createAcademicCycleSchemaValidator,
+  body: createAcademicCycleSchema,
   tags: [tagName],
   controller: controller.create.bind(controller),
 });
@@ -28,7 +28,7 @@ createApi(academicCycleRoutes, {
   path: "/",
   fullPath: "/academiccycle",
   summary: "Buscar todos os ciclos acadêmicos",
-  body: createAcademicCycleSchemaValidator,
+  body: createAcademicCycleSchema,
   tags: [tagName],
   controller: controller.getAll.bind(controller),
 });
@@ -38,7 +38,7 @@ createApi(academicCycleRoutes, {
   path: "/uuid/:uuid",
   fullPath: "/academiccycle/uuid/:uuid",
   summary: "Buscar um ciclo  acadêmicos",
-  params: getOneAcademicCycleSchemaValidator,
+  params: getOneAcademicCycleSchema,
   tags: [tagName],
   controller: controller.getOne.bind(controller),
 });
@@ -48,8 +48,8 @@ createApi(academicCycleRoutes, {
   path: "/:uuid",
   fullPath: "/academiccycle/:uuid",
   summary: "Atualizar um ciclo  acadêmicos",
-  body: updateAcademicCycleSchemaValidator.body,
-  params: updateAcademicCycleSchemaValidator.params,
+  body: updateAcademicCycleSchema.body,
+  params: updateAcademicCycleSchema.params,
   tags: [tagName],
   controller: controller.update.bind(controller),
 });
@@ -59,7 +59,7 @@ createApi(academicCycleRoutes, {
   path: "/:uuid",
   fullPath: "/academiccycle/:uuid",
   summary: "Deletar um ciclo  acadêmico",
-  params: deleteAcademicCycleSchemaValidator,
+  params: deleteAcademicCycleSchema,
   tags: [tagName],
   controller: controller.delete.bind(controller),
 });

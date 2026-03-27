@@ -113,7 +113,7 @@ export class NotesTypeOrmRepository implements INotesRepository {
 
   async gradeReport(studentUuid: string): Promise<GradeReporDTO[]> {
     const query = `
-      select 
+      SELECT 
         ts.name as name,
         ts.matriculation,
         ts.cpf,
@@ -125,15 +125,19 @@ export class NotesTypeOrmRepository implements INotesRepository {
         tac.uuid  as academyCycleUuid,
         td.name as disciplineName,
         td.uuid as disciplineUuid,
-        tn.note 
-      from tb_notes tn 
-      inner join tb_student ts on tn.studentUuid = ts.uuid 
-      inner join tb_discipline td on tn.disciplineUuid = td.uuid 
-      inner join tb_class tc on tn.classUuid = tc.uuid 
-      inner join tb_periodo tp on tn.periodUuid = tp.uuid 
-      inner join tb_school ts2 on tn.schoolUuid  = ts2.uuid 
-      inner join tb_academic_cycle tac on  tn.academiccycleUuid = tac.uuid 
-      where tn.studentUuid = "${studentUuid}"
+        tn.note,
+        CASE WHEN tn.note >= tm.media THEN TRUE
+        ELSE FALSE 
+        END AS isApproved
+      FROM tb_notes tn 
+      INNER JOIN tb_student ts on tn.studentUuid = ts.uuid 
+      INNER JOIN tb_discipline td on tn.disciplineUuid = td.uuid 
+      INNER JOIN tb_class tc on tn.classUuid = tc.uuid 
+      INNER JOIN tb_periodo tp on tn.periodUuid = tp.uuid 
+      INNER JOIN tb_school ts2 on tn.schoolUuid  = ts2.uuid 
+      INNER JOIN tb_academic_cycle tac on  tn.academiccycleUuid = tac.uuid 
+      LEFT JOIN tb_media tm on tm.schoolUuid = tn.schoolUuid
+      WHERE tn.studentUuid = "${studentUuid}"
     `;
 
     const executeSQL = await this._repo.query(query);

@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { ValidationEmpty } from "../../../utils/error";
 
-const createClassPeriodSchemaValidator = z.object({
+const createClassPeriodSchema = z.object({
   classUuid: z
     .string({ error: new ValidationEmpty("classUuid").response })
     .trim()
@@ -13,7 +13,7 @@ const createClassPeriodSchemaValidator = z.object({
   value: z.number({ error: new ValidationEmpty("value").response }),
 });
 
-const updateClassPeriodSchemaValidator = z.object({
+const updateClassPeriodSchema = z.object({
   classUuid: z
     .string({ error: new ValidationEmpty("classUuid").response })
     .trim()
@@ -25,14 +25,14 @@ const updateClassPeriodSchemaValidator = z.object({
   value: z.number({ error: new ValidationEmpty("value").response }),
 });
 
-const deleteClassPeriodSchemaValidator = z.object({
+const deleteClassPeriodSchema = z.object({
   uuid: z
     .string({ error: new ValidationEmpty("Uuid").response })
     .trim()
     .min(1, new ValidationEmpty("Uuid").response),
 });
 
-const getOneClassPeriodSchemaValidator = z.object({
+const getOneClassPeriodSchema = z.object({
   uuid: z
     .string({ error: new ValidationEmpty("Uuid").response })
     .trim()
@@ -40,8 +40,8 @@ const getOneClassPeriodSchemaValidator = z.object({
 });
 
 export {
-  getOneClassPeriodSchemaValidator,
-  deleteClassPeriodSchemaValidator,
-  updateClassPeriodSchemaValidator,
-  createClassPeriodSchemaValidator,
+  getOneClassPeriodSchema,
+  deleteClassPeriodSchema,
+  updateClassPeriodSchema,
+  createClassPeriodSchema,
 };
