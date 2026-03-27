@@ -14,8 +14,8 @@ import { academicCycleRoutes } from "./academicCycle.routes";
 export const routes = Router();
 
 routes.get("/", (_req, res) => res.send("OK"));
-routes.use("/escola", schoolRoutes);
-routes.use("/user", usersRoutes);
+routes.use("/school", schoolRoutes);
+routes.use("/users", usersRoutes);
 routes.use("/profile", profileRoutes);
 routes.use("/login", loginRoutes);
 routes.use("/periodo", periodRoutes);

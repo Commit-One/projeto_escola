@@ -1,36 +1,65 @@
 import { Router } from "express";
 import { container } from "tsyringe";
 import { DisciplineController } from "../controllers/discipline.controller";
-import { validateMiddlewareSchema } from "../middleware/validateSchema.middleware";
 import {
   createDisciplineSchemaValidator,
   deleteDisciplineSchemaValidator,
   getOneDisciplineSchemaValidator,
   updateDisciplineSchemaValidator,
 } from "../validators/discipline.validator";
+import { createApi } from "../../../utils/helpers/createApi";
 
 export const disciplineRoutes = Router();
 
 const controller = container.resolve(DisciplineController);
+const tagName = "Disciplinas";
 
-disciplineRoutes.post(
-  "/",
-  validateMiddlewareSchema(createDisciplineSchemaValidator),
-  (req, res) => controller.create(req, res),
-);
-disciplineRoutes.delete(
-  "/:uuid",
-  validateMiddlewareSchema(deleteDisciplineSchemaValidator),
-  (req, res) => controller.delete(req, res),
-);
-disciplineRoutes.put(
-  "/:uuid",
-  validateMiddlewareSchema(updateDisciplineSchemaValidator),
-  (req, res) => controller.update(req, res),
-);
-disciplineRoutes.get("/", (req, res) => controller.getAll(req, res));
-disciplineRoutes.get(
-  "/uuid/:uuid",
-  validateMiddlewareSchema(getOneDisciplineSchemaValidator),
-  (req, res) => controller.getOne(req, res),
-);
+createApi(disciplineRoutes, {
+  controller: controller.create.bind(controller),
+  method: "post",
+  path: "/",
+  fullPath: "/discipline",
+  summary: "Cria disciplina",
+  tags: [tagName],
+  body: createDisciplineSchemaValidator,
+});
+
+createApi(disciplineRoutes, {
+  controller: controller.delete.bind(controller),
+  method: "delete",
+  path: "/:uuid",
+  fullPath: "/discipline/:uuid",
+  summary: "Deleta disciplina",
+  tags: [tagName],
+  body: deleteDisciplineSchemaValidator,
+});
+
+createApi(disciplineRoutes, {
+  controller: controller.update.bind(controller),
+  method: "put",
+  path: "/:uuid",
+  fullPath: "/discipline/:uuid",
+  summary: "Atualiza disciplina",
+  tags: [tagName],
+  body: updateDisciplineSchemaValidator.body,
+  params: updateDisciplineSchemaValidator.params,
+});
+
+createApi(disciplineRoutes, {
+  controller: controller.getAll.bind(controller),
+  method: "put",
+  path: "/",
+  fullPath: "/discipline",
+  summary: "Busca todas disciplinas",
+  tags: [tagName],
+});
+
+createApi(disciplineRoutes, {
+  controller: controller.getAll.bind(controller),
+  method: "get",
+  path: "/:uuid",
+  fullPath: "/discipline/:uuid",
+  summary: "Busca uma disciplina",
+  tags: [tagName],
+  params: getOneDisciplineSchemaValidator,
+});

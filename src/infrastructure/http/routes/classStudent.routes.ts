@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { validateMiddlewareSchema } from "../middleware/validateSchema.middleware";
 import {
   createClassSchemaValidator,
   deleteClassSchemaValidator,
@@ -8,33 +7,57 @@ import {
 } from "../validators/classStudent.validator";
 import { container } from "tsyringe";
 import { ClassStudentController } from "../controllers/classStudent.controller";
+import { createApi } from "../../../utils/helpers/createApi";
 
 export const classStudentsRoutes = Router();
-
 const controller = container.resolve(ClassStudentController);
+const tagName = "Classe / Turma";
 
-classStudentsRoutes.post(
-  "/",
-  validateMiddlewareSchema(createClassSchemaValidator),
-  (req, res) => controller.create(req, res),
-);
+createApi(classStudentsRoutes, {
+  controller: controller.create.bind(controller),
+  method: "post",
+  path: "/",
+  fullPath: "/class",
+  summary: "Criar uma turma",
+  tags: [tagName],
+  body: createClassSchemaValidator,
+});
 
-classStudentsRoutes.put(
-  "/:uuid",
-  validateMiddlewareSchema(updateClassSchemaValidator),
-  (req, res) => controller.update(req, res),
-);
+createApi(classStudentsRoutes, {
+  controller: controller.update.bind(controller),
+  method: "put",
+  path: "/:uuid",
+  fullPath: "/class/:uuid",
+  summary: "Atualizar uma turma",
+  tags: [tagName],
+  body: updateClassSchemaValidator,
+});
 
-classStudentsRoutes.get(
-  "/uuid/:uuid",
-  validateMiddlewareSchema(getOneClassSchemaValidator),
-  (req, res) => controller.geByUuid(req, res),
-);
+createApi(classStudentsRoutes, {
+  controller: controller.getByUuid.bind(controller),
+  method: "get",
+  path: "/uuid/:uuid",
+  fullPath: "/class/uuid/:uuid",
+  summary: "Buscar uma turma",
+  tags: [tagName],
+  body: getOneClassSchemaValidator,
+});
 
-classStudentsRoutes.delete(
-  "/:uuid",
-  validateMiddlewareSchema(deleteClassSchemaValidator),
-  (req, res) => controller.delete(req, res),
-);
+createApi(classStudentsRoutes, {
+  controller: controller.delete.bind(controller),
+  method: "delete",
+  path: "/:uuid",
+  fullPath: "/class/:uuid",
+  summary: "Deletar uma turma",
+  tags: [tagName],
+  body: deleteClassSchemaValidator,
+});
 
-classStudentsRoutes.get("/", (req, res) => controller.getAll(req, res));
+createApi(classStudentsRoutes, {
+  controller: controller.getAll.bind(controller),
+  method: "get",
+  path: "/",
+  fullPath: "/class",
+  summary: "Buscar turmas",
+  tags: [tagName],
+});

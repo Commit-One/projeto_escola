@@ -41,7 +41,7 @@ export class ClassStudentController {
     }
   }
 
-  async geByUuid(req: Request, res: Response) {
+  async getByUuid(req: Request, res: Response) {
     try {
       const { uuid } = req.params;
       const getOne = await this._getOne.execute(uuid as string);

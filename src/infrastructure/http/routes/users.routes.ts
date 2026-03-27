@@ -1,26 +1,43 @@
 import { Router } from "express";
-import { validateMiddlewareSchema } from "../middleware/validateSchema.middleware";
 import {
   updatePasswordUserSchema,
   updateStatusUserSchema,
 } from "../validators/user.validator";
 import { container } from "tsyringe";
 import { UserController } from "../controllers/user.controller";
+import { createApi } from "../../../utils/helpers/createApi";
 
 export const usersRoutes = Router();
 
 const controller = container.resolve(UserController);
+const tagName = "Users";
 
-usersRoutes.get("/", (req, res) => controller.getAll(req, res));
+createApi(usersRoutes, {
+  method: "get",
+  path: "/",
+  fullPath: "/users",
+  summary: "Buscar todos os usuários",
+  tags: [tagName],
+  controller: controller.getAll.bind(controller),
+});
 
-usersRoutes.put(
-  "/password",
-  validateMiddlewareSchema(updatePasswordUserSchema),
-  (req, res) => controller.updatePassword(req, res),
-);
+createApi(usersRoutes, {
+  method: "put",
+  path: "/password",
+  fullPath: "/users/password",
+  summary: "Atualizar senha do usuário",
+  tags: [tagName],
+  body: updatePasswordUserSchema,
+  controller: controller.updatePassword.bind(controller),
+});
 
-usersRoutes.put(
-  "/status/:uuid",
-  validateMiddlewareSchema(updateStatusUserSchema),
-  (req, res) => controller.updateStatus(req, res),
-);
+createApi(usersRoutes, {
+  method: "put",
+  path: "/status/:uuid",
+  fullPath: "/users/status/:uuid",
+  summary: "Atualizar status do usuário",
+  tags: [tagName],
+  body: updateStatusUserSchema.body,
+  params: updateStatusUserSchema.params,
+  controller: controller.updateStatus.bind(controller),
+});

@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { validateMiddlewareSchema } from "../middleware/validateSchema.middleware";
 import {
   createClassPeriodSchemaValidator,
   deleteClassPeriodSchemaValidator,
@@ -8,33 +7,58 @@ import {
 } from "../validators/classPeriod.validator";
 import { container } from "tsyringe";
 import { ClassPeriodController } from "../controllers/classPeriod.controller";
+import { createApi } from "../../../utils/helpers/createApi";
 
 export const classPeriodRoutes = Router();
 
 const controller = container.resolve(ClassPeriodController);
+const tagName = "Períodos e turnos";
 
-classPeriodRoutes.post(
-  "/",
-  validateMiddlewareSchema(createClassPeriodSchemaValidator),
-  (req, res) => controller.create(req, res),
-);
+createApi(classPeriodRoutes, {
+  controller: controller.create.bind(controller),
+  method: "post",
+  path: "/",
+  fullPath: "/classPeriod",
+  summary: "Criar um regra de classe e período",
+  tags: [tagName],
+  body: createClassPeriodSchemaValidator,
+});
 
-classPeriodRoutes.put(
-  "/:uuid",
-  validateMiddlewareSchema(updateClassPeriodSchemaValidator),
-  (req, res) => controller.update(req, res),
-);
+createApi(classPeriodRoutes, {
+  controller: controller.update.bind(controller),
+  method: "put",
+  path: "/:uuid",
+  fullPath: "/classPeriod/:uuid",
+  summary: "Atualizar regra de classe e período",
+  tags: [tagName],
+  body: updateClassPeriodSchemaValidator,
+});
 
-classPeriodRoutes.get(
-  "/uuid/:uuid",
-  validateMiddlewareSchema(getOneClassPeriodSchemaValidator),
-  (req, res) => controller.getOne(req, res),
-);
+createApi(classPeriodRoutes, {
+  controller: controller.getOne.bind(controller),
+  method: "get",
+  path: "/:uuid",
+  fullPath: "/classPeriod/:uuid",
+  tags: [tagName],
+  summary: "Buscar uma regra de classe e período",
+  body: getOneClassPeriodSchemaValidator,
+});
 
-classPeriodRoutes.delete(
-  "/:uuid",
-  validateMiddlewareSchema(deleteClassPeriodSchemaValidator),
-  (req, res) => controller.delete(req, res),
-);
+createApi(classPeriodRoutes, {
+  controller: controller.delete.bind(controller),
+  method: "delete",
+  path: "/:uuid",
+  fullPath: "/classPeriod/:uuid",
+  tags: [tagName],
+  summary: "Deletar uma regra de classe e período",
+  body: deleteClassPeriodSchemaValidator,
+});
 
-classPeriodRoutes.get("/", (req, res) => controller.getAll(req, res));
+createApi(classPeriodRoutes, {
+  controller: controller.getAll.bind(controller),
+  method: "get",
+  tags: [tagName],
+  path: "/",
+  fullPath: "/classPeriod",
+  summary: "Buscar todas as regras de classe e período",
+});

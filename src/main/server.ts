@@ -5,6 +5,8 @@ import { connectRedis } from "../infrastructure/redis/redis.connection";
 import { setupRabbitMQ } from "../infrastructure/messaging/rabbit/setup";
 import { requestLoggerMiddleware } from "../infrastructure/http/middleware/requestLogger.middleware";
 import { errorMiddleware } from "../infrastructure/http/middleware/errorLogger.middleware";
+import { generateOpenAPIDocument } from "./swagger";
+import swaggerUi from "swagger-ui-express";
 
 export class ServerInitializer {
   private readonly app: express.Application;
@@ -27,6 +29,9 @@ export class ServerInitializer {
 
     this.app.use(express.json());
     this.app.use(routes);
+
+    const openApiDocument = generateOpenAPIDocument();
+    this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
     this.app.use(errorMiddleware);
 
