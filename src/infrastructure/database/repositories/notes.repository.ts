@@ -2,11 +2,8 @@ import { Repository } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { injectable } from "tsyringe";
 import { AppError, NotFoundError } from "../../../utils/error";
-
 import { NotesDTO } from "../../../application/dtos/notes.dto";
-
 import { NotesEntity } from "../entities/NotesEntity";
-
 import { ClassStudentEntity } from "../entities/ClassStudentEntity";
 import { StudentEntity } from "../entities/StudentEntity";
 import { DisciplineEntity } from "../entities/DisciplineEntity";
@@ -16,7 +13,8 @@ import { NotesMapper } from "../mappers/notes.mapper";
 import { SchoolEntity } from "../entities/SchoolEntity";
 import { PeriodEntity } from "../entities/PeriodEntity";
 import { AcademicCycleEntity } from "../entities/AcademicCycleEntity";
-import { GradeReporDTO } from "../../../application/dtos/gradeReport.dto";
+import { GradeReporResponseDTO } from "../../../application/dtos/gradeReport.dto";
+import { gradeReportQuery } from "../_queries/gradeReport.query";
 
 @injectable()
 export class NotesTypeOrmRepository implements INotesRepository {
@@ -111,36 +109,8 @@ export class NotesTypeOrmRepository implements INotesRepository {
     return NotesMapper.toDomain(entity);
   }
 
-  async gradeReport(studentUuid: string): Promise<GradeReporDTO[]> {
-    const query = `
-      SELECT 
-        ts.name as name,
-        ts.matriculation,
-        ts.cpf,
-        tc.name as className,
-        tp.name as periodName,
-        ts2.name as schoolName,
-        ts2.uuid as schoolUuid,
-        tac.name  as academyCycle,
-        tac.uuid  as academyCycleUuid,
-        td.name as disciplineName,
-        td.uuid as disciplineUuid,
-        tn.note,
-        CASE WHEN tn.note >= tm.media THEN TRUE
-        ELSE FALSE 
-        END AS isApproved
-      FROM tb_notes tn 
-      INNER JOIN tb_student ts on tn.studentUuid = ts.uuid 
-      INNER JOIN tb_discipline td on tn.disciplineUuid = td.uuid 
-      INNER JOIN tb_class tc on tn.classUuid = tc.uuid 
-      INNER JOIN tb_periodo tp on tn.periodUuid = tp.uuid 
-      INNER JOIN tb_school ts2 on tn.schoolUuid  = ts2.uuid 
-      INNER JOIN tb_academic_cycle tac on  tn.academiccycleUuid = tac.uuid 
-      LEFT JOIN tb_media tm on tm.schoolUuid = tn.schoolUuid
-      WHERE tn.studentUuid = "${studentUuid}"
-    `;
-
-    const executeSQL = await this._repo.query(query);
-    return executeSQL;
+  async gradeReport(studentUuid: string): Promise<GradeReporResponseDTO> {
+    const executeSQL = await this._repo.query(gradeReportQuery, [studentUuid]);
+    return NotesMapper.toGradeResponse(executeSQL);
   }
 }

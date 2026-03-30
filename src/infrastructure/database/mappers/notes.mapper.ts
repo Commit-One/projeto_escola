@@ -38,7 +38,7 @@ export class NotesMapper {
     return entity;
   }
 
-  static toGradeRepport(data: GradeReporDTO[]): GradeReporResponseDTO {
+  static toGradeResponse(data: GradeReporDTO[]): GradeReporResponseDTO {
     const response: GradeReporResponseDTO[] = [];
 
     for (const item of data) {
