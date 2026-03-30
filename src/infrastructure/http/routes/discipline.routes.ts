@@ -47,7 +47,7 @@ createApi(disciplineRoutes, {
 
 createApi(disciplineRoutes, {
   controller: controller.getAll.bind(controller),
-  method: "put",
+  method: "get",
   path: "/",
   fullPath: "/discipline",
   summary: "Busca todas disciplinas",

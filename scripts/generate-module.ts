@@ -171,6 +171,8 @@ export class GetOne${name.pascal}UseCase {
     content: `import { inject, injectable } from "tsyringe";
 import { ${name.pascal} } from "../../../domain/entities/${name.pascal}";
 import { I${name.pascal}Repository } from "../../../domain/repositories/I${name.pascal}Repository";
+import { IRedisService } from "../../../domain/contracts/IRedisService";
+import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { ContainerEnum } from "../../../utils/enum/container";
 
 @injectable()
@@ -178,10 +180,20 @@ export class GetAll${name.pascal}UseCase {
   constructor(
     @inject(ContainerEnum.${name.upper}_REPOSITORY)
     private readonly _repo: I${name.pascal}Repository,
+
+    @inject(ContainerEnum.REDIS_SERVICE)
+    private readonly _cache: IRedisService,
   ) {}
 
   async execute(): Promise<${name.pascal}[]> {
-    return await this._repo.getAll();
+    const cached = await this._cache.get<${name.pascal}[]>(cacheKeyEnum.${cacheEnumKey});
+
+    if (cached) return cached;
+
+    const list = await this._repo.getAll();
+    await this._cache.set(cacheKeyEnum.${cacheEnumKey}, list);
+
+    return list;
   }
 }
 `,
@@ -513,16 +525,57 @@ export class ${name.pascal}Controller {
     content: `import { Router } from "express";
 import { container } from "tsyringe";
 import { ${name.pascal}Controller } from "../controllers/${name.raw}.controller";
+import { createApi } from "../docs/createApi";
 
 export const ${name.raw}Routes = Router();
 
 const controller = container.resolve(${name.pascal}Controller);
+const tagName = "${name.pascal}";
 
-${name.raw}Routes.post("/", (req, res) => controller.create(req, res));
-${name.raw}Routes.get("/", (req, res) => controller.getAll(req, res));
-${name.raw}Routes.get("/:uuid", (req, res) => controller.getOne(req, res));
-${name.raw}Routes.put("/:uuid", (req, res) => controller.update(req, res));
-${name.raw}Routes.delete("/:uuid", (req, res) => controller.delete(req, res));
+createApi(${name.raw}Routes, {
+  controller: controller.create.bind(controller),
+  method: "post",
+  path: "/",
+  fullPath: "/${name.raw}",
+  summary: "Cria ${name.raw}",
+  tags: [tagName],
+});
+
+createApi(${name.raw}Routes, {
+  controller: controller.getAll.bind(controller),
+  method: "get",
+  path: "/",
+  fullPath: "/${name.raw}",
+  summary: "Busca todos os ${name.raw}",
+  tags: [tagName],
+});
+
+createApi(${name.raw}Routes, {
+  controller: controller.getOne.bind(controller),
+  method: "get",
+  path: "/:uuid",
+  fullPath: "/${name.raw}/:uuid",
+  summary: "Busca ${name.raw} por uuid",
+  tags: [tagName],
+});
+
+createApi(${name.raw}Routes, {
+  controller: controller.update.bind(controller),
+  method: "put",
+  path: "/:uuid",
+  fullPath: "/${name.raw}/:uuid",
+  summary: "Atualiza ${name.raw}",
+  tags: [tagName],
+});
+
+createApi(${name.raw}Routes, {
+  controller: controller.delete.bind(controller),
+  method: "delete",
+  path: "/:uuid",
+  fullPath: "/${name.raw}/:uuid",
+  summary: "Remove ${name.raw}",
+  tags: [tagName],
+});
 `,
   },
 ];

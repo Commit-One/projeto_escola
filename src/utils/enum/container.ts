@@ -16,4 +16,5 @@ export enum ContainerEnum {
   NOTES_REPOSITORY = "NotesTypeOrmRepository",
   ACADEMIC_CYCLE_REPOSITORY = "AcademicCycleTypeOrmRepository",
   MEDIA_REPOSITORY = "MediaTypeOrmRepository",
+  EMPLOYEE_REPOSITORY = "EmployeeTypeOrmRepository",
 }

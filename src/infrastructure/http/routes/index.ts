@@ -11,6 +11,7 @@ import { disciplineRoutes } from "./discipline.routes";
 import { notesRoutes } from "./notes.routes";
 import { academicCycleRoutes } from "./academicCycle.routes";
 import { mediaRoutes } from "./media.routes";
+import { employeeRoutes } from "./employee.routes";
 
 export const routes = Router();
 
@@ -27,3 +28,4 @@ routes.use("/discipline", disciplineRoutes);
 routes.use("/notes", notesRoutes);
 routes.use("/academiccycle", academicCycleRoutes);
 routes.use("/media", mediaRoutes);
+routes.use("/employee", employeeRoutes);

@@ -23,7 +23,7 @@ export class CreateSchoolUseCase {
   ) {}
 
   async execute(dto: SchoolDTO): Promise<School> {
-    const school = await this._repo.createSchoolUserTransaction(dto);
+    const school = await this._repo.create(dto);
 
     await this._cache.delete(cacheKeyEnum.SCHOOLS);
     await this._queue.sendToQueue(QueueEnum.NOTIFICATION_NAME, school);

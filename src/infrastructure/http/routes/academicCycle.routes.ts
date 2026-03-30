@@ -28,7 +28,6 @@ createApi(academicCycleRoutes, {
   path: "/",
   fullPath: "/academiccycle",
   summary: "Buscar todos os ciclos acadêmicos",
-  body: createAcademicCycleSchema,
   tags: [tagName],
   controller: controller.getAll.bind(controller),
 });

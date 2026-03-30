@@ -16,7 +16,7 @@ export class CreateProfileUseCase {
   ) {}
 
   async execute(): Promise<boolean> {
-    const listProfile = ["admin", "teacher", "student"];
+    const listProfile = ["admin", "teacher", "student", "employee"];
 
     for (const profile of listProfile) {
       const isExist = await this._profileRepository.existByName(profile);

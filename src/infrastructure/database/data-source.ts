@@ -13,6 +13,7 @@ import { DisciplineEntity } from "./entities/DisciplineEntity";
 import { NotesEntity } from "./entities/NotesEntity";
 import { AcademicCycleEntity } from "./entities/AcademicCycleEntity";
 import { MediaEntity } from "./entities/MediaEntity";
+import { EmployeeEntity } from "./entities/EmployeeEntity";
 
 const env = new EnvironmentConfig();
 export const AppDataSource = new DataSource({
@@ -37,6 +38,7 @@ export const AppDataSource = new DataSource({
     NotesEntity,
     AcademicCycleEntity,
     MediaEntity,
+    EmployeeEntity,
   ],
   migrations: [],
 });

@@ -18,6 +18,7 @@ import { DisciplineTypeOrmRepository } from "../infrastructure/database/reposito
 import { NotesTypeOrmRepository } from "../infrastructure/database/repositories/notes.repository";
 import { AcademicCycleTypeOrmRepository } from "../infrastructure/database/repositories/academicCycle.repository";
 import { MediaTypeOrmRepository } from "../infrastructure/database/repositories/media.repository";
+import { EmployeeTypeOrmRepository } from "../infrastructure/database/repositories/employee.repository";
 
 export const environment = new EnvironmentConfig();
 
@@ -41,6 +42,10 @@ container.registerSingleton(
 container.registerSingleton(
   ContainerEnum.NOTES_REPOSITORY,
   NotesTypeOrmRepository,
+);
+container.registerSingleton(
+  ContainerEnum.EMPLOYEE_REPOSITORY,
+  EmployeeTypeOrmRepository,
 );
 container.registerSingleton(
   ContainerEnum.MEDIA_REPOSITORY,

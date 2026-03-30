@@ -64,7 +64,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
     }
   }
 
-  async createSchoolUserTransaction(data: SchoolDTO): Promise<School> {
+  async create(data: SchoolDTO): Promise<School> {
     const queryRunner = AppDataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -93,20 +93,20 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
         environment.PASSWORD_DEFAULT,
       );
 
-      const domain = SchoolMapper.toDomain(data);
+      const mapper = SchoolMapper.toEntity(data);
+      const entity = await schoolRepository.save(mapper);
+
       const user = new User(
-        domain.email,
+        data.email,
         hashedPassword,
-        domain.uuid,
+        entity.uuid,
         profileAdmin.uuid,
-        domain.nameDirector,
+        data.nameDirector,
       );
 
-      await schoolRepository.save(domain);
       await userRepository.save(user);
       await queryRunner.commitTransaction();
-
-      return domain;
+      return SchoolMapper.toDomain(entity);
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;

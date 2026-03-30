@@ -1,4 +1,7 @@
+import { SchoolDTO } from "../../../application/dtos/school.dto";
 import { School } from "../../../domain/entities/School";
+import { StatusEnum } from "../../../utils/enum/status";
+import { replace } from "../../../utils/helpers/replace";
 import { SchoolEntity } from "../entities/SchoolEntity";
 
 export class SchoolMapper {
@@ -17,5 +20,21 @@ export class SchoolMapper {
         enable: entity.enable,
       },
     );
+  }
+
+  static toEntity(data: School | SchoolDTO): SchoolEntity {
+    const entity = new SchoolEntity();
+
+    entity.name = data.name;
+    entity.address = data.address;
+    entity.phone = data.phone;
+    entity.email = data.email;
+    entity.nameDirector = data.nameDirector;
+    entity.cnpj = replace(data.cnpj);
+    entity.status = StatusEnum.ACTIVE;
+
+    console.log(entity);
+
+    return entity;
   }
 }
