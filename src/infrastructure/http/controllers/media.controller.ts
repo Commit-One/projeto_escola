@@ -17,9 +17,11 @@ export class MediaController {
     private readonly _getOne: GetOneMediaUseCase,
   ) {}
 
-  async create(req: Request, res: Response) {
+  async create(req: any, res: Response) {
     try {
-      const created = await this._create.execute(req.body);
+      const { media } = req.body;
+      const schoolUuid = req.user.escola.uuid;
+      const created = await this._create.execute({ media, schoolUuid });
       return Handler.created(res, created);
     } catch (err: unknown) {
       return Handler.error(res, err);
@@ -36,10 +38,15 @@ export class MediaController {
     }
   }
 
-  async update(req: Request, res: Response) {
+  async update(req: any, res: Response) {
     try {
       const { uuid } = req.params;
-      const updated = await this._update.execute(uuid as string, req.body);
+      const { media } = req.body;
+      const schoolUuid = req.user.escola.uuid;
+      const updated = await this._update.execute(uuid as string, {
+        media,
+        schoolUuid,
+      });
       return Handler.ok(res, updated);
     } catch (err: unknown) {
       return Handler.error(res, err);

@@ -9,7 +9,6 @@ const createNotesSchema = z.object({
   disciplineUuid: z.string({
     error: new ValidationEmpty("disciplineUuid").response,
   }),
-  schoolUuid: z.string({ error: new ValidationEmpty("SchoolUuid").response }),
   periodUuid: z.string({ error: new ValidationEmpty("periodUuid").response }),
   academiccycleUuid: z.string({
     error: new ValidationEmpty("academiccycleUuid").response,
@@ -27,7 +26,6 @@ const updateNotesSchema = {
       error: new ValidationEmpty("SchoolUuid").response,
     }),
     periodUuid: z.string({ error: new ValidationEmpty("periodUuid").response }),
-    schoolUuid: z.string({ error: new ValidationEmpty("SchoolUuid").response }),
     academiccycleUuid: z.string({
       error: new ValidationEmpty("academiccycleUuid").response,
     }),

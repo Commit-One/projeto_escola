@@ -8,6 +8,9 @@ import {
   updateDisciplineSchema,
 } from "../validators/discipline.validator";
 import { createApi } from "../../../utils/helpers/createApi";
+import { authenticateMiddleware } from "../middleware/auth.middleware";
+import { authorizationMiddleware } from "../middleware/profile.middleware";
+import { ProfileEnum } from "../../../utils/enum/profile";
 
 export const disciplineRoutes = Router();
 
@@ -22,6 +25,10 @@ createApi(disciplineRoutes, {
   summary: "Cria disciplina",
   tags: [tagName],
   body: createDisciplineSchema,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(disciplineRoutes, {
@@ -32,6 +39,10 @@ createApi(disciplineRoutes, {
   summary: "Deleta disciplina",
   tags: [tagName],
   body: deleteDisciplineSchema,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(disciplineRoutes, {
@@ -43,6 +54,10 @@ createApi(disciplineRoutes, {
   tags: [tagName],
   body: updateDisciplineSchema.body,
   params: updateDisciplineSchema.params,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(disciplineRoutes, {
@@ -52,6 +67,7 @@ createApi(disciplineRoutes, {
   fullPath: "/discipline",
   summary: "Busca todas disciplinas",
   tags: [tagName],
+  middlewares: [authenticateMiddleware],
 });
 
 createApi(disciplineRoutes, {
@@ -62,4 +78,5 @@ createApi(disciplineRoutes, {
   summary: "Busca uma disciplina",
   tags: [tagName],
   params: getOneDisciplineSchema,
+  middlewares: [authenticateMiddleware],
 });

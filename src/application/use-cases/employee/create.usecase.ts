@@ -13,7 +13,6 @@ export class CreateEmployeeUseCase {
   ) {}
 
   async execute(data: EmployeeDTO): Promise<Employee> {
-    console.log(data);
     const created = await this._repo.create(data);
 
     logger.info({

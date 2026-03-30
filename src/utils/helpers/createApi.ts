@@ -4,6 +4,12 @@ import { registry } from "../../main/swagger";
 
 type HttpMethod = "get" | "post" | "put" | "patch" | "delete";
 
+type Middleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => unknown | Promise<unknown>;
+
 type SwaggerRouteConfig = {
   method: HttpMethod;
   path: string;
@@ -15,6 +21,7 @@ type SwaggerRouteConfig = {
   query?: z.ZodObject<z.ZodRawShape>;
   body?: ZodTypeAny;
   response?: ZodTypeAny;
+  middlewares?: Middleware[];
   controller: (
     req: Request,
     res: Response,
@@ -34,11 +41,13 @@ export function createApi(router: Router, config: SwaggerRouteConfig) {
     query,
     body,
     response,
+    middlewares = [],
     controller,
   } = config;
 
   router[method](
     path,
+    ...middlewares,
     async (
       req: Request & { body: unknown },
       res: Response,
@@ -138,6 +147,12 @@ export function createApi(router: Router, config: SwaggerRouteConfig) {
           },
       400: {
         description: "Requisição inválida",
+      },
+      401: {
+        description: "Não autenticado",
+      },
+      403: {
+        description: "Sem permissão",
       },
     },
   });

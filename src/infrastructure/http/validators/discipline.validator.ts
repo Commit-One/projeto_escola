@@ -6,7 +6,6 @@ const createDisciplineSchema = z.object({
     .string({ error: new ValidationEmpty("Nome").response })
     .trim()
     .min(1, new ValidationEmpty("Nome").response),
-  schoolUuid: z.string({ error: new ValidationEmpty("SchoolUuid").response }),
 });
 
 const updateDisciplineSchema = {

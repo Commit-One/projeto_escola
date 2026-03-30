@@ -17,7 +17,7 @@ export class AcademicCycleController {
     private readonly _getOne: GetOneAcademicCycleUseCase,
   ) {}
 
-  async create(req: Request, res: Response) {
+  async create(req: any, res: Response) {
     try {
       const created = await this._create.execute(req.body);
       return Handler.created(res, created);

@@ -65,11 +65,6 @@ const createStudentSchema = z.object({
     }),
   }),
 
-  schoolUuid: z
-    .string({ error: new ValidationEmpty("SchoolUuid").response })
-    .trim()
-    .min(1, new ValidationEmpty("SchoolUuid").response),
-
   periodUuid: z
     .string({ error: new ValidationEmpty("PeriodUuid").response })
     .trim()
@@ -153,11 +148,6 @@ const updateStudentSchema = {
         message: new ValidationEmpty("Dia do pagamento").response,
       }),
     }),
-
-    schoolUuid: z
-      .string({ error: new ValidationEmpty("SchoolUuid").response })
-      .trim()
-      .min(1, new ValidationEmpty("SchoolUuid").response),
 
     periodUuid: z
       .string({ error: new ValidationEmpty("PeriodUuid").response })

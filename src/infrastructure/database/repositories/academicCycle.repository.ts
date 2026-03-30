@@ -3,7 +3,7 @@ import { Repository } from "typeorm";
 import { AcademicCycleDTO } from "../../../application/dtos/academicCycle.dto";
 import { AcademicCycle } from "../../../domain/entities/AcademicCycle";
 import { IAcademicCycleRepository } from "../../../domain/repositories/IAcademicCycleRepository";
-import { NotFoundError } from "../../../utils/error";
+import { AppError, NotFoundError } from "../../../utils/error";
 import { AppDataSource } from "../data-source";
 import { AcademicCycleEntity } from "../entities/AcademicCycleEntity";
 import { AcademicCycleMapper } from "../mappers/academicCycle.mapper";
@@ -37,6 +37,13 @@ export class AcademicCycleTypeOrmRepository implements IAcademicCycleRepository 
   }
 
   async create(data: AcademicCycleDTO): Promise<AcademicCycle> {
+    const exists = await this._repo.exists({
+      where: { name: data.name },
+    });
+
+    if (exists)
+      throw new AppError("Já existe um ciclo acadêmico com esse nome");
+
     const entity = AcademicCycleMapper.toEntity(data);
     await this._repo.save(entity);
     return AcademicCycleMapper.toDomain(entity);

@@ -17,15 +17,18 @@ export class ClassStudentController {
     private readonly _delete: DeleteClassStudentUseCase,
   ) {}
 
-  async create(req: Request, res: Response) {
+  async create(req: any, res: Response) {
     try {
-      const { name, maxAge, minAge, schoolUuid } = req.body;
+      const { name, maxAge, minAge } = req.body;
+      const schoolUuid = req.user.escola.uuid;
+
       const created = await this._create.execute({
         name,
         maxAge,
         minAge,
         schoolUuid,
       });
+
       return Handler.created(res, created);
     } catch (err: unknown) {
       return Handler.error(res, err);
@@ -61,10 +64,11 @@ export class ClassStudentController {
     }
   }
 
-  async update(req: Request, res: Response) {
+  async update(req: any, res: Response) {
     try {
-      const { name, maxAge, minAge, schoolUuid } = req.body;
+      const { name, maxAge, minAge } = req.body;
       const { uuid } = req.params;
+      const schoolUuid = req.user.escola.uuid;
       const updated = await this._update.execute(uuid as string, {
         name,
         maxAge,

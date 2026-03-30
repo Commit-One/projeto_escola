@@ -7,14 +7,6 @@ const createEmployeeSchema = z.object({
     .email({ error: "E-mail inválido" })
     .trim()
     .min(1, new ValidationEmpty("email").response),
-  profileUuid: z
-    .string()
-    .trim()
-    .min(1, new ValidationEmpty("profile").response),
-  schoolUuid: z
-    .string()
-    .trim()
-    .min(1, new ValidationEmpty("schoolUuid").response),
 });
 
 const updateEmployeeSchema = {
@@ -27,14 +19,6 @@ const updateEmployeeSchema = {
       .email({ error: "E-mail inválido" })
       .trim()
       .min(1, new ValidationEmpty("email").response),
-    profileUuid: z
-      .string()
-      .trim()
-      .min(1, new ValidationEmpty("profile").response),
-    schoolUuid: z
-      .string()
-      .trim()
-      .min(1, new ValidationEmpty("schoolUuid").response),
   }),
 };
 

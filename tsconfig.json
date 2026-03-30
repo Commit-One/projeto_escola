@@ -9,12 +9,17 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2020",
+    "typeRoots": [
+      "./src/@types",
+      "./node_modules/@types"
+    ],
     "types": [
       "jest",
       "node"
     ]
   },
   "include": [
-    "src"
+    "src/**/*.ts",
+    "src/**/*.d.ts"
   ]
 }

@@ -1,28 +1,29 @@
-import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import { AppError, NotFoundError } from "../../../utils/error";
+import { AuthenticationSecurity } from "../../security/auth";
+import { StatusHTTP } from "../../../utils/enum/statusHTTP";
 
-export function authMiddleware(
+export async function authenticateMiddleware(
   req: Request,
   res: Response,
   next: NextFunction,
 ) {
-  const authHeader = req.headers.authorization;
+  const token = req.headers.authorization;
 
-  if (!authHeader) {
+  if (!token) {
     return res
-      .status(401)
+      .status(StatusHTTP.UNAUTHORIZED)
       .json({ message: new NotFoundError("Token").response });
   }
 
-  const [, token] = authHeader.split(" ");
-
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    const decoded = await new AuthenticationSecurity().decoded(token);
     (req as any).user = decoded;
 
     next();
   } catch {
-    return res.status(401).json({ message: new AppError("Token inválido") });
+    return res
+      .status(StatusHTTP.UNAUTHORIZED)
+      .json({ message: new AppError("Token inválido") });
   }
 }

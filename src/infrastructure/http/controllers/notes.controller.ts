@@ -6,7 +6,6 @@ import { GetAllNotesUseCase } from "../../../application/use-cases/notes/getAll.
 import { GetOneNotesUseCase } from "../../../application/use-cases/notes/getOne.usecase";
 import { DeleteNotesUseCase } from "../../../application/use-cases/notes/delete.usecase";
 import { UpdateNotesUseCase } from "../../../application/use-cases/notes/update.usecase";
-import { NotesDTO } from "../../../application/dtos/notes.dto";
 import { CreateGradeReportByStudentUuidUseCase } from "../../../application/use-cases/notes/createGradeReportByStudentUuid.usecase";
 
 @injectable()
@@ -29,29 +28,17 @@ export class NotesController {
     }
   }
 
-  async create(req: Request, res: Response) {
+  async create(req: any, res: Response) {
     try {
-      const {
-        classUuid,
-        disciplineUuid,
-        note,
-        schoolUuid,
-        studentUuid,
-        periodUuid,
-        academiccycleUuid,
-      } = req.body;
-
-      const data: NotesDTO = {
-        classUuid,
-        disciplineUuid,
-        note,
-        academiccycleUuid,
-        schoolUuid,
-        periodUuid,
-        studentUuid,
-      };
-
-      const created = await this._create.execute(data);
+      const created = await this._create.execute({
+        classUuid: req.body?.classUuid,
+        periodUuid: req.body?.periodUuid,
+        disciplineUuid: req.body?.disciplineUuid,
+        academiccycleUuid: req.body?.academiccycleUuid,
+        note: req.body?.note,
+        schoolUuid: req.user.escola.uuid,
+        studentUuid: req.body?.studentUuid,
+      });
       return Handler.created(res, created);
     } catch (err: unknown) {
       return Handler.error(res, err);
@@ -88,31 +75,19 @@ export class NotesController {
     }
   }
 
-  async update(req: Request, res: Response) {
+  async update(req: any, res: Response) {
     try {
       const { uuid } = req.params;
 
-      const {
-        classUuid,
-        disciplineUuid,
-        note,
-        schoolUuid,
-        studentUuid,
-        periodUuid,
-        academiccycleUuid,
-      } = req.body;
-
-      const data: NotesDTO = {
-        classUuid,
-        periodUuid,
-        disciplineUuid,
-        academiccycleUuid,
-        note,
-        schoolUuid,
-        studentUuid,
-      };
-
-      const updated = await this._update.execute(uuid as string, data);
+      const updated = await this._update.execute(uuid as string, {
+        classUuid: req.body?.classUuid,
+        periodUuid: req.body?.periodUuid,
+        disciplineUuid: req.body?.disciplineUuid,
+        academiccycleUuid: req.body?.academiccycleUuid,
+        note: req.body?.note,
+        schoolUuid: req.user.escola.uuid,
+        studentUuid: req.body?.studentUuid,
+      });
       return Handler.ok(res, updated);
     } catch (err: unknown) {
       return Handler.error(res, err);

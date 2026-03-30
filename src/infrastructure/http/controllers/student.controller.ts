@@ -19,11 +19,26 @@ export class StudentController {
     private readonly _delete: DeleteStudentUseCase,
   ) {}
 
-  async create(req: Request, res: Response) {
+  async create(req: any, res: Response) {
     try {
-      const body = req.body;
-
-      const student = await this._create.execute(body);
+      const student = await this._create.execute({
+        name: req.body?.name,
+        matriculation: req.body?.matriculation,
+        dateBirth: req.body?.dateBirth,
+        status: req.body?.status,
+        nameMother: req.body?.nameMother,
+        nameFather: req.body?.nameFather,
+        phone: req.body?.phone,
+        dateMatriculation: req.body?.dateMatriculation,
+        hasDiscount: req.body?.hasDiscount,
+        discount: req.body?.discount,
+        dayPayment: req.body?.dayPayment,
+        periodUuid: req.body?.periodUuid,
+        classUuid: req.body?.classUuid,
+        profileUuid: req.body?.profileUuid,
+        schoolUuid: req.user.escola.uuid,
+        cpf: req.body?.cpf,
+      });
       return Handler.created(res, student);
     } catch (err: unknown) {
       return Handler.error(res, err);
@@ -59,11 +74,28 @@ export class StudentController {
     }
   }
 
-  async update(req: Request, res: Response) {
+  async update(req: any, res: Response) {
     try {
       const { uuid } = req.params;
-      const body = req.body;
-      const updated = await this._update.execute(uuid as string, body);
+
+      const updated = await this._update.execute(uuid as string, {
+        name: req.body?.name,
+        matriculation: req.body?.matriculation,
+        dateBirth: req.body?.dateBirth,
+        status: req.body?.status,
+        nameMother: req.body?.nameMother,
+        nameFather: req.body?.nameFather,
+        phone: req.body?.phone,
+        dateMatriculation: req.body?.dateMatriculation,
+        hasDiscount: req.body?.hasDiscount,
+        discount: req.body?.discount,
+        dayPayment: req.body?.dayPayment,
+        periodUuid: req.body?.periodUuid,
+        classUuid: req.body?.classUuid,
+        profileUuid: req.body?.profileUuid,
+        schoolUuid: req.user.escola.uuid,
+        cpf: req.body?.cpf,
+      });
       return Handler.ok(res, updated);
     } catch (err: unknown) {
       return Handler.error(res, err);

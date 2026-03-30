@@ -9,6 +9,9 @@ import {
 import { container } from "tsyringe";
 import { SchoolController } from "../controllers/school.controller";
 import { createApi } from "../../../utils/helpers/createApi";
+import { authorizationMiddleware } from "../middleware/profile.middleware";
+import { authenticateMiddleware } from "../middleware/auth.middleware";
+import { ProfileEnum } from "../../../utils/enum/profile";
 
 export const schoolRoutes = Router();
 
@@ -23,6 +26,10 @@ createApi(schoolRoutes, {
   tags: [tagName],
   controller: controller.create.bind(controller),
   body: createSchoolSchema,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(schoolRoutes, {
@@ -32,6 +39,7 @@ createApi(schoolRoutes, {
   summary: "Buscar escolas",
   tags: [tagName],
   controller: controller.getAll.bind(controller),
+  middlewares: [authenticateMiddleware],
 });
 
 createApi(schoolRoutes, {
@@ -42,6 +50,10 @@ createApi(schoolRoutes, {
   tags: [tagName],
   params: deleteSchoolSchema,
   controller: controller.delete.bind(controller),
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(schoolRoutes, {
@@ -53,6 +65,10 @@ createApi(schoolRoutes, {
   body: updateSchoolSchema.body,
   tags: [tagName],
   controller: controller.update.bind(controller),
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(schoolRoutes, {
@@ -64,6 +80,10 @@ createApi(schoolRoutes, {
   body: updateStatusSchoolSchema.body,
   tags: [tagName],
   controller: controller.updateStatus.bind(controller),
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(schoolRoutes, {
@@ -74,4 +94,5 @@ createApi(schoolRoutes, {
   params: getByNameSchema,
   tags: [tagName],
   controller: controller.getByName.bind(controller),
+  middlewares: [authenticateMiddleware],
 });

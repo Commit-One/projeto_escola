@@ -19,9 +19,18 @@ export class EmployeeController {
     private readonly _getOne: GetOneEmployeeUseCase,
   ) {}
 
-  async create(req: Request, res: Response) {
+  async create(req: any, res: Response) {
     try {
-      const created = await this._create.execute(req.body);
+      const { name, email } = req.body;
+      const schoolUuid = req.user.escola.uuid;
+      const profileUuid = req.user.profile.uuid;
+
+      const created = await this._create.execute({
+        name,
+        email,
+        schoolUuid,
+        profileUuid,
+      });
       return Handler.created(res, created);
     } catch (err: unknown) {
       return Handler.error(res, err);
@@ -38,10 +47,18 @@ export class EmployeeController {
     }
   }
 
-  async update(req: Request, res: Response) {
+  async update(req: any, res: Response) {
     try {
       const { uuid } = req.params;
-      const updated = await this._update.execute(uuid as string, req.body);
+      const { name, email } = req.body;
+      const schoolUuid = req.user.escola.uuid;
+      const profileUuid = req.user.profile.uuid;
+      const updated = await this._update.execute(uuid as string, {
+        name,
+        email,
+        schoolUuid,
+        profileUuid,
+      });
       return Handler.ok(res, updated);
     } catch (err: unknown) {
       return Handler.error(res, err);

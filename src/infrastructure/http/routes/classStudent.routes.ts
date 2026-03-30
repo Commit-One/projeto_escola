@@ -8,6 +8,9 @@ import {
 import { container } from "tsyringe";
 import { ClassStudentController } from "../controllers/classStudent.controller";
 import { createApi } from "../../../utils/helpers/createApi";
+import { authenticateMiddleware } from "../middleware/auth.middleware";
+import { authorizationMiddleware } from "../middleware/profile.middleware";
+import { ProfileEnum } from "../../../utils/enum/profile";
 
 export const classStudentsRoutes = Router();
 const controller = container.resolve(ClassStudentController);
@@ -21,6 +24,10 @@ createApi(classStudentsRoutes, {
   summary: "Criar uma turma",
   tags: [tagName],
   body: createClassSchema,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(classStudentsRoutes, {
@@ -31,6 +38,10 @@ createApi(classStudentsRoutes, {
   summary: "Atualizar uma turma",
   tags: [tagName],
   body: updateClassSchema,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(classStudentsRoutes, {
@@ -41,6 +52,7 @@ createApi(classStudentsRoutes, {
   summary: "Buscar uma turma",
   tags: [tagName],
   body: getOneClassSchema,
+  middlewares: [authenticateMiddleware],
 });
 
 createApi(classStudentsRoutes, {
@@ -51,6 +63,10 @@ createApi(classStudentsRoutes, {
   summary: "Deletar uma turma",
   tags: [tagName],
   body: deleteClassSchema,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(classStudentsRoutes, {
@@ -60,4 +76,5 @@ createApi(classStudentsRoutes, {
   fullPath: "/class",
   summary: "Buscar turmas",
   tags: [tagName],
+  middlewares: [authenticateMiddleware],
 });

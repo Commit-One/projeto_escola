@@ -26,9 +26,10 @@ export class DisciplineController {
     }
   }
 
-  async create(req: Request, res: Response) {
+  async create(req: any, res: Response) {
     try {
-      const { name, schoolUuid } = req.body;
+      const { name } = req.body;
+      const schoolUuid = req.user.escola.uuid;
       const created = await this._create.execute(name, schoolUuid);
       return Handler.created(res, created);
     } catch (err: unknown) {

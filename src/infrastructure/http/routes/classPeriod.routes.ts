@@ -8,6 +8,9 @@ import {
 import { container } from "tsyringe";
 import { ClassPeriodController } from "../controllers/classPeriod.controller";
 import { createApi } from "../../../utils/helpers/createApi";
+import { authenticateMiddleware } from "../middleware/auth.middleware";
+import { ProfileEnum } from "../../../utils/enum/profile";
+import { authorizationMiddleware } from "../middleware/profile.middleware";
 
 export const classPeriodRoutes = Router();
 
@@ -22,6 +25,10 @@ createApi(classPeriodRoutes, {
   summary: "Criar um regra de classe e período",
   tags: [tagName],
   body: createClassPeriodSchema,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(classPeriodRoutes, {
@@ -32,6 +39,10 @@ createApi(classPeriodRoutes, {
   summary: "Atualizar regra de classe e período",
   tags: [tagName],
   body: updateClassPeriodSchema,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(classPeriodRoutes, {
@@ -42,6 +53,7 @@ createApi(classPeriodRoutes, {
   tags: [tagName],
   summary: "Buscar uma regra de classe e período",
   body: getOneClassPeriodSchema,
+  middlewares: [authenticateMiddleware],
 });
 
 createApi(classPeriodRoutes, {
@@ -52,6 +64,10 @@ createApi(classPeriodRoutes, {
   tags: [tagName],
   summary: "Deletar uma regra de classe e período",
   body: deleteClassPeriodSchema,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(classPeriodRoutes, {
@@ -61,4 +77,5 @@ createApi(classPeriodRoutes, {
   path: "/",
   fullPath: "/classPeriod",
   summary: "Buscar todas as regras de classe e período",
+  middlewares: [authenticateMiddleware],
 });

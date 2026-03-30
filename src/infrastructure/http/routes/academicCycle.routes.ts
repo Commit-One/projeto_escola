@@ -8,6 +8,9 @@ import {
   getOneAcademicCycleSchema,
   updateAcademicCycleSchema,
 } from "../validators/academicCycle.validator";
+import { authenticateMiddleware } from "../middleware/auth.middleware";
+import { authorizationMiddleware } from "../middleware/profile.middleware";
+import { ProfileEnum } from "../../../utils/enum/profile";
 
 export const academicCycleRoutes = Router();
 const controller = container.resolve(AcademicCycleController);
@@ -21,6 +24,10 @@ createApi(academicCycleRoutes, {
   body: createAcademicCycleSchema,
   tags: [tagName],
   controller: controller.create.bind(controller),
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(academicCycleRoutes, {
@@ -30,6 +37,7 @@ createApi(academicCycleRoutes, {
   summary: "Buscar todos os ciclos acadêmicos",
   tags: [tagName],
   controller: controller.getAll.bind(controller),
+  middlewares: [authenticateMiddleware],
 });
 
 createApi(academicCycleRoutes, {
@@ -40,6 +48,7 @@ createApi(academicCycleRoutes, {
   params: getOneAcademicCycleSchema,
   tags: [tagName],
   controller: controller.getOne.bind(controller),
+  middlewares: [authenticateMiddleware],
 });
 
 createApi(academicCycleRoutes, {
@@ -51,6 +60,10 @@ createApi(academicCycleRoutes, {
   params: updateAcademicCycleSchema.params,
   tags: [tagName],
   controller: controller.update.bind(controller),
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(academicCycleRoutes, {
@@ -61,4 +74,8 @@ createApi(academicCycleRoutes, {
   params: deleteAcademicCycleSchema,
   tags: [tagName],
   controller: controller.delete.bind(controller),
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });

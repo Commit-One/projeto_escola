@@ -9,6 +9,9 @@ import {
 import { container } from "tsyringe";
 import { StudentController } from "../controllers/student.controller";
 import { createApi } from "../../../utils/helpers/createApi";
+import { authorizationMiddleware } from "../middleware/profile.middleware";
+import { authenticateMiddleware } from "../middleware/auth.middleware";
+import { ProfileEnum } from "../../../utils/enum/profile";
 
 export const studentsRoutes = Router();
 const controller = container.resolve(StudentController);
@@ -21,6 +24,10 @@ createApi(studentsRoutes, {
   summary: "Busca todos os alunos",
   tags: [tagName],
   controller: controller.getAll.bind(controller),
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(studentsRoutes, {
@@ -31,6 +38,10 @@ createApi(studentsRoutes, {
   tags: [tagName],
   controller: controller.create.bind(controller),
   body: createStudentSchema,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(studentsRoutes, {
@@ -41,6 +52,7 @@ createApi(studentsRoutes, {
   tags: [tagName],
   controller: controller.getOne.bind(controller),
   body: getOneStudentSchema,
+  middlewares: [authenticateMiddleware],
 });
 
 createApi(studentsRoutes, {
@@ -51,6 +63,10 @@ createApi(studentsRoutes, {
   tags: [tagName],
   controller: controller.delete.bind(controller),
   body: deleteStudentSchema,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(studentsRoutes, {
@@ -62,6 +78,10 @@ createApi(studentsRoutes, {
   controller: controller.update.bind(controller),
   body: updateStudentSchema.body,
   params: updateStudentSchema.params,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(studentsRoutes, {
@@ -72,4 +92,8 @@ createApi(studentsRoutes, {
   tags: [tagName],
   controller: controller.updateStatus.bind(controller),
   params: updateStatusStudentSchema,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });

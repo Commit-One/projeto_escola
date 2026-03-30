@@ -9,6 +9,9 @@ import {
   updateStatusEmployeeSchema,
 } from "../validators/employee.validator";
 import { updateSchoolSchema } from "../validators/school.validator";
+import { authenticateMiddleware } from "../middleware/auth.middleware";
+import { authorizationMiddleware } from "../middleware/profile.middleware";
+import { ProfileEnum } from "../../../utils/enum/profile";
 
 export const employeeRoutes = Router();
 
@@ -22,6 +25,7 @@ createApi(employeeRoutes, {
   fullPath: "/employee",
   summary: "Busca todos os funcionários",
   tags: [tagName],
+  middlewares: [authenticateMiddleware],
 });
 
 createApi(employeeRoutes, {
@@ -32,6 +36,10 @@ createApi(employeeRoutes, {
   summary: "Cria um novo funcionário",
   tags: [tagName],
   body: createEmployeeSchema,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(employeeRoutes, {
@@ -43,6 +51,10 @@ createApi(employeeRoutes, {
   tags: [tagName],
   body: updateStatusEmployeeSchema.body,
   params: updateStatusEmployeeSchema.params,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(employeeRoutes, {
@@ -54,6 +66,10 @@ createApi(employeeRoutes, {
   tags: [tagName],
   params: updateSchoolSchema.params,
   body: updateSchoolSchema.body,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });
 
 createApi(employeeRoutes, {
@@ -64,6 +80,7 @@ createApi(employeeRoutes, {
   summary: "Busca um funcionário",
   tags: [tagName],
   params: getOneDisciplineSchema,
+  middlewares: [authenticateMiddleware],
 });
 
 createApi(employeeRoutes, {
@@ -74,4 +91,8 @@ createApi(employeeRoutes, {
   summary: "Remove um funcionário",
   tags: [tagName],
   params: deleteEmployeeSchema,
+  middlewares: [
+    authenticateMiddleware,
+    authorizationMiddleware([ProfileEnum.ADMIN]),
+  ],
 });

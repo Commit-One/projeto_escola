@@ -1,6 +1,6 @@
 export enum ProfileEnum {
   ADMIN = "admin",
-  SCHOOL = "school",
+  TEACHER = "teacher",
   STUDENT = "student",
   EMPLOYEE = "employee",
 }
