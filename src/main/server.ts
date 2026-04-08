@@ -7,6 +7,7 @@ import { requestLoggerMiddleware } from "../infrastructure/http/middleware/reque
 import { errorMiddleware } from "../infrastructure/http/middleware/errorLogger.middleware";
 import { generateOpenAPIDocument } from "./swagger";
 import swaggerUi from "swagger-ui-express";
+import { startWorkers } from "./startWorkers";
 
 export class ServerInitializer {
   private readonly app: express.Application;
@@ -24,6 +25,9 @@ export class ServerInitializer {
 
     await setupRabbitMQ();
     console.log("✅ Rabbit connected");
+
+    await startWorkers();
+    console.log("✅ Workers started");
 
     this.app.use(requestLoggerMiddleware);
 

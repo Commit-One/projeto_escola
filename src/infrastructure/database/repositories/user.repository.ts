@@ -8,6 +8,7 @@ import { BcryptSecurity } from "../../security/bcrypt";
 import { StatusEnum } from "../../../utils/enum/status";
 import { UserMapper } from "../mappers/user.mapper";
 import { injectable } from "tsyringe";
+import { getUsersWithoutAccessForMoreThan3MonthsQuery } from "../_queries/getUsersWithoutAccessForMoreThan3Months.query";
 
 @injectable()
 export class UserTypeOrmRepository implements IUserRepository {
@@ -16,6 +17,16 @@ export class UserTypeOrmRepository implements IUserRepository {
 
   constructor() {
     this._repo = AppDataSource.getRepository(UserEntity);
+  }
+
+  getUsersWithoutAccessForMoreThan3Months(): Promise<User[]> {
+    const users = this._repo.query(
+      getUsersWithoutAccessForMoreThan3MonthsQuery,
+    );
+
+    return users.then((entities) =>
+      entities.map((entity: UserEntity) => UserMapper.toDomain(entity)),
+    );
   }
 
   async create(data: User): Promise<User> {

@@ -5,6 +5,7 @@ import { AppError, NotFoundError } from "../../../utils/error";
 import { inject, injectable } from "tsyringe";
 import { ContainerEnum } from "../../../utils/enum/container";
 import { logger } from "../../../infrastructure/logger";
+import { StatusEnum } from "../../../utils/enum/status";
 
 @injectable()
 export class SignInUseCase {
@@ -27,6 +28,11 @@ export class SignInUseCase {
       throw new NotFoundError("Usuário");
     }
 
+    if (user.status !== StatusEnum.ACTIVE) {
+      logger.error({ message: "Usuário desabilitado" });
+      throw new AppError("Usuário desabilitado");
+    }
+
     const isAuthorization = await this._bcryptSecurity.compare(
       password,
       user.password,
@@ -38,6 +44,7 @@ export class SignInUseCase {
     }
     const schemaDatabase = await this._loginRepository.schemaDatabase(email);
     const token = await this._authSecurity.token(schemaDatabase);
+    await this._loginRepository.updateLastAccess(email);
 
     logger.info({ message: "Login realizado com sucesso", date: new Date() });
 

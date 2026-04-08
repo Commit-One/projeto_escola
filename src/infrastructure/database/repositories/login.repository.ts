@@ -23,6 +23,14 @@ export class LoginTypeOrmRepository implements ILoginRepository {
     this._repoSchool = AppDataSource.getRepository(SchoolEntity);
   }
 
+  async updateLastAccess(email: string): Promise<boolean> {
+    const result = await this._repoUser.update(
+      { email },
+      { last_access: new Date() },
+    );
+    return result.affected !== 0;
+  }
+
   async findUserByEmail(email: string): Promise<User | null> {
     const user = await this._repoUser.findOne({ where: { email } });
     if (!user) throw new NotFoundError("Usuário");

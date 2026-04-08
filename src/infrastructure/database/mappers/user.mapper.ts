@@ -18,10 +18,15 @@ export class UserMapper {
     );
   }
 
-  static toResponse(entity: UserEntity): { email: string; status: string } {
+  static toResponse(entity: UserEntity): {
+    email: string;
+    status: string;
+    uuid: string;
+  } {
     return {
       email: entity.email,
       status: entity.status,
+      uuid: entity.uuid,
     };
   }
 }

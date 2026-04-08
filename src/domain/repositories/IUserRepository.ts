@@ -3,6 +3,7 @@ import { User } from "../entities/User";
 
 export interface IUserRepository {
   getAll(): Promise<{ email: string; status: string }[]>;
+  getUsersWithoutAccessForMoreThan3Months(): Promise<User[]>;
   findByEmail(email: string): Promise<User | null>;
   updatePassword(password: string, email: string): Promise<boolean>;
   create(data: User): Promise<User>;

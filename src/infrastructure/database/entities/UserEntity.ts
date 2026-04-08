@@ -26,4 +26,7 @@ export class UserEntity extends Base {
     nullable: false,
   })
   status!: StatusEnum;
+
+  @Column({ type: "datetime", nullable: false })
+  last_access!: Date;
 }

@@ -13,6 +13,7 @@ export class EnvironmentConfig {
   readonly JWT_EXPIRES_IN: string;
   readonly REDIS_URL: string;
   readonly PINO_LOGGER_LEVEL: string;
+  readonly CRON_DISABLED_USER: string;
 
   constructor() {
     this.NODE_ENV = process.env.NODE_ENV || "development";
@@ -29,5 +30,6 @@ export class EnvironmentConfig {
     this.JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "3h";
     this.REDIS_URL = process.env.REDIS_URL || "";
     this.PINO_LOGGER_LEVEL = process.env.LOGGER_LEVEL || "info";
+    this.CRON_DISABLED_USER = process.env.CRON_DISABLED_USER || "0 0 * * *";
   }
 }
