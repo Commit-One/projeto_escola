@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { Repository, LessThan } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { UserEntity } from "../entities/UserEntity";
@@ -8,7 +8,6 @@ import { BcryptSecurity } from "../../security/bcrypt";
 import { StatusEnum } from "../../../utils/enum/status";
 import { UserMapper } from "../mappers/user.mapper";
 import { injectable } from "tsyringe";
-import { getUsersWithoutAccessForMoreThan3MonthsQuery } from "../_queries/getUsersWithoutAccessForMoreThan3Months.query";
 
 @injectable()
 export class UserTypeOrmRepository implements IUserRepository {
@@ -20,9 +19,14 @@ export class UserTypeOrmRepository implements IUserRepository {
   }
 
   getUsersWithoutAccessForMoreThan3Months(): Promise<User[]> {
-    const users = this._repo.query(
-      getUsersWithoutAccessForMoreThan3MonthsQuery,
-    );
+    const threeMonthsAgo = new Date();
+    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() + 1 - 3);
+
+    const users = this._repo.find({
+      where: {
+        last_access: LessThan(threeMonthsAgo),
+      },
+    });
 
     return users.then((entities) =>
       entities.map((entity: UserEntity) => UserMapper.toDomain(entity)),
