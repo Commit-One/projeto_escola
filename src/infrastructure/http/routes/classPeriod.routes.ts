@@ -2,15 +2,15 @@ import { Router } from "express";
 import {
   createClassPeriodSchema,
   deleteClassPeriodSchema,
-  getOneClassPeriodSchema,
+  getOneClassPeriodByUuidSchema,
   updateClassPeriodSchema,
 } from "../validators/classPeriod.validator";
 import { container } from "tsyringe";
 import { ClassPeriodController } from "../controllers/classPeriod.controller";
 import { createApi } from "../../../utils/helpers/createApi";
-import { authenticateMiddleware } from "../middleware/auth.middleware";
+import { isAuthMiddleware } from "../middleware/auth.middleware";
 import { ProfileEnum } from "../../../utils/enum/profile";
-import { authorizationMiddleware } from "../middleware/profile.middleware";
+import { authorizationProfileMiddleware } from "../middleware/profile.middleware";
 
 export const classPeriodRoutes = Router();
 
@@ -26,8 +26,8 @@ createApi(classPeriodRoutes, {
   tags: [tagName],
   body: createClassPeriodSchema,
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -40,8 +40,8 @@ createApi(classPeriodRoutes, {
   tags: [tagName],
   body: updateClassPeriodSchema,
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -52,8 +52,8 @@ createApi(classPeriodRoutes, {
   fullPath: "/classPeriod/:uuid",
   tags: [tagName],
   summary: "Buscar uma regra de classe e período",
-  body: getOneClassPeriodSchema,
-  middlewares: [authenticateMiddleware],
+  body: getOneClassPeriodByUuidSchema,
+  middlewares: [isAuthMiddleware],
 });
 
 createApi(classPeriodRoutes, {
@@ -65,8 +65,8 @@ createApi(classPeriodRoutes, {
   summary: "Deletar uma regra de classe e período",
   body: deleteClassPeriodSchema,
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -77,5 +77,5 @@ createApi(classPeriodRoutes, {
   path: "/",
   fullPath: "/classPeriod",
   summary: "Buscar todas as regras de classe e período",
-  middlewares: [authenticateMiddleware],
+  middlewares: [isAuthMiddleware],
 });

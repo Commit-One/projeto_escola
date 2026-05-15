@@ -1,9 +1,6 @@
-//TODO: Cadastro de colaborador;
 //TODO: Criar dashboard financeiro;
 //TODO: Criar middleare de profile;
 //TODO: Criar middleare de permissão;
-
--
 
 Ordem criação
 
@@ -17,3 +14,17 @@ Ordem criação
 - Media
 - Notas
 - Boletim
+
+integração
+
+- login - OK
+- disciplinas - OK
+- classe - OK
+- Períodos - ok
+- Regra de classe + turma
+- Estudante
+- agenda
+- turma
+- media
+- notas
+- boletim

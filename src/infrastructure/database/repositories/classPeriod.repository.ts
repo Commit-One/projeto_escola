@@ -5,10 +5,14 @@ import { IClassPeriodRepository } from "../../../domain/repositories/IClassPerio
 import { ClassPeriod } from "../../../domain/entities/ClassPeriod";
 import { AppError, NotFoundError } from "../../../utils/error";
 import { ClassPeriodMapper } from "../mappers/classPeriod.mapper";
-import { ClassPeriodDTO } from "../../../application/dtos/classPeriod.dto";
+import {
+  ClassPeriodDTO,
+  ClassPeriodResponseDTO,
+} from "../../../application/dtos/classPeriod.dto";
 import { ClassStudentEntity } from "../entities/ClassStudentEntity";
 import { PeriodEntity } from "../entities/PeriodEntity";
 import { injectable } from "tsyringe";
+import { classPeriodQuery } from "../_queries/classPeriod.query";
 
 @injectable()
 export class ClassPeriodTypeOrmRepository implements IClassPeriodRepository {
@@ -42,9 +46,13 @@ export class ClassPeriodTypeOrmRepository implements IClassPeriodRepository {
     return ClassPeriodMapper.toDomain(result);
   }
 
-  async getAll(): Promise<ClassPeriod[]> {
-    const list = await this._repo.find();
-    return list.map((e) => ClassPeriodMapper.toDomain(e));
+  async getAll(schoolUuid: string): Promise<ClassPeriod[]> {
+    const list = await this._repo.query(
+      classPeriodQuery.replace("@SchoolUuid", schoolUuid),
+    );
+    return list.map((e: ClassPeriodResponseDTO) =>
+      ClassPeriodMapper.toResponseDTO(e),
+    );
   }
 
   async create(data: ClassPeriodDTO): Promise<ClassPeriod> {

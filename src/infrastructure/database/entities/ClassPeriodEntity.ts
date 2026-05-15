@@ -11,4 +11,7 @@ export class ClassPeriodEntity extends Base {
 
   @Column("decimal", { precision: 10, scale: 2 })
   value!: number;
+
+  @Column({ type: "varchar", length: 200, nullable: false })
+  schoolUuid!: string;
 }

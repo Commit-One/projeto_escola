@@ -3,26 +3,26 @@ import { ValidationEmpty } from "../../../utils/error";
 
 const createClassPeriodSchema = z.object({
   classUuid: z
-    .string({ error: new ValidationEmpty("classUuid").response })
+    .string({ error: new ValidationEmpty("Classe").response })
     .trim()
-    .min(1, new ValidationEmpty("classUuid").response),
+    .min(1, new ValidationEmpty("Classe").response),
   periodUuid: z
-    .string({ error: new ValidationEmpty("periodUuid").response })
+    .string({ error: new ValidationEmpty("Período").response })
     .trim()
-    .min(1, new ValidationEmpty("periodUuid").response),
-  value: z.number({ error: new ValidationEmpty("value").response }),
+    .min(1, new ValidationEmpty("Período").response),
+  value: z.number({ error: new ValidationEmpty("Valor").response }),
 });
 
 const updateClassPeriodSchema = z.object({
   classUuid: z
-    .string({ error: new ValidationEmpty("classUuid").response })
+    .string({ error: new ValidationEmpty("Classe").response })
     .trim()
-    .min(1, new ValidationEmpty("classUuid").response),
+    .min(1, new ValidationEmpty("Classe").response),
   periodUuid: z
-    .string({ error: new ValidationEmpty("periodUuid").response })
+    .string({ error: new ValidationEmpty("Período").response })
     .trim()
-    .min(1, new ValidationEmpty("periodUuid").response),
-  value: z.number({ error: new ValidationEmpty("value").response }),
+    .min(1, new ValidationEmpty("Período").response),
+  value: z.number({ error: new ValidationEmpty("Valor").response }),
 });
 
 const deleteClassPeriodSchema = z.object({
@@ -32,7 +32,7 @@ const deleteClassPeriodSchema = z.object({
     .min(1, new ValidationEmpty("Uuid").response),
 });
 
-const getOneClassPeriodSchema = z.object({
+const getOneClassPeriodByUuidSchema = z.object({
   uuid: z
     .string({ error: new ValidationEmpty("Uuid").response })
     .trim()
@@ -40,7 +40,7 @@ const getOneClassPeriodSchema = z.object({
 });
 
 export {
-  getOneClassPeriodSchema,
+  getOneClassPeriodByUuidSchema,
   deleteClassPeriodSchema,
   updateClassPeriodSchema,
   createClassPeriodSchema,

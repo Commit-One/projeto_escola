@@ -11,4 +11,7 @@ export class ClassStudentEntity extends Base {
 
   @Column({ type: "int", nullable: false })
   minAge!: number;
+
+  @Column({ type: "varchar", length: 200, nullable: false })
+  schoolUuid!: string;
 }

@@ -44,8 +44,8 @@ export class ClassStudentTypeOrmRepository implements IClassStudentRepository {
     return ClassStudentMapper.toDomain(entity);
   }
 
-  async getAll(): Promise<ClassStudent[]> {
-    const list = await this._repo.find();
+  async getAll(schoolUuid: string): Promise<ClassStudent[]> {
+    const list = await this._repo.find({ where: { schoolUuid: schoolUuid } });
     return list.map((e) => ClassStudentMapper.toDomain(e));
   }
 
@@ -61,8 +61,14 @@ export class ClassStudentTypeOrmRepository implements IClassStudentRepository {
 
     if (!school) throw new NotFoundError("Escola");
 
-    const entity = ClassStudentMapper.toEntity(data);
+    const domain = new ClassStudent(
+      data.name,
+      data.maxAge,
+      data.minAge,
+      data.schoolUuid,
+    );
 
+    const entity = ClassStudentMapper.toEntity(domain);
     await this._repo.save(entity);
     return ClassStudentMapper.toDomain(entity);
   }

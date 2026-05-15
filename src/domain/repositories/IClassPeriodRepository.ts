@@ -4,7 +4,7 @@ import { ClassPeriod } from "../entities/ClassPeriod";
 export interface IClassPeriodRepository {
   getOne(uuid: string): Promise<ClassPeriod | null>;
   delete(uuid: string): Promise<boolean>;
-  getAll(): Promise<ClassPeriod[]>;
+  getAll(schoolUuid: string): Promise<ClassPeriod[]>;
   create(data: ClassPeriodDTO): Promise<ClassPeriod>;
   update(uuid: string, data: ClassPeriodDTO): Promise<ClassPeriod>;
   getByClassPeriodUuid(

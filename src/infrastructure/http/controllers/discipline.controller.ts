@@ -6,6 +6,7 @@ import { GetAllDisciplineUseCase } from "../../../application/use-cases/discipli
 import { GetOneDisciplineUseCase } from "../../../application/use-cases/discipline/getOne.usecase";
 import { DeleteDisciplineUseCase } from "../../../application/use-cases/discipline/delete.usecase";
 import { UpdateDisciplineUseCase } from "../../../application/use-cases/discipline/update.usecase";
+import { schoolByUserMiddleware } from "../middleware/schoolByUser.middleware";
 
 @injectable()
 export class DisciplineController {
@@ -17,9 +18,10 @@ export class DisciplineController {
     private readonly _update: UpdateDisciplineUseCase,
   ) {}
 
-  async getAll(_: Request, res: Response) {
+  async getAll(req: any, res: Response) {
     try {
-      const disciplines = await this._getAll.execute();
+      const schoolUuid = schoolByUserMiddleware(req);
+      const disciplines = await this._getAll.execute(schoolUuid);
       return Handler.ok(res, disciplines);
     } catch (err: unknown) {
       return Handler.error(res, err);
@@ -29,8 +31,11 @@ export class DisciplineController {
   async create(req: any, res: Response) {
     try {
       const { name } = req.body;
-      const schoolUuid = req.user.escola.uuid;
-      const created = await this._create.execute(name, schoolUuid);
+      const schoolUuid = schoolByUserMiddleware(req);
+      const created = await this._create.execute({
+        name,
+        schoolUuid,
+      });
       return Handler.created(res, created);
     } catch (err: unknown) {
       return Handler.error(res, err);
@@ -57,11 +62,15 @@ export class DisciplineController {
     }
   }
 
-  async update(req: Request, res: Response) {
+  async update(req: any, res: Response) {
     try {
       const { uuid } = req.params;
       const { name } = req.body;
-      const updated = await this._update.execute(uuid as string, name);
+      const schoolUuid = schoolByUserMiddleware(req);
+      const updated = await this._update.execute(uuid as string, {
+        name,
+        schoolUuid,
+      });
       return Handler.ok(res, updated);
     } catch (err: unknown) {
       return Handler.error(res, err);

@@ -15,6 +15,7 @@ export class PaymentMapper {
     entity.status = data.status;
     entity.studentUuid = data.studentUuid;
     entity.annualValue = data.annualValue;
+    entity.datePayment = data.datePayment;
 
     return entity;
   }

@@ -103,6 +103,7 @@ export class SchoolTypeOrmRepository implements ISchoolRepository {
         profileAdmin.uuid,
         data.nameDirector,
       );
+      user.last_access = new Date();
 
       await userRepository.save(user);
       await queryRunner.commitTransaction();

@@ -8,8 +8,8 @@ import {
   updateDisciplineSchema,
 } from "../validators/discipline.validator";
 import { createApi } from "../../../utils/helpers/createApi";
-import { authenticateMiddleware } from "../middleware/auth.middleware";
-import { authorizationMiddleware } from "../middleware/profile.middleware";
+import { isAuthMiddleware } from "../middleware/auth.middleware";
+import { authorizationProfileMiddleware } from "../middleware/profile.middleware";
 import { ProfileEnum } from "../../../utils/enum/profile";
 
 export const disciplineRoutes = Router();
@@ -26,8 +26,8 @@ createApi(disciplineRoutes, {
   tags: [tagName],
   body: createDisciplineSchema,
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -38,10 +38,10 @@ createApi(disciplineRoutes, {
   fullPath: "/discipline/:uuid",
   summary: "Deleta disciplina",
   tags: [tagName],
-  body: deleteDisciplineSchema,
+  params: deleteDisciplineSchema,
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -55,8 +55,8 @@ createApi(disciplineRoutes, {
   body: updateDisciplineSchema.body,
   params: updateDisciplineSchema.params,
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -67,7 +67,7 @@ createApi(disciplineRoutes, {
   fullPath: "/discipline",
   summary: "Busca todas disciplinas",
   tags: [tagName],
-  middlewares: [authenticateMiddleware],
+  middlewares: [isAuthMiddleware],
 });
 
 createApi(disciplineRoutes, {
@@ -78,5 +78,5 @@ createApi(disciplineRoutes, {
   summary: "Busca uma disciplina",
   tags: [tagName],
   params: getOneDisciplineSchema,
-  middlewares: [authenticateMiddleware],
+  middlewares: [isAuthMiddleware],
 });

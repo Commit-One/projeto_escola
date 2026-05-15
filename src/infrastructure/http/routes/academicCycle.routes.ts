@@ -8,8 +8,8 @@ import {
   getOneAcademicCycleSchema,
   updateAcademicCycleSchema,
 } from "../validators/academicCycle.validator";
-import { authenticateMiddleware } from "../middleware/auth.middleware";
-import { authorizationMiddleware } from "../middleware/profile.middleware";
+import { isAuthMiddleware } from "../middleware/auth.middleware";
+import { authorizationProfileMiddleware } from "../middleware/profile.middleware";
 import { ProfileEnum } from "../../../utils/enum/profile";
 
 export const academicCycleRoutes = Router();
@@ -25,8 +25,8 @@ createApi(academicCycleRoutes, {
   tags: [tagName],
   controller: controller.create.bind(controller),
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -37,7 +37,7 @@ createApi(academicCycleRoutes, {
   summary: "Buscar todos os ciclos acadêmicos",
   tags: [tagName],
   controller: controller.getAll.bind(controller),
-  middlewares: [authenticateMiddleware],
+  middlewares: [isAuthMiddleware],
 });
 
 createApi(academicCycleRoutes, {
@@ -48,7 +48,7 @@ createApi(academicCycleRoutes, {
   params: getOneAcademicCycleSchema,
   tags: [tagName],
   controller: controller.getOne.bind(controller),
-  middlewares: [authenticateMiddleware],
+  middlewares: [isAuthMiddleware],
 });
 
 createApi(academicCycleRoutes, {
@@ -61,8 +61,8 @@ createApi(academicCycleRoutes, {
   tags: [tagName],
   controller: controller.update.bind(controller),
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -75,7 +75,7 @@ createApi(academicCycleRoutes, {
   tags: [tagName],
   controller: controller.delete.bind(controller),
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });

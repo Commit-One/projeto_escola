@@ -15,14 +15,14 @@ export class GetAllClassPeriodUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(): Promise<ClassPeriod[]> {
+  async execute(schoolUuid: string): Promise<ClassPeriod[]> {
     const cached = await this._cache.get<ClassPeriod[]>(
       cacheKeyEnum.CLASS_PERIOD,
     );
 
-    if (cached) return cached;
+    if (cached) return cached.filter((c) => c.schoolUuid === schoolUuid);
 
-    const list = await this._repo.getAll();
+    const list = await this._repo.getAll(schoolUuid);
     await this._cache.delete(cacheKeyEnum.CLASS_PERIOD);
     return list;
   }

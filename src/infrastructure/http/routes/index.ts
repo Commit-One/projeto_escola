@@ -16,6 +16,7 @@ import { employeeRoutes } from "./employee.routes";
 export const routes = Router();
 
 routes.get("/", (_req, res) => res.send("OK"));
+routes.use("/discipline", disciplineRoutes);
 routes.use("/school", schoolRoutes);
 routes.use("/users", usersRoutes);
 routes.use("/profile", profileRoutes);
@@ -24,7 +25,6 @@ routes.use("/periodo", periodRoutes);
 routes.use("/student", studentsRoutes);
 routes.use("/class", classStudentsRoutes);
 routes.use("/classPeriod", classPeriodRoutes);
-routes.use("/discipline", disciplineRoutes);
 routes.use("/notes", notesRoutes);
 routes.use("/academiccycle", academicCycleRoutes);
 routes.use("/media", mediaRoutes);

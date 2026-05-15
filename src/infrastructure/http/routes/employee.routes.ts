@@ -9,8 +9,8 @@ import {
   updateStatusEmployeeSchema,
 } from "../validators/employee.validator";
 import { updateSchoolSchema } from "../validators/school.validator";
-import { authenticateMiddleware } from "../middleware/auth.middleware";
-import { authorizationMiddleware } from "../middleware/profile.middleware";
+import { isAuthMiddleware } from "../middleware/auth.middleware";
+import { authorizationProfileMiddleware } from "../middleware/profile.middleware";
 import { ProfileEnum } from "../../../utils/enum/profile";
 
 export const employeeRoutes = Router();
@@ -25,7 +25,7 @@ createApi(employeeRoutes, {
   fullPath: "/employee",
   summary: "Busca todos os funcionários",
   tags: [tagName],
-  middlewares: [authenticateMiddleware],
+  middlewares: [isAuthMiddleware],
 });
 
 createApi(employeeRoutes, {
@@ -37,8 +37,8 @@ createApi(employeeRoutes, {
   tags: [tagName],
   body: createEmployeeSchema,
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -52,8 +52,8 @@ createApi(employeeRoutes, {
   body: updateStatusEmployeeSchema.body,
   params: updateStatusEmployeeSchema.params,
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -67,8 +67,8 @@ createApi(employeeRoutes, {
   params: updateSchoolSchema.params,
   body: updateSchoolSchema.body,
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -80,7 +80,7 @@ createApi(employeeRoutes, {
   summary: "Busca um funcionário",
   tags: [tagName],
   params: getOneDisciplineSchema,
-  middlewares: [authenticateMiddleware],
+  middlewares: [isAuthMiddleware],
 });
 
 createApi(employeeRoutes, {
@@ -92,7 +92,7 @@ createApi(employeeRoutes, {
   tags: [tagName],
   params: deleteEmployeeSchema,
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });

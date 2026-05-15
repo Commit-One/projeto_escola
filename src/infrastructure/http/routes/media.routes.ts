@@ -8,8 +8,8 @@ import {
   getOneMediaSchema,
   updateMediaSchema,
 } from "../validators/media.validator";
-import { authenticateMiddleware } from "../middleware/auth.middleware";
-import { authorizationMiddleware } from "../middleware/profile.middleware";
+import { isAuthMiddleware } from "../middleware/auth.middleware";
+import { authorizationProfileMiddleware } from "../middleware/profile.middleware";
 import { ProfileEnum } from "../../../utils/enum/profile";
 
 export const mediaRoutes = Router();
@@ -26,8 +26,8 @@ createApi(mediaRoutes, {
   tags: [tagName],
   controller: controller.create.bind(controller),
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -38,7 +38,7 @@ createApi(mediaRoutes, {
   summary: "Busca todas as médias disponíveis",
   tags: [tagName],
   controller: controller.getAll.bind(controller),
-  middlewares: [authenticateMiddleware],
+  middlewares: [isAuthMiddleware],
 });
 
 createApi(mediaRoutes, {
@@ -49,7 +49,7 @@ createApi(mediaRoutes, {
   body: getOneMediaSchema,
   tags: [tagName],
   controller: controller.getOne.bind(controller),
-  middlewares: [authenticateMiddleware],
+  middlewares: [isAuthMiddleware],
 });
 
 createApi(mediaRoutes, {
@@ -62,8 +62,8 @@ createApi(mediaRoutes, {
   tags: [tagName],
   controller: controller.update.bind(controller),
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -76,7 +76,7 @@ createApi(mediaRoutes, {
   tags: [tagName],
   controller: controller.delete.bind(controller),
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });

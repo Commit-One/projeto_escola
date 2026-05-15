@@ -9,8 +9,8 @@ import {
 } from "../validators/notes.validator";
 import { NotesController } from "../controllers/notes.controller";
 import { createApi } from "../../../utils/helpers/createApi";
-import { authenticateMiddleware } from "../middleware/auth.middleware";
-import { authorizationMiddleware } from "../middleware/profile.middleware";
+import { isAuthMiddleware } from "../middleware/auth.middleware";
+import { authorizationProfileMiddleware } from "../middleware/profile.middleware";
 import { ProfileEnum } from "../../../utils/enum/profile";
 
 export const notesRoutes = Router();
@@ -27,8 +27,8 @@ createApi(notesRoutes, {
   tags: [tagName],
   controller: controller.create.bind(controller),
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -41,8 +41,8 @@ createApi(notesRoutes, {
   tags: [tagName],
   controller: controller.delete.bind(controller),
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -56,8 +56,8 @@ createApi(notesRoutes, {
   tags: [tagName],
   controller: controller.update.bind(controller),
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -68,7 +68,7 @@ createApi(notesRoutes, {
   summary: "Buscar notas",
   tags: [tagName],
   controller: controller.getAll.bind(controller),
-  middlewares: [authenticateMiddleware],
+  middlewares: [isAuthMiddleware],
 });
 
 createApi(notesRoutes, {
@@ -79,7 +79,7 @@ createApi(notesRoutes, {
   params: getOneNotesSchema,
   tags: [tagName],
   controller: controller.getOne.bind(controller),
-  middlewares: [authenticateMiddleware],
+  middlewares: [isAuthMiddleware],
 });
 
 createApi(notesRoutes, {
@@ -90,5 +90,5 @@ createApi(notesRoutes, {
   params: createGradeReportByStudentUuid,
   tags: [tagName],
   controller: controller.createGradeByStudentUuid.bind(controller),
-  middlewares: [authenticateMiddleware],
+  middlewares: [isAuthMiddleware],
 });

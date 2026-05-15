@@ -10,14 +10,19 @@ const createClassSchema = z.object({
   minAge: z.number({ error: new ValidationEmpty("Idade mínima").response }),
 });
 
-const updateClassSchema = z.object({
-  name: z
-    .string({ error: new ValidationEmpty("Nome").response })
-    .trim()
-    .min(1, new ValidationEmpty("Nome").response),
-  maxAge: z.number({ error: new ValidationEmpty("Idade máxima").response }),
-  minAge: z.number({ error: new ValidationEmpty("Idade mínima").response }),
-});
+const updateClassSchema = {
+  body: z.object({
+    name: z
+      .string({ error: new ValidationEmpty("Nome").response })
+      .trim()
+      .min(1, new ValidationEmpty("Nome").response),
+    maxAge: z.number({ error: new ValidationEmpty("Idade máxima").response }),
+    minAge: z.number({ error: new ValidationEmpty("Idade mínima").response }),
+  }),
+  params: z.object({
+    uuid: z.string({ error: new ValidationEmpty("Uuid").response }),
+  }),
+};
 
 const deleteClassSchema = z.object({
   uuid: z

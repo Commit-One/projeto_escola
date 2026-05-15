@@ -15,14 +15,20 @@ export class GetAllDisciplineUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(): Promise<Discipline[]> {
+  async execute(schoolUuid: string): Promise<Discipline[]> {
     const cachedDiscipline = await this._cache.get<Discipline[]>(
       cacheKeyEnum.DISCIPLINE,
     );
 
-    if (cachedDiscipline) return cachedDiscipline;
+    if (cachedDiscipline) {
+      const filterBySchoolUuid: Discipline[] = cachedDiscipline.filter(
+        (c) => c.schoolUuid === schoolUuid,
+      );
 
-    const list = await this._repo.getAll();
+      return filterBySchoolUuid;
+    }
+
+    const list = await this._repo.getAll(schoolUuid);
     await this._cache.set(cacheKeyEnum.DISCIPLINE, list);
     return list;
   }

@@ -25,5 +25,5 @@ export const gradeReportQuery = `
   INNER JOIN tb_school ts2 ON tn.schoolUuid = ts2.uuid
   INNER JOIN tb_academic_cycle tac ON tn.academiccycleUuid = tac.uuid
   LEFT JOIN tb_media tm ON tm.schoolUuid = tn.schoolUuid
-  WHERE tn.studentUuid = ?
+  WHERE tn.studentUuid = "@studentUuid"
 `;

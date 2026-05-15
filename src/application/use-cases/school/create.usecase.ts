@@ -26,7 +26,9 @@ export class CreateSchoolUseCase {
     const school = await this._repo.create(dto);
 
     await this._cache.delete(cacheKeyEnum.SCHOOLS);
-    await this._queue.sendToQueue(QueueEnum.NOTIFICATION_NAME, school);
+
+    // TODO: Criar tabela de notificação e eliminar rabbit
+    // await this._queue.sendToQueue(QueueEnum.NOTIFICATION_NAME, school);
 
     logger.info({
       message: "Escola criada com sucesso!",

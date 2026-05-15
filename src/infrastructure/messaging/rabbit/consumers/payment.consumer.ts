@@ -49,7 +49,7 @@ export class PaymentConsumer {
             payload.annualValue,
             month.monthPending,
             payload.referenceDay,
-            payload.referenceYear,
+            new Date().getFullYear(),
             StatusPayment.PENDING,
             payload.discountApplied,
             payload.discount,

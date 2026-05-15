@@ -1,3 +1,4 @@
+import { startConsumers } from "../../../main/startConsumers";
 import { assertQueue } from "../../../utils/helpers/assertQueue";
 import { RabbitMQConnection } from "./connection";
 import { queues } from "./queues";
@@ -11,5 +12,5 @@ export async function setupRabbitMQ(): Promise<void> {
     await assertQueue(channel, queue.dlq);
   }
 
-  // startConsumers();
+  startConsumers();
 }

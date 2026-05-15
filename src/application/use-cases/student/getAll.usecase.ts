@@ -15,14 +15,15 @@ export class GetAllStudetsUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(): Promise<StudentResponseDTO[]> {
+  async execute(schoolUuid: string): Promise<StudentResponseDTO[]> {
     const cached =
       (await this._cache.get<StudentResponseDTO[]>(cacheKeyEnum.STUDENTS)) ??
       [];
 
-    if (cached.length > 1) return cached;
+    if (cached.length > 1)
+      return cached.filter((s) => s.escola.uuid == schoolUuid);
 
-    const students = await this._repo.getAll();
+    const students = await this._repo.getAll(schoolUuid);
     await this._cache.set(cacheKeyEnum.STUDENTS, students);
 
     return students;

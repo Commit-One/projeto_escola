@@ -3,6 +3,7 @@ import { AppDataSource } from "../data-source";
 import { IStudentRepository } from "../../../domain/repositories/IStudentRepository";
 import { StudentEntity } from "../entities/StudentEntity";
 import {
+  StatisticsStudentByStatusDTO,
   StudentDTO,
   StudentResponseDTO,
 } from "../../../application/dtos/student.dto";
@@ -15,7 +16,10 @@ import { ClassStudentEntity } from "../entities/ClassStudentEntity";
 import { StudentMapper } from "../mappers/student.mapper";
 import { replace } from "../../../utils/helpers/replace";
 import { injectable } from "tsyringe";
-import { studentsQuery } from "../_queries/students.query";
+import {
+  studentsQuery,
+  studentStatisticsQuery,
+} from "../_queries/students.query";
 
 @injectable()
 export class StudentTypeOrmRepository implements IStudentRepository {
@@ -80,6 +84,7 @@ export class StudentTypeOrmRepository implements IStudentRepository {
     });
     if (!period) throw new NotFoundError("Período");
 
+    data.profileUuid = profile.uuid;
     const student = StudentMapper.toDomain(data);
 
     await this._repo.save(student);
@@ -126,8 +131,17 @@ export class StudentTypeOrmRepository implements IStudentRepository {
     );
   }
 
-  async getAll(): Promise<StudentResponseDTO[]> {
-    const students = await this._repo.query(studentsQuery);
+  async getAll(schoolUuid: string): Promise<StudentResponseDTO[]> {
+    const students = await this._repo.query(
+      studentsQuery.replace("@SchollUuid", schoolUuid),
+    );
     return students.map((e: any) => StudentMapper.toQuery(e));
+  }
+
+  async statistics(schoolUuid: string): Promise<StatisticsStudentByStatusDTO> {
+    const stats = await this._repo.query(
+      studentStatisticsQuery.replace(/@SchollUuid/g, schoolUuid),
+    );
+    return stats;
   }
 }

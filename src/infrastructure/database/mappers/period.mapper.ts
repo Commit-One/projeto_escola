@@ -3,7 +3,7 @@ import { PeriodEntity } from "../entities/PeriodEntity";
 
 export class PeriodMapper {
   static toDomain(entity: PeriodEntity): Period {
-    return new Period(entity.name, {
+    return new Period(entity.name, entity.schoolUuid, {
       uuid: entity.uuid,
       createdAt: entity.createdAt,
       enable: entity.enable,
@@ -14,6 +14,7 @@ export class PeriodMapper {
     const periodEntity = new PeriodEntity();
 
     periodEntity.name = entity.name;
+    periodEntity.schoolUuid = entity.schoolUuid;
 
     return periodEntity;
   }

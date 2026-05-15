@@ -5,6 +5,7 @@ import { ContainerEnum } from "../../../utils/enum/container";
 import { logger } from "../../../infrastructure/logger";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { Discipline } from "../../../domain/entities/Discipline";
+import { DisciplineDTO } from "../../dtos/discipline.dto";
 
 @injectable()
 export class CreateDisciplineUseCase {
@@ -16,8 +17,8 @@ export class CreateDisciplineUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(name: string, schoolUuid: string): Promise<Discipline> {
-    const discipline = await this._repo.create(name, schoolUuid);
+  async execute(data: DisciplineDTO): Promise<Discipline> {
+    const discipline = await this._repo.create(data);
     await this._cache.delete(cacheKeyEnum.DISCIPLINE);
     logger.info({
       message: "Disciplina criada com sucesso",

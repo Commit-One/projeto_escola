@@ -20,7 +20,7 @@ export interface StudentResponseDTO {
   name: string;
   matriculation: string;
   dateBirth: Date;
-  status: StatusEnum;
+  status: string;
   nameMother: string;
   nameFather: string;
   phone: string;
@@ -31,6 +31,9 @@ export interface StudentResponseDTO {
   dayPayment: number;
   uuid: string;
   cpf: string;
+  age: number;
+  address: string;
+  mensalidade?: string;
 }
 
 export interface StudentDTO {
@@ -50,6 +53,8 @@ export interface StudentDTO {
   classUuid: string;
   profileUuid: string;
   cpf: string;
+  age: number;
+  address: string;
 }
 
 export interface StudentQuery {
@@ -63,7 +68,7 @@ export interface StudentQuery {
   name: string;
   matriculation: string;
   dateBirth: Date;
-  status: StatusEnum;
+  status: string;
   nameMother: string;
   nameFather: string;
   phone: string;
@@ -74,4 +79,13 @@ export interface StudentQuery {
   dayPayment: number;
   uuid: string;
   cpf: string;
+  age: number;
+  address: string;
+  mensalidade: string;
+  studentUuid: string;
+}
+
+export interface StatisticsStudentByStatusDTO {
+  totalAtivo: number;
+  totalInativo: number;
 }

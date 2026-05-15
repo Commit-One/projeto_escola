@@ -15,14 +15,15 @@ export class GetAllClassStudentUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(): Promise<ClassStudent[] | null> {
+  async execute(schoolUuid: string): Promise<ClassStudent[] | null> {
     const cachedClass = await this._cache.get<ClassStudent[]>(
       cacheKeyEnum.CLASS,
     );
 
-    if (cachedClass) return cachedClass;
+    if (cachedClass)
+      return cachedClass.filter((c) => c.schoolUuid === schoolUuid);
 
-    const classStudents = await this._classRepository.getAll();
+    const classStudents = await this._classRepository.getAll(schoolUuid);
     await this._cache.set(cacheKeyEnum.CLASS, classStudents);
     return classStudents;
   }

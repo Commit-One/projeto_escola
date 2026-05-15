@@ -49,6 +49,12 @@ export class StudentEntity extends Base {
   @Column({ type: "varchar", length: 20, nullable: false })
   cpf!: string;
 
+  @Column({ type: "varchar", nullable: false })
+  address!: string;
+
+  @Column({ type: "int", nullable: false })
+  age!: number;
+
   @Column({
     type: "enum",
     enum: StatusEnum,

@@ -4,11 +4,17 @@ import { ClassStudentEntity } from "../entities/ClassStudentEntity";
 
 export class ClassStudentMapper {
   static toDomain(entity: ClassStudentEntity): ClassStudent {
-    return new ClassStudent(entity.name, entity.maxAge, entity.minAge, {
-      uuid: entity.uuid,
-      createdAt: entity.createdAt,
-      enable: entity.enable,
-    });
+    return new ClassStudent(
+      entity.name,
+      entity.maxAge,
+      entity.minAge,
+      entity.schoolUuid,
+      {
+        uuid: entity.uuid,
+        createdAt: entity.createdAt,
+        enable: entity.enable,
+      },
+    );
   }
 
   static toEntity(data: ClassStudent | IClassStudentDTO): ClassStudentEntity {
@@ -17,6 +23,7 @@ export class ClassStudentMapper {
     entity.name = data.name;
     entity.maxAge = data.maxAge;
     entity.minAge = data.minAge;
+    entity.schoolUuid = data.schoolUuid;
 
     return entity;
   }

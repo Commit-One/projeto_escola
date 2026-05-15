@@ -3,7 +3,7 @@ import { StatusEnum } from "../../utils/enum/status";
 import { ClassStudent } from "../entities/ClassStudent";
 
 export interface IClassStudentRepository {
-  getAll(): Promise<ClassStudent[]>;
+  getAll(schoolUuid: string): Promise<ClassStudent[]>;
   existByName(name: string): Promise<boolean>;
   create(data: IClassStudentDTO): Promise<ClassStudent>;
   getOne(uuid: string): Promise<ClassStudent | null>;

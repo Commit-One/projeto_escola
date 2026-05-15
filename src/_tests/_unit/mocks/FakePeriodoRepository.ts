@@ -1,4 +1,5 @@
 import { IPeriodRepository } from "../../../domain/repositories/IPeriodRepository";
+import { PeriodEntity } from "../../../infrastructure/database/entities/PeriodEntity";
 
 export class FakePeriodoRepository implements IPeriodRepository {
   private profiles: string[] = [];
@@ -10,5 +11,9 @@ export class FakePeriodoRepository implements IPeriodRepository {
 
   async existByName(name: string): Promise<boolean> {
     return this.profiles.some((p) => p.toLowerCase() === name.toLowerCase());
+  }
+
+  async getAll(): Promise<PeriodEntity[] | null> {
+    return [];
   }
 }

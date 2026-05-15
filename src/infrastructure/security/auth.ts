@@ -6,7 +6,7 @@ import { injectable } from "tsyringe";
 @injectable()
 export class AuthenticationSecurity implements IAuthenticationSecurity {
   async decoded(token: string): Promise<unknown> {
-    const decoded = await jwt.decode(token);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
     return decoded;
   }
 

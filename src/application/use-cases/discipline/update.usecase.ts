@@ -4,6 +4,7 @@ import { ContainerEnum } from "../../../utils/enum/container";
 import { IRedisService } from "../../../domain/contracts/IRedisService";
 import { logger } from "../../../infrastructure/logger";
 import { IDisciplineRepository } from "../../../domain/repositories/IDisciplineRepository";
+import { DisciplineDTO } from "../../dtos/discipline.dto";
 
 @injectable()
 export class UpdateDisciplineUseCase {
@@ -15,8 +16,8 @@ export class UpdateDisciplineUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string, name: string): Promise<boolean> {
-    const discipline = await this._repo.update(uuid, name);
+  async execute(uuid: string, data: DisciplineDTO): Promise<boolean> {
+    const discipline = await this._repo.update(uuid, data);
 
     if (!discipline) {
       logger.warn({

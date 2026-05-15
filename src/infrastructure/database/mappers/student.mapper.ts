@@ -29,6 +29,8 @@ export class StudentMapper {
       entity.dayPayment,
       entity.profileUuid,
       entity.cpf,
+      entity.age,
+      entity.address,
       {
         uuid: entity.uuid,
         createdAt: entity.createdAt,
@@ -98,6 +100,8 @@ export class StudentMapper {
       dayPayment: student.dayPayment,
       uuid: student.uuid,
       cpf: student.cpf,
+      age: student.age,
+      address: student.address,
     };
 
     return response;
@@ -124,7 +128,7 @@ export class StudentMapper {
       name: dataJoin.name,
       matriculation: dataJoin.matriculation,
       dateBirth: dataJoin.dateBirth,
-      status: dataJoin.status as StatusEnum,
+      status: dataJoin.status,
       nameMother: dataJoin.nameMother,
       nameFather: dataJoin.nameFather,
       phone: dataJoin.phone,
@@ -133,8 +137,11 @@ export class StudentMapper {
       hasDiscount: dataJoin.hasDiscount,
       discount: dataJoin.discount,
       dayPayment: dataJoin.dayPayment,
-      uuid: dataJoin.uuid,
+      uuid: dataJoin.studentUuid,
       cpf: dataJoin.cpf,
+      address: dataJoin.address,
+      age: dataJoin.age,
+      mensalidade: dataJoin.mensalidade,
     };
 
     return response;

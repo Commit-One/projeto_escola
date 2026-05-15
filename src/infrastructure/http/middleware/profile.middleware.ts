@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { StatusHTTP } from "../../../utils/enum/statusHTTP";
 import { IDecoded } from "../../../domain/contracts/IDecoded";
 
-export function authorizationMiddleware(profile: string[]) {
+export function authorizationProfileMiddleware(profile: string[]) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       const user: IDecoded = (req as any).user;
@@ -15,9 +15,9 @@ export function authorizationMiddleware(profile: string[]) {
 
       return next();
     } catch (error) {
-      console.log(error);
       return res.status(403).json({
         message: "Perfil de acesso inválido",
+        error: error,
       });
     }
   };

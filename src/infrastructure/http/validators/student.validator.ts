@@ -3,68 +3,60 @@ import { ValidationEmpty } from "../../../utils/error";
 
 const createStudentSchema = z.object({
   name: z
-    .string({ error: new ValidationEmpty("Name").response })
+    .string({ error: new ValidationEmpty("Nome").response })
     .trim()
-    .min(1, new ValidationEmpty("Name").response),
+    .min(1, new ValidationEmpty("Nome").response),
   cpf: z
     .string({ error: new ValidationEmpty("CPF").response })
     .trim()
     .min(1, new ValidationEmpty("CPF").response),
-
+  age: z
+    .number({ error: new ValidationEmpty("Idade").response })
+    .min(1, new ValidationEmpty("Idade").response),
   matriculation: z
     .string({
-      error: new ValidationEmpty("Matriculation").response,
+      error: new ValidationEmpty("Matrícula").response,
     })
     .trim()
-    .min(1, new ValidationEmpty("Matriculation").response),
-
+    .min(1, new ValidationEmpty("Matrícula").response),
   dateBirth: z.coerce.date({
     error: () => ({
       message: new ValidationEmpty("Data aniversário").response,
     }),
   }),
-
-  status: z
-    .string({ error: new ValidationEmpty("Status").response })
-    .trim()
-    .min(1, new ValidationEmpty("Status").response),
-
   nameMother: z
-    .string({ error: new ValidationEmpty("NameMother").response })
+    .string({ error: new ValidationEmpty("Nome da mãe").response })
     .trim()
-    .min(1, new ValidationEmpty("NameMother").response),
+    .min(1, new ValidationEmpty("Nome da mãe").response),
 
   nameFather: z
-    .string({ error: new ValidationEmpty("NameFather").response })
+    .string({ error: new ValidationEmpty("Nome do pai").response })
     .trim()
-    .min(1, new ValidationEmpty("NameFather").response),
+    .min(1, new ValidationEmpty("Nome do pai").response),
 
   phone: z
-    .string({ error: new ValidationEmpty("Phone").response })
+    .string({ error: new ValidationEmpty("Telefone").response })
     .trim()
-    .min(1, new ValidationEmpty("Phone").response),
+    .min(1, new ValidationEmpty("Telefone").response),
 
   classUuid: z
     .string({ error: new ValidationEmpty("classUuid").response })
     .trim()
     .min(1, new ValidationEmpty("classUuid").response),
-
-  dateMatriculation: z.coerce.date({
-    error: () => ({
-      message: new ValidationEmpty("Data de matrícula").response,
-    }),
-  }),
-
-  hasDiscount: z.boolean().default(false),
-
+  address: z
+    .string({ error: new ValidationEmpty("Endereço").response })
+    .trim()
+    .min(1, new ValidationEmpty("Endereço").response),
+  dateMatriculation: z
+    .string({ error: new ValidationEmpty("Data matrícula").response })
+    .trim()
+    .min(1, new ValidationEmpty("Data matrícula").response),
   discount: z.number(),
-
   dayPayment: z.number({
     error: () => ({
       message: new ValidationEmpty("Dia do pagamento").response,
     }),
   }),
-
   periodUuid: z
     .string({ error: new ValidationEmpty("PeriodUuid").response })
     .trim()
@@ -91,64 +83,25 @@ const updateStatusStudentSchema = z.object({
 
 const updateStudentSchema = {
   body: z.object({
-    name: z
-      .string({ error: new ValidationEmpty("Name").response })
-      .trim()
-      .min(1, new ValidationEmpty("Name").response),
-
-    matriculation: z
-      .string({
-        error: new ValidationEmpty("Matriculation").response,
-      })
-      .trim()
-      .min(1, new ValidationEmpty("Matriculation").response),
-
-    dateBirth: z.coerce.date({
-      error: () => ({
-        message: new ValidationEmpty("Data de aniversário").response,
-      }),
-    }),
-    status: z
-      .string({ error: new ValidationEmpty("Status").response })
-      .trim()
-      .min(1, new ValidationEmpty("Status").response),
-
-    nameMother: z
-      .string({ error: new ValidationEmpty("NameMother").response })
-      .trim()
-      .min(1, new ValidationEmpty("NameMother").response),
-
-    nameFather: z
-      .string({ error: new ValidationEmpty("NameFather").response })
-      .trim()
-      .min(1, new ValidationEmpty("NameFather").response),
-
     phone: z
-      .string({ error: new ValidationEmpty("Phone").response })
+      .string({ error: new ValidationEmpty("Telefone").response })
       .trim()
-      .min(1, new ValidationEmpty("Phone").response),
-
-    classStudent: z
-      .string({ error: new ValidationEmpty("ClassStudent").response })
+      .min(1, new ValidationEmpty("Telefone").response),
+    classUuid: z
+      .string({ error: new ValidationEmpty("classUuid").response })
       .trim()
-      .min(1, new ValidationEmpty("ClassStudent").response),
-
-    dateMatriculation: z.coerce.date({
-      error: () => ({
-        message: new ValidationEmpty("Data de matrícula").response,
-      }),
-    }),
-
+      .min(1, new ValidationEmpty("classUuid").response),
+    address: z
+      .string({ error: new ValidationEmpty("Endereço").response })
+      .trim()
+      .min(1, new ValidationEmpty("Endereço").response),
     hasDiscount: z.boolean().default(false),
-
     discount: z.number(),
-
     dayPayment: z.number({
       error: () => ({
         message: new ValidationEmpty("Dia do pagamento").response,
       }),
     }),
-
     periodUuid: z
       .string({ error: new ValidationEmpty("PeriodUuid").response })
       .trim()

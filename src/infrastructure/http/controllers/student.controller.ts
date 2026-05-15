@@ -7,6 +7,9 @@ import { DeleteStudentUseCase } from "../../../application/use-cases/student/del
 import { UpdateStatusStudentUseCase } from "../../../application/use-cases/student/updateStatus.usecase";
 import { UpdateStudentUseCase } from "../../../application/use-cases/student/updateStudent.usecase";
 import { injectable } from "tsyringe";
+import { GetStatisticsUsecase } from "../../../application/use-cases/student/getStatistics.usecase";
+import { schoolByUserMiddleware } from "../middleware/schoolByUser.middleware";
+import { StatusEnum } from "../../../utils/enum/status";
 
 @injectable()
 export class StudentController {
@@ -16,11 +19,13 @@ export class StudentController {
     private readonly _getAll: GetAllStudetsUseCase,
     private readonly _update: UpdateStudentUseCase,
     private readonly _updateStatus: UpdateStatusStudentUseCase,
+    private readonly _getStatistics: GetStatisticsUsecase,
     private readonly _delete: DeleteStudentUseCase,
   ) {}
 
   async create(req: any, res: Response) {
     try {
+      const schoolUuid = schoolByUserMiddleware(req);
       const student = await this._create.execute({
         name: req.body?.name,
         matriculation: req.body?.matriculation,
@@ -36,8 +41,10 @@ export class StudentController {
         periodUuid: req.body?.periodUuid,
         classUuid: req.body?.classUuid,
         profileUuid: req.body?.profileUuid,
-        schoolUuid: req.user.escola.uuid,
+        schoolUuid: schoolUuid,
         cpf: req.body?.cpf,
+        age: req.body?.age,
+        address: req.body?.address,
       });
       return Handler.created(res, student);
     } catch (err: unknown) {
@@ -45,9 +52,10 @@ export class StudentController {
     }
   }
 
-  async getAll(_: Request, res: Response) {
+  async getAll(req: any, res: Response) {
     try {
-      const students = await this._getAll.execute();
+      const schoolUuid = schoolByUserMiddleware(req);
+      const students = await this._getAll.execute(schoolUuid);
       return Handler.ok(res, students);
     } catch (err: unknown) {
       return Handler.error(res, err);
@@ -77,7 +85,7 @@ export class StudentController {
   async update(req: any, res: Response) {
     try {
       const { uuid } = req.params;
-
+      const schoolUuid = schoolByUserMiddleware(req);
       const updated = await this._update.execute(uuid as string, {
         name: req.body?.name,
         matriculation: req.body?.matriculation,
@@ -93,8 +101,10 @@ export class StudentController {
         periodUuid: req.body?.periodUuid,
         classUuid: req.body?.classUuid,
         profileUuid: req.body?.profileUuid,
-        schoolUuid: req.user.escola.uuid,
+        schoolUuid: schoolUuid,
         cpf: req.body?.cpf,
+        age: req.body?.age,
+        address: req.body?.address,
       });
       return Handler.ok(res, updated);
     } catch (err: unknown) {
@@ -105,8 +115,20 @@ export class StudentController {
   async updateStatus(req: Request, res: Response) {
     try {
       const { uuid } = req.params;
-      const { status } = req.body;
-      const updated = await this._updateStatus.execute(uuid as string, status);
+      const updated = await this._updateStatus.execute(
+        uuid as string,
+        StatusEnum.INACTIVE,
+      );
+      return Handler.ok(res, updated);
+    } catch (err: unknown) {
+      return Handler.error(res, err);
+    }
+  }
+
+  async statistics(req: any, res: Response) {
+    try {
+      const schoolUuid = schoolByUserMiddleware(req);
+      const updated = await this._getStatistics.execute(schoolUuid);
       return Handler.ok(res, updated);
     } catch (err: unknown) {
       return Handler.error(res, err);

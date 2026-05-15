@@ -5,6 +5,7 @@ import { Base } from "./Base";
 export class Period extends Base {
   constructor(
     public name: string,
+    public schoolUuid: string,
     baseProps?: IBaseProps,
   ) {
     super(baseProps);
@@ -13,5 +14,6 @@ export class Period extends Base {
 
   private validate() {
     if (!this.name) throw new ValidationEmpty("name");
+    if (!this.schoolUuid) throw new ValidationEmpty("schoolUuid");
   }
 }

@@ -4,6 +4,7 @@ import { IPeriodRepository } from "../../../domain/repositories/IPeriodRepositor
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { ContainerEnum } from "../../../utils/enum/container";
 import { logger } from "../../../infrastructure/logger";
+import { AppError } from "../../../utils/error";
 
 @injectable()
 export class CreatePeriodUseCase {
@@ -15,19 +16,18 @@ export class CreatePeriodUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(): Promise<boolean> {
-    const listPeriod = ["Manhã", "Tarde", "Noite"];
+  async execute(name: string, schoolUuid: string): Promise<boolean> {
+    const isExist = await this._periodRepository.existByName(name);
 
-    for (const p of listPeriod) {
-      const isExist = await this._periodRepository.existByName(p);
-      if (!isExist) {
-        await this._periodRepository.create(p);
-      }
+    if (isExist) {
+      logger.warn("Período já cadastrado");
+      new AppError("Período já cadastrado");
     }
 
-    await this._cache.set(cacheKeyEnum.PERIOD, listPeriod);
+    await this._periodRepository.create(name, schoolUuid);
+    await this._cache.delete(cacheKeyEnum.PERIOD);
 
-    logger.info({ message: "Períodos criados com sucesso" });
+    logger.info({ message: "Período criado com sucesso" });
 
     return true;
   }

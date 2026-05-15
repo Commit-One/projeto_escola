@@ -9,8 +9,8 @@ import {
 import { container } from "tsyringe";
 import { StudentController } from "../controllers/student.controller";
 import { createApi } from "../../../utils/helpers/createApi";
-import { authorizationMiddleware } from "../middleware/profile.middleware";
-import { authenticateMiddleware } from "../middleware/auth.middleware";
+import { authorizationProfileMiddleware } from "../middleware/profile.middleware";
+import { isAuthMiddleware } from "../middleware/auth.middleware";
 import { ProfileEnum } from "../../../utils/enum/profile";
 
 export const studentsRoutes = Router();
@@ -25,8 +25,8 @@ createApi(studentsRoutes, {
   tags: [tagName],
   controller: controller.getAll.bind(controller),
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -39,8 +39,21 @@ createApi(studentsRoutes, {
   controller: controller.create.bind(controller),
   body: createStudentSchema,
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
+  ],
+});
+
+createApi(studentsRoutes, {
+  method: "get",
+  path: "/stats",
+  fullPath: "/student/stats",
+  summary: "Busca dados de estatísticas",
+  tags: [tagName],
+  controller: controller.statistics.bind(controller),
+  middlewares: [
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -51,8 +64,8 @@ createApi(studentsRoutes, {
   summary: "Busca um aluno com base no id",
   tags: [tagName],
   controller: controller.getOne.bind(controller),
-  body: getOneStudentSchema,
-  middlewares: [authenticateMiddleware],
+  params: getOneStudentSchema,
+  middlewares: [isAuthMiddleware],
 });
 
 createApi(studentsRoutes, {
@@ -62,10 +75,10 @@ createApi(studentsRoutes, {
   summary: "Deleta um aluno com base no id",
   tags: [tagName],
   controller: controller.delete.bind(controller),
-  body: deleteStudentSchema,
+  params: deleteStudentSchema,
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -79,8 +92,8 @@ createApi(studentsRoutes, {
   body: updateStudentSchema.body,
   params: updateStudentSchema.params,
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -93,7 +106,7 @@ createApi(studentsRoutes, {
   controller: controller.updateStatus.bind(controller),
   params: updateStatusStudentSchema,
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });

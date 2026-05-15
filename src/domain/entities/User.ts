@@ -11,6 +11,7 @@ export class User extends Base {
     public profileUuid: string,
     public name: string,
     public status: StatusEnum = StatusEnum.ACTIVE,
+    public last_access?: Date,
     baseProps?: IBaseProps,
   ) {
     super(baseProps);

@@ -21,9 +21,9 @@ export class Payment extends Base {
     super(baseProps);
     this.calculateMonthlyValue(this.discount);
     this.datePayment = new Date(
-      this.referenceDay,
-      this.referenceMonth,
-      this.referenceYear,
+      referenceYear,
+      referenceMonth - 1,
+      referenceDay,
     );
   }
 

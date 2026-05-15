@@ -10,6 +10,7 @@ export class UserMapper {
       entity.profileUuid,
       entity.name,
       entity.status,
+      entity.last_access,
       {
         uuid: entity.uuid,
         createdAt: entity.createdAt,

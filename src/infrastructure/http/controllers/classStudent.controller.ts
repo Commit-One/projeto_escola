@@ -6,6 +6,7 @@ import { GetOneClassStudentUseCase } from "../../../application/use-cases/classS
 import { UpdateClassStudentUseCase } from "../../../application/use-cases/classStudent/update.usecase";
 import { DeleteClassStudentUseCase } from "../../../application/use-cases/classStudent/delete.usecase";
 import { injectable } from "tsyringe";
+import { schoolByUserMiddleware } from "../middleware/schoolByUser.middleware";
 
 @injectable()
 export class ClassStudentController {
@@ -20,8 +21,7 @@ export class ClassStudentController {
   async create(req: any, res: Response) {
     try {
       const { name, maxAge, minAge } = req.body;
-      const schoolUuid = req.user.escola.uuid;
-
+      const schoolUuid = schoolByUserMiddleware(req);
       const created = await this._create.execute({
         name,
         maxAge,
@@ -35,9 +35,10 @@ export class ClassStudentController {
     }
   }
 
-  async getAll(_: Request, res: Response) {
+  async getAll(req: any, res: Response) {
     try {
-      const getAll = await this._getAll.execute();
+      const schoolUuid = schoolByUserMiddleware(req);
+      const getAll = await this._getAll.execute(schoolUuid);
       return Handler.ok(res, getAll);
     } catch (err: unknown) {
       return Handler.error(res, err);
@@ -68,7 +69,7 @@ export class ClassStudentController {
     try {
       const { name, maxAge, minAge } = req.body;
       const { uuid } = req.params;
-      const schoolUuid = req.user.escola.uuid;
+      const schoolUuid = schoolByUserMiddleware(req);
       const updated = await this._update.execute(uuid as string, {
         name,
         maxAge,

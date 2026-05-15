@@ -8,8 +8,8 @@ import {
 import { container } from "tsyringe";
 import { ClassStudentController } from "../controllers/classStudent.controller";
 import { createApi } from "../../../utils/helpers/createApi";
-import { authenticateMiddleware } from "../middleware/auth.middleware";
-import { authorizationMiddleware } from "../middleware/profile.middleware";
+import { isAuthMiddleware } from "../middleware/auth.middleware";
+import { authorizationProfileMiddleware } from "../middleware/profile.middleware";
 import { ProfileEnum } from "../../../utils/enum/profile";
 
 export const classStudentsRoutes = Router();
@@ -25,8 +25,8 @@ createApi(classStudentsRoutes, {
   tags: [tagName],
   body: createClassSchema,
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -37,10 +37,11 @@ createApi(classStudentsRoutes, {
   fullPath: "/class/:uuid",
   summary: "Atualizar uma turma",
   tags: [tagName],
-  body: updateClassSchema,
+  body: updateClassSchema.body,
+  params: updateClassSchema.params,
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -52,7 +53,7 @@ createApi(classStudentsRoutes, {
   summary: "Buscar uma turma",
   tags: [tagName],
   body: getOneClassSchema,
-  middlewares: [authenticateMiddleware],
+  middlewares: [isAuthMiddleware],
 });
 
 createApi(classStudentsRoutes, {
@@ -62,10 +63,10 @@ createApi(classStudentsRoutes, {
   fullPath: "/class/:uuid",
   summary: "Deletar uma turma",
   tags: [tagName],
-  body: deleteClassSchema,
+  params: deleteClassSchema,
   middlewares: [
-    authenticateMiddleware,
-    authorizationMiddleware([ProfileEnum.ADMIN]),
+    isAuthMiddleware,
+    authorizationProfileMiddleware([ProfileEnum.ADMIN]),
   ],
 });
 
@@ -76,5 +77,5 @@ createApi(classStudentsRoutes, {
   fullPath: "/class",
   summary: "Buscar turmas",
   tags: [tagName],
-  middlewares: [authenticateMiddleware],
+  middlewares: [isAuthMiddleware],
 });

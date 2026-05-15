@@ -7,6 +7,7 @@ import { DisciplineEntity } from "../entities/DisciplineEntity";
 import { DisciplineMapper } from "../mappers/discipline.mapper";
 import { NotFoundError } from "../../../utils/error";
 import { SchoolEntity } from "../entities/SchoolEntity";
+import { DisciplineDTO } from "../../../application/dtos/discipline.dto";
 
 @injectable()
 export class DisciplineTypeOrmRepository implements IDisciplineRepository {
@@ -18,15 +19,17 @@ export class DisciplineTypeOrmRepository implements IDisciplineRepository {
     this._repoSchool = AppDataSource.getRepository(SchoolEntity);
   }
 
-  async getAll(): Promise<Discipline[]> {
-    const list = await this._repo.find();
+  async getAll(schoolUuid: string): Promise<Discipline[]> {
+    const list = await this._repo.find({ where: { schoolUuid } });
     return list.map((e) => DisciplineMapper.toDomain(e));
   }
 
-  async create(name: string, schoolUuid: string): Promise<Discipline> {
-    const discipline = new Discipline(name, schoolUuid);
+  async create(data: DisciplineDTO): Promise<Discipline> {
+    console.log(data);
+    const discipline = new Discipline(data.name, data.schoolUuid);
+
     const school = await this._repoSchool.findOne({
-      where: { uuid: schoolUuid },
+      where: { uuid: data.schoolUuid },
     });
 
     if (!school) throw new NotFoundError("Escola");
@@ -49,12 +52,13 @@ export class DisciplineTypeOrmRepository implements IDisciplineRepository {
     return (deleted.affected ?? 0) > 0;
   }
 
-  async update(uuid: string, name: string): Promise<Discipline> {
+  async update(uuid: string, data: DisciplineDTO): Promise<Discipline> {
     const entity = await this._repo.findOne({ where: { uuid } });
 
     if (!entity) throw new NotFoundError("Disciplina");
+    const updated = new Discipline(data.name, data.schoolUuid);
 
-    await this._repo.update({ uuid }, { name });
+    await this._repo.update({ uuid }, { name: updated.name });
     return DisciplineMapper.toDomain(entity);
   }
 }

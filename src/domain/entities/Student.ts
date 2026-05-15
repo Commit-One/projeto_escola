@@ -11,7 +11,7 @@ export class Student extends Base {
     public schoolUuid: string,
     public matriculation: string,
     public dateBirth: Date,
-    public status: StatusEnum = StatusEnum.ACTIVE,
+    public status: StatusEnum,
     public nameMother: string,
     public nameFather: string,
     public name: string,
@@ -24,10 +24,11 @@ export class Student extends Base {
     public dayPayment: number,
     public profileUuid: string,
     public cpf: string,
+    public age: number,
+    public address: string,
     baseProps?: IBaseProps,
   ) {
     super(baseProps);
-    this.profileUuid = "b8509789-9180-4345-a19e-386b14b81a90";
     this.validate();
     this.formatFields();
   }
@@ -37,6 +38,8 @@ export class Student extends Base {
     this.phone = replace(this.phone);
     this.dateBirth = dateForMySQL(this.dateBirth);
     this.dateMatriculation = dateForMySQL(this.dateMatriculation);
+    this.hasDiscount = String(this.hasDiscount) === "sim";
+    this.status = StatusEnum.ACTIVE;
   }
 
   private validate() {
@@ -50,11 +53,12 @@ export class Student extends Base {
     if (!this.classUuid) throw new ValidationEmpty("classUuid");
     if (!this.periodUuid) throw new ValidationEmpty("periodUuid");
     if (!this.dateMatriculation) throw new ValidationEmpty("dateMatriculation");
-    if (!this.hasDiscount) throw new ValidationEmpty("hasDiscount");
     if (!this.discount) throw new ValidationEmpty("discount");
     if (!this.dayPayment) throw new ValidationEmpty("dayPayment");
     if (!this.profileUuid) throw new ValidationEmpty("profileUuid");
     if (!this.cpf) throw new ValidationEmpty("cpf");
+    if (!this.address) throw new ValidationEmpty("Endereço");
+    if (!this.age) throw new ValidationEmpty("Idade");
     if (!CpfValueObject.validate(this.cpf)) throw new AppError("CPF inválido");
   }
 }
