@@ -3,7 +3,6 @@ import cors from "cors";
 import { AppDataSource } from "../infrastructure/database/data-source";
 import { routes } from "../infrastructure/http/routes";
 import { connectRedis } from "../infrastructure/redis/redis.connection";
-// import { setupRabbitMQ } from "../infrastructure/messaging/rabbit/setup";
 import { requestLoggerMiddleware } from "../infrastructure/http/middleware/requestLogger.middleware";
 import { errorMiddleware } from "../infrastructure/http/middleware/errorLogger.middleware";
 import { generateOpenAPIDocument } from "./swagger";

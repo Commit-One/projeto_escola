@@ -1,4 +1,4 @@
-import { IRabbitQueueConfig } from "../../infrastructure/messaging/rabbit/queues/interface";
+import { IRabbitQueueConfig } from "../../infrastructure/_/rabbit/queues/interface";
 
 export interface IQueueService {
   sendToQueue(

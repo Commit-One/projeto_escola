@@ -12,7 +12,6 @@ import { ProfileTypeOrmRepository } from "../infrastructure/database/repositorie
 import { SchoolTypeOrmRepository } from "../infrastructure/database/repositories/school.repository";
 import { StudentTypeOrmRepository } from "../infrastructure/database/repositories/student.repository";
 import { UserTypeOrmRepository } from "../infrastructure/database/repositories/user.repository";
-import { RabbitService } from "../infrastructure/messaging/rabbit/rabbit.service";
 import { EnvironmentConfig } from "../infrastructure/config";
 import { DisciplineTypeOrmRepository } from "../infrastructure/database/repositories/discipline.repository";
 import { NotesTypeOrmRepository } from "../infrastructure/database/repositories/notes.repository";
@@ -84,4 +83,3 @@ container.registerSingleton(
   ContainerEnum.USER_REPOSITORY,
   UserTypeOrmRepository,
 );
-container.registerSingleton(ContainerEnum.QUEUE_SERVICE, RabbitService);

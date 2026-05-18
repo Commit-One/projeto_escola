@@ -1,8 +1,6 @@
-import { IQueueService } from "../../../domain/contracts/IQueueService";
 import { School } from "../../../domain/entities/School";
 import { ISchoolRepository } from "../../../domain/repositories/ISchoolRepository";
 import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
-import { QueueEnum } from "../../../utils/enum/queue";
 import { SchoolDTO } from "../../dtos/school.dto";
 import { inject, injectable } from "tsyringe";
 import { ContainerEnum } from "../../../utils/enum/container";
@@ -17,18 +15,12 @@ export class CreateSchoolUseCase {
 
     @inject(ContainerEnum.REDIS_SERVICE)
     private readonly _cache: IRedisService,
-
-    @inject(ContainerEnum.QUEUE_SERVICE)
-    private readonly _queue: IQueueService,
   ) {}
 
   async execute(dto: SchoolDTO): Promise<School> {
     const school = await this._repo.create(dto);
 
     await this._cache.delete(cacheKeyEnum.SCHOOLS);
-
-    // TODO: Criar tabela de notificação e eliminar rabbit
-    // await this._queue.sendToQueue(QueueEnum.NOTIFICATION_NAME, school);
 
     logger.info({
       message: "Escola criada com sucesso!",

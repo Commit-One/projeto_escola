@@ -19,4 +19,24 @@ export class PaymentMapper {
 
     return entity;
   }
+
+  static toDomain(entity: PaymentEntity): Payment {
+    return new Payment(
+      entity.studentUuid,
+      entity.schoolUuid,
+      entity.annualValue,
+      entity.referenceMonth,
+      entity.referenceDay,
+      entity.referenceYear,
+      entity.status,
+      entity.discountApplied,
+      entity.discount,
+      {
+        createdAt: entity.createdAt,
+        enable: entity.enable,
+        id: entity.id,
+        uuid: entity.uuid,
+      },
+    );
+  }
 }

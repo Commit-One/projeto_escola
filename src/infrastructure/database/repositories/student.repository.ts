@@ -20,6 +20,9 @@ import {
   studentsQuery,
   studentStatisticsQuery,
 } from "../_queries/students.query";
+import { PaymentEntity } from "../entities/PaymentEntity";
+import { PaymentTypeOrmRepository } from "./payment.repository";
+import { ClassPeriodEntity } from "../entities/ClassPeriodEntity";
 
 @injectable()
 export class StudentTypeOrmRepository implements IStudentRepository {
@@ -57,45 +60,82 @@ export class StudentTypeOrmRepository implements IStudentRepository {
   }
 
   async create(data: StudentDTO): Promise<StudentResponseDTO> {
-    const isExist = await this._repo.exists({
-      where: { cpf: replace(data.cpf) },
-    });
+    const queryRunner = AppDataSource.createQueryRunner();
 
-    if (isExist) throw new AppError("Já possuimos um registro com esse CPF");
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    const profile = await this._repoProfile.findOne({
-      where: { name: ProfileEnum.STUDENT },
-    });
+    try {
+      const _repo = queryRunner.manager.getRepository(StudentEntity);
+      const _repoProfile = queryRunner.manager.getRepository(ProfileEntity);
+      const _repoSchool = queryRunner.manager.getRepository(SchoolEntity);
+      const _repoPeriod = queryRunner.manager.getRepository(PeriodEntity);
+      const _repoClass = queryRunner.manager.getRepository(ClassStudentEntity);
+      const _repoRules = queryRunner.manager.getRepository(ClassPeriodEntity);
+      const _paymentRepository = new PaymentTypeOrmRepository(
+        queryRunner.manager.getRepository(PaymentEntity),
+      );
 
-    if (!profile) throw new NotFoundError("Perfil");
+      const isExist = await _repo.exists({
+        where: { cpf: replace(data.cpf) },
+      });
+      if (isExist) throw new AppError("Já possuimos um registro com esse CPF");
 
-    const school = await this._repoSchool.findOne({
-      where: { uuid: data.schoolUuid },
-    });
-    if (!school) throw new NotFoundError("Escola");
+      const profile = await _repoProfile.findOne({
+        where: { name: ProfileEnum.STUDENT },
+      });
+      if (!profile) throw new NotFoundError("Perfil");
 
-    const classStudent = await this._repoClass.findOne({
-      where: { uuid: data.classUuid },
-    });
-    if (!classStudent) throw new NotFoundError("Classe");
+      const school = await _repoSchool.findOne({
+        where: { uuid: data.schoolUuid },
+      });
+      if (!school) throw new NotFoundError("Escola");
 
-    const period = await this._repoPeriod.findOne({
-      where: { uuid: data.periodUuid },
-    });
-    if (!period) throw new NotFoundError("Período");
+      const classStudent = await _repoClass.findOne({
+        where: { uuid: data.classUuid },
+      });
+      if (!classStudent) throw new NotFoundError("Classe");
 
-    data.profileUuid = profile.uuid;
-    const student = StudentMapper.toDomain(data);
+      const period = await _repoPeriod.findOne({
+        where: { uuid: data.periodUuid },
+      });
+      if (!period) throw new NotFoundError("Período");
 
-    await this._repo.save(student);
+      const rules = await _repoRules.findOne({
+        where: {
+          classUuid: classStudent.uuid,
+          periodUuid: period.uuid,
+        },
+      });
+      if (!rules) throw new NotFoundError("Regra");
 
-    return StudentMapper.toResponse(
-      student,
-      school,
-      profile,
-      period,
-      classStudent,
-    );
+      data.profileUuid = profile.uuid;
+      const student = StudentMapper.toDomain(data);
+
+      await _repo.save(student);
+      await _paymentRepository.createAllPayments({
+        discount: data.discount,
+        discountApplied: !!data.hasDiscount,
+        schoolUuid: data.schoolUuid,
+        studentUuid: student.uuid,
+        value: rules.value,
+        dayPayment: data.dayPayment,
+      });
+
+      await queryRunner.commitTransaction();
+      return StudentMapper.toResponse(
+        student,
+        school,
+        profile,
+        period,
+        classStudent,
+      );
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async getOne(uuid: string): Promise<StudentResponseDTO> {

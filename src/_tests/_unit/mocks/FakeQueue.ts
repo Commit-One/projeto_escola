@@ -1,5 +1,5 @@
 import { IQueueService } from "../../../domain/contracts/IQueueService";
-import { IRabbitQueueConfig } from "../../../infrastructure/messaging/rabbit/queues/interface";
+import { IRabbitQueueConfig } from "../../../infrastructure/_/rabbit/queues/interface";
 
 export class FakeQueue implements IQueueService {
   public messages: { queue: string; payload: unknown }[] = [];
