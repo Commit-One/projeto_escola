@@ -15,15 +15,15 @@ export class GetOneDisciplineUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string): Promise<Discipline | null> {
+  async execute(uuid: string, schoolUuid: string): Promise<Discipline | null> {
     const disciplineCached = await this._cache.get<Discipline[]>(
-      cacheKeyEnum.CLASS,
+      `${cacheKeyEnum.DISCIPLINE}:${schoolUuid}`,
     );
     let discipline;
 
     if (!disciplineCached)
       discipline = await this._classRepository.getOne(uuid);
-    else discipline = disciplineCached.find((s) => s.uuid.includes(uuid));
+    else discipline = disciplineCached.find((s) => s.uuid === uuid);
 
     return discipline ?? null;
   }

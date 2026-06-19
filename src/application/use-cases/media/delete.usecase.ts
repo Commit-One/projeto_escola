@@ -15,7 +15,7 @@ export class DeleteMediaUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string): Promise<boolean> {
+  async execute(uuid: string, schoolUuid: string): Promise<boolean> {
     const deleted = await this._repo.delete(uuid);
 
     if (!deleted) {
@@ -27,7 +27,7 @@ export class DeleteMediaUseCase {
       return false;
     }
 
-    await this._cache.delete(cacheKeyEnum.MEDIAS);
+    await this._cache.delete(`${cacheKeyEnum.MEDIAS}:${schoolUuid}`);
 
     logger.info({
       message: "Media deletado com sucesso",

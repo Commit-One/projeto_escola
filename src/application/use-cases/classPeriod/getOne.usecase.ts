@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
 import { ClassPeriod } from "../../../domain/entities/ClassPeriod";
 import { IClassPeriodRepository } from "../../../domain/repositories/IClassPeriodRepository";
-import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 import { ContainerEnum } from "../../../utils/enum/container";
 import { IRedisService } from "../../../domain/contracts/IRedisService";
+import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 
 @injectable()
 export class GetOneClassPeriodUseCase {
@@ -15,14 +15,14 @@ export class GetOneClassPeriodUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string): Promise<ClassPeriod | null> {
+  async execute(uuid: string, schoolUuid: string): Promise<ClassPeriod | null> {
     const classPeriodCached = await this._cache.get<ClassPeriod[]>(
-      cacheKeyEnum.CLASS_PERIOD,
+      `${cacheKeyEnum.CLASS_PERIOD}:${schoolUuid}`,
     );
     let classPeriod;
 
     if (!classPeriodCached) classPeriod = await this._repo.getOne(uuid);
-    else classPeriod = classPeriodCached.find((s) => s.uuid.includes(uuid));
+    else classPeriod = classPeriodCached.find((s) => s.uuid === uuid);
 
     return classPeriod ?? null;
   }

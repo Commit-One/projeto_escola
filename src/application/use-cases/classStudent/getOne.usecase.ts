@@ -15,15 +15,18 @@ export class GetOneClassStudentUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string): Promise<ClassStudent | null> {
+  async execute(
+    uuid: string,
+    schoolUuid: string,
+  ): Promise<ClassStudent | null> {
     const classStudentCached = await this._cache.get<ClassStudent[]>(
-      cacheKeyEnum.CLASS,
+      `${cacheKeyEnum.CLASS_STUDENT}:${schoolUuid}`,
     );
     let classStudent;
 
     if (!classStudentCached)
       classStudent = await this._classRepository.getOne(uuid);
-    else classStudent = classStudentCached.find((s) => s.uuid.includes(uuid));
+    else classStudent = classStudentCached.find((s) => s.uuid === uuid);
 
     return classStudent ?? null;
   }

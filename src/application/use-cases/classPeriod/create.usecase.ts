@@ -19,7 +19,7 @@ export class CreateClassPeriodUseCase {
 
   async execute(data: ClassPeriodDTO): Promise<ClassPeriod> {
     const classPeriod = await this._repo.create(data);
-    await this._cache.delete(cacheKeyEnum.CLASS_PERIOD);
+    await this._cache.delete(`${cacheKeyEnum.CLASS_PERIOD}:${data.schoolUuid}`);
 
     logger.info({
       message: "Regra de classe e período criado com sucesso",

@@ -27,7 +27,7 @@ export class UpdateDisciplineUseCase {
       return false;
     }
 
-    await this._cache.delete(cacheKeyEnum.DISCIPLINE);
+    await this._cache.delete(`${cacheKeyEnum.DISCIPLINE}:${data.schoolUuid}`);
 
     logger.info({
       message: "Atualização realizada com sucesso",

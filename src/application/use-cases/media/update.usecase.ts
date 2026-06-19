@@ -30,7 +30,7 @@ export class UpdateMediaUseCase {
       return item;
     }
 
-    await this._cache.delete(cacheKeyEnum.MEDIAS);
+    await this._cache.delete(`${cacheKeyEnum.MEDIAS}:${data.schoolUuid}`);
 
     logger.info({
       message: "Media atualizado com sucesso",

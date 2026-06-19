@@ -15,7 +15,7 @@ export class DeleteNotesUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string): Promise<boolean> {
+  async execute(uuid: string, schoolUuid: string): Promise<boolean> {
     const deleted = await this._repo.delete(uuid);
 
     if (!deleted) {
@@ -26,7 +26,7 @@ export class DeleteNotesUseCase {
       return false;
     }
 
-    await this._cache.delete(cacheKeyEnum.NOTES);
+    await this._cache.delete(`${cacheKeyEnum.NOTES}:${schoolUuid}`);
     logger.info({
       message: "Relação deletada com sucesso",
       Notes: uuid,

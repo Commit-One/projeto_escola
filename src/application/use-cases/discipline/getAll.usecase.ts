@@ -17,19 +17,15 @@ export class GetAllDisciplineUseCase {
 
   async execute(schoolUuid: string): Promise<Discipline[]> {
     const cachedDiscipline = await this._cache.get<Discipline[]>(
-      cacheKeyEnum.DISCIPLINE,
+      `${cacheKeyEnum.DISCIPLINE}:${schoolUuid}`,
     );
 
     if (cachedDiscipline) {
-      const filterBySchoolUuid: Discipline[] = cachedDiscipline.filter(
-        (c) => c.schoolUuid === schoolUuid,
-      );
-
-      return filterBySchoolUuid;
+      return cachedDiscipline;
     }
 
     const list = await this._repo.getAll(schoolUuid);
-    await this._cache.set(cacheKeyEnum.DISCIPLINE, list);
+    await this._cache.set(`${cacheKeyEnum.DISCIPLINE}:${schoolUuid}`, list);
     return list;
   }
 }

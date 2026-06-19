@@ -15,7 +15,7 @@ export class DeleteClassStudentUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string): Promise<boolean> {
+  async execute(uuid: string, schoolUuid: string): Promise<boolean> {
     const deleted = await this._classRepository.delete(uuid);
 
     if (!deleted) {
@@ -26,7 +26,7 @@ export class DeleteClassStudentUseCase {
       return false;
     }
 
-    await this._cache.delete(cacheKeyEnum.CLASS);
+    await this._cache.delete(`${cacheKeyEnum.CLASS_STUDENT}:${schoolUuid}`);
 
     logger.info({
       message: "Relação de aluno e classe deletada com sucesso",

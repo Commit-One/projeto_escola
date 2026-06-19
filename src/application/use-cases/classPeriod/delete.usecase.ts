@@ -15,7 +15,7 @@ export class DeleteClassPeriodUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string): Promise<boolean> {
+  async execute(uuid: string, schoolUuid: string): Promise<boolean> {
     const deleted = await this._repo.delete(uuid);
 
     if (!deleted) {
@@ -26,7 +26,7 @@ export class DeleteClassPeriodUseCase {
       return false;
     }
 
-    await this._cache.delete(cacheKeyEnum.CLASS_PERIOD);
+    await this._cache.delete(`${cacheKeyEnum.CLASS_PERIOD}:${schoolUuid}`);
 
     logger.info({
       message: "Regra de classe e periíodo deletada com sucesso",

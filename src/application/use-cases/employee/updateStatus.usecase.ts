@@ -16,7 +16,11 @@ export class UpdateStatusEmployeeUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string, status: StatusEnum): Promise<boolean> {
+  async execute(
+    uuid: string,
+    status: StatusEnum,
+    schoolUuid: string,
+  ): Promise<boolean> {
     const item = await this._repo.updateStatus(uuid, status);
 
     if (!item) {
@@ -29,7 +33,7 @@ export class UpdateStatusEmployeeUseCase {
       return item;
     }
 
-    await this._cache.delete(cacheKeyEnum.EMPLOYEES);
+    await this._cache.delete(`${cacheKeyEnum.EMPLOYEES}:${schoolUuid}`);
 
     logger.info({
       message: "Status do employee atualizado com sucesso",

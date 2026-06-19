@@ -30,7 +30,7 @@ export class UpdateEmployeeUseCase {
       return item;
     }
 
-    await this._cache.delete(cacheKeyEnum.EMPLOYEES);
+    await this._cache.delete(`${cacheKeyEnum.EMPLOYEES}:${data.schoolUuid}`);
 
     logger.info({
       message: "Employee atualizado com sucesso",

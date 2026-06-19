@@ -1,14 +1,14 @@
-import { IRabbitQueueConfig } from "../../infrastructure/_/rabbit/queues/interface";
+// import { IRabbitQueueConfig } from "../../infrastructure/_/rabbit/queues/interface";
 
-export interface IQueueService {
-  sendToQueue(
-    queueName: string,
-    payload: any,
-    headers?: Record<string, unknown>,
-  ): Promise<void>;
+// export interface IQueueService {
+//   sendToQueue(
+//     queueName: string,
+//     payload: any,
+//     headers?: Record<string, unknown>,
+//   ): Promise<void>;
 
-  consumerQueue(
-    queue: IRabbitQueueConfig,
-    callback: (payload: any) => Promise<void>,
-  ): Promise<void>;
-}
+//   consumerQueue(
+//     queue: IRabbitQueueConfig,
+//     callback: (payload: any) => Promise<void>,
+//   ): Promise<void>;
+// }

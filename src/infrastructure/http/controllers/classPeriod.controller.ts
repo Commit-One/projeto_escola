@@ -18,7 +18,7 @@ export class ClassPeriodController {
     private readonly _getOne: GetOneClassPeriodUseCase,
   ) {}
 
-  async create(req: any, res: Response) {
+  async create(req: Request, res: Response) {
     try {
       const { classUuid, periodUuid, value } = req.body;
       const schoolUuid = schoolByUserMiddleware(req);
@@ -37,7 +37,8 @@ export class ClassPeriodController {
   async delete(req: Request, res: Response) {
     try {
       const { uuid } = req.params;
-      const deleted = await this._delete.execute(uuid as string);
+      const schoolUuid = schoolByUserMiddleware(req);
+      const deleted = await this._delete.execute(uuid as string, schoolUuid);
       return Handler.ok(res, deleted);
     } catch (err: unknown) {
       return Handler.error(res, err);
@@ -61,7 +62,7 @@ export class ClassPeriodController {
     }
   }
 
-  async getAll(req: any, res: Response) {
+  async getAll(req: Request, res: Response) {
     try {
       const schoolUuid = schoolByUserMiddleware(req);
       const getAll = await this._getAll.execute(schoolUuid);
@@ -74,7 +75,8 @@ export class ClassPeriodController {
   async getOne(req: Request, res: Response) {
     try {
       const { uuid } = req.params;
-      const getOne = await this._getOne.execute(uuid as string);
+      const schoolUuid = schoolByUserMiddleware(req);
+      const getOne = await this._getOne.execute(uuid as string, schoolUuid);
       return Handler.ok(res, getOne);
     } catch (err: unknown) {
       return Handler.error(res, err);

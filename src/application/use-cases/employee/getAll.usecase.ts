@@ -15,13 +15,15 @@ export class GetAllEmployeeUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(): Promise<Employee[]> {
-    const cached = await this._cache.get<Employee[]>(cacheKeyEnum.EMPLOYEES);
+  async execute(schoolUuid: string): Promise<Employee[]> {
+    const cached = await this._cache.get<Employee[]>(
+      `${cacheKeyEnum.EMPLOYEES}:${schoolUuid}`,
+    );
 
     if (cached) return cached;
 
     const list = await this._repo.getAll();
-    await this._cache.set(cacheKeyEnum.EMPLOYEES, list);
+    await this._cache.set(`${cacheKeyEnum.EMPLOYEES}:${schoolUuid}`, list);
     return list;
   }
 }

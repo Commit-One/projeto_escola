@@ -15,13 +15,15 @@ export class GetOneEmployeeUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string): Promise<Employee | null> {
-    const cached = await this._cache.get<Employee[]>(cacheKeyEnum.EMPLOYEES);
-    let discipline;
+  async execute(uuid: string, schoolUuid: string): Promise<Employee | null> {
+    const cached = await this._cache.get<Employee[]>(
+      `${cacheKeyEnum.EMPLOYEES}:${schoolUuid}`,
+    );
+    let employee;
 
-    if (!cached) discipline = await this._repo.getOne(uuid);
-    else discipline = cached.find((s) => s.uuid.includes(uuid));
+    if (!cached) employee = await this._repo.getOne(uuid);
+    else employee = cached.find((s) => s.uuid === uuid);
 
-    return discipline ?? null;
+    return employee ?? null;
   }
 }

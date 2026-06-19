@@ -27,7 +27,7 @@ export class UpdateNotesUseCase {
       return false;
     }
 
-    await this._cache.delete(cacheKeyEnum.NOTES);
+    await this._cache.delete(`${cacheKeyEnum.NOTES}:${data.schoolUuid}`);
 
     logger.info({
       message: "Atualização realizada com sucesso",

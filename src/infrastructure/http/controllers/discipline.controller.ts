@@ -42,20 +42,22 @@ export class DisciplineController {
     }
   }
 
-  async getOne(req: Request, res: Response) {
+  async getOne(req: any, res: Response) {
     try {
       const { uuid } = req.params;
-      const displine = await this._getOne.execute(uuid as string);
+      const schoolUuid = schoolByUserMiddleware(req);
+      const displine = await this._getOne.execute(uuid as string, schoolUuid);
       return Handler.ok(res, displine);
     } catch (err: unknown) {
       return Handler.error(res, err);
     }
   }
 
-  async delete(req: Request, res: Response) {
+  async delete(req: any, res: Response) {
     try {
       const { uuid } = req.params;
-      const deleted = await this._delete.execute(uuid as string);
+      const schoolUuid = schoolByUserMiddleware(req);
+      const deleted = await this._delete.execute(uuid as string, schoolUuid);
       return Handler.ok(res, deleted);
     } catch (err: unknown) {
       return Handler.error(res, err);

@@ -31,7 +31,9 @@ export class UpdateClassStudentUseCase {
       return null;
     }
 
-    await this._cache.delete(cacheKeyEnum.CLASS);
+    await this._cache.delete(
+      `${cacheKeyEnum.CLASS_STUDENT}:${data.schoolUuid}`,
+    );
 
     logger.info({
       message: "Atualização da relação de classe e aluno feita com sucesso",

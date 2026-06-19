@@ -15,7 +15,7 @@ export class DeleteEmployeeUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string): Promise<boolean> {
+  async execute(uuid: string, schoolUuid: string): Promise<boolean> {
     const deleted = await this._repo.delete(uuid);
 
     if (!deleted) {
@@ -27,7 +27,7 @@ export class DeleteEmployeeUseCase {
       return false;
     }
 
-    await this._cache.delete(cacheKeyEnum.EMPLOYEES);
+    await this._cache.delete(`${cacheKeyEnum.EMPLOYEES}:${schoolUuid}`);
 
     logger.info({
       message: "Employee deletado com sucesso",

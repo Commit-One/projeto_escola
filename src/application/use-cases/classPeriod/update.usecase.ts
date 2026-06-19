@@ -27,7 +27,7 @@ export class UpdateClassPeriodUseCase {
       return false;
     }
 
-    await this._cache.delete(cacheKeyEnum.CLASS_PERIOD);
+    await this._cache.delete(`${cacheKeyEnum.CLASS_PERIOD}:${data.schoolUuid}`);
 
     logger.info({
       message:

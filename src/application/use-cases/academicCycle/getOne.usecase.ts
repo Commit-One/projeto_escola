@@ -22,7 +22,7 @@ export class GetOneAcademicCycleUseCase {
     let academc;
 
     if (!academicCache) academc = await this._repo.getOne(uuid);
-    else academc = academicCache.find((s) => s.uuid.includes(uuid));
+    else academc = academicCache.find((s) => s.uuid === uuid);
 
     return academc ?? null;
   }

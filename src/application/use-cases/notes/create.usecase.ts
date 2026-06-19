@@ -19,7 +19,7 @@ export class CreateNotesUseCase {
 
   async execute(data: NotesDTO): Promise<Notes> {
     const notes = await this._repo.create(data);
-    await this._cache.delete(cacheKeyEnum.NOTES);
+    await this._cache.delete(`${cacheKeyEnum.NOTES}:${data.schoolUuid}`);
     logger.info({
       message: "Relação criada com sucesso",
       noteUuid: notes.uuid,

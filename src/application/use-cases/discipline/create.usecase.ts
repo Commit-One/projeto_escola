@@ -19,7 +19,7 @@ export class CreateDisciplineUseCase {
 
   async execute(data: DisciplineDTO): Promise<Discipline> {
     const discipline = await this._repo.create(data);
-    await this._cache.delete(cacheKeyEnum.DISCIPLINE);
+    await this._cache.delete(`${cacheKeyEnum.DISCIPLINE}:${data.schoolUuid}`);
     logger.info({
       message: "Disciplina criada com sucesso",
       schoolId: discipline.uuid,

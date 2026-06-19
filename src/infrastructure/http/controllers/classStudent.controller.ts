@@ -45,20 +45,22 @@ export class ClassStudentController {
     }
   }
 
-  async getByUuid(req: Request, res: Response) {
+  async getByUuid(req: any, res: Response) {
     try {
       const { uuid } = req.params;
-      const getOne = await this._getOne.execute(uuid as string);
+      const schoolUuid = schoolByUserMiddleware(req);
+      const getOne = await this._getOne.execute(uuid as string, schoolUuid);
       return Handler.ok(res, getOne);
     } catch (err: unknown) {
       return Handler.error(res, err);
     }
   }
 
-  async delete(req: Request, res: Response) {
+  async delete(req: any, res: Response) {
     try {
       const { uuid } = req.params;
-      const deleted = await this._delete.execute(uuid as string);
+      const schoolUuid = schoolByUserMiddleware(req);
+      const deleted = await this._delete.execute(uuid as string, schoolUuid);
       return Handler.ok(res, deleted);
     } catch (err: unknown) {
       return Handler.error(res, err);

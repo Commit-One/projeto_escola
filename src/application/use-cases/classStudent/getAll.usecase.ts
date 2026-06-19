@@ -17,14 +17,16 @@ export class GetAllClassStudentUseCase {
 
   async execute(schoolUuid: string): Promise<ClassStudent[] | null> {
     const cachedClass = await this._cache.get<ClassStudent[]>(
-      cacheKeyEnum.CLASS,
+      `${cacheKeyEnum.CLASS_STUDENT}:${schoolUuid}`,
     );
 
-    if (cachedClass)
-      return cachedClass.filter((c) => c.schoolUuid === schoolUuid);
+    if (cachedClass) return cachedClass;
 
     const classStudents = await this._classRepository.getAll(schoolUuid);
-    await this._cache.set(cacheKeyEnum.CLASS, classStudents);
+    await this._cache.set(
+      `${cacheKeyEnum.CLASS_STUDENT}:${schoolUuid}`,
+      classStudents,
+    );
     return classStudents;
   }
 }

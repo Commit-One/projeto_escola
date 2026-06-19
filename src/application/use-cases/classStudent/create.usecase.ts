@@ -19,7 +19,9 @@ export class CreateClassStudentuUseCase {
 
   async execute(data: IClassStudentDTO): Promise<ClassStudent> {
     const classStudent = await this._classRepository.create(data);
-    await this._cache.delete(cacheKeyEnum.CLASS);
+    await this._cache.delete(
+      `${cacheKeyEnum.CLASS_STUDENT}:${data.schoolUuid}`,
+    );
     logger.info({
       message: "Regra de classe e período criado com sucesso",
       schoolId: classStudent.uuid,

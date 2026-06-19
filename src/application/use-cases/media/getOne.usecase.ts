@@ -15,12 +15,14 @@ export class GetOneMediaUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string): Promise<Media | null> {
-    const cached = await this._cache.get<Media[]>(cacheKeyEnum.MEDIAS);
+  async execute(uuid: string, schoolUuid: string): Promise<Media | null> {
+    const cached = await this._cache.get<Media[]>(
+      `${cacheKeyEnum.MEDIAS}:${schoolUuid}`,
+    );
     let media;
 
     if (!cached) media = await this._repo.getOne(uuid);
-    else media = cached.find((s) => s.uuid.includes(uuid));
+    else media = cached.find((s) => s.uuid === uuid);
 
     return media ?? null;
   }

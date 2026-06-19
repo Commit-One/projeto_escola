@@ -7,6 +7,7 @@ import { GetOneEmployeeUseCase } from "../../../application/use-cases/employee/g
 import { UpdateEmployeeUseCase } from "../../../application/use-cases/employee/update.usecase";
 import { Handler } from "../statusHttp";
 import { UpdateStatusEmployeeUseCase } from "../../../application/use-cases/employee/updateStatus.usecase";
+import { schoolByUserMiddleware } from "../middleware/schoolByUser.middleware";
 
 @injectable()
 export class EmployeeController {
@@ -22,7 +23,7 @@ export class EmployeeController {
   async create(req: any, res: Response) {
     try {
       const { name, email } = req.body;
-      const schoolUuid = req.user.escola.uuid;
+      const schoolUuid = schoolByUserMiddleware(req);
       const profileUuid = req.user.profile.uuid;
 
       const created = await this._create.execute({
@@ -40,7 +41,8 @@ export class EmployeeController {
   async delete(req: Request, res: Response) {
     try {
       const { uuid } = req.params;
-      const deleted = await this._delete.execute(uuid as string);
+      const schoolUuid = schoolByUserMiddleware(req);
+      const deleted = await this._delete.execute(uuid as string, schoolUuid);
       return Handler.ok(res, deleted);
     } catch (err: unknown) {
       return Handler.error(res, err);
@@ -51,7 +53,7 @@ export class EmployeeController {
     try {
       const { uuid } = req.params;
       const { name, email } = req.body;
-      const schoolUuid = req.user.escola.uuid;
+      const schoolUuid = schoolByUserMiddleware(req);
       const profileUuid = req.user.profile.uuid;
       const updated = await this._update.execute(uuid as string, {
         name,
@@ -65,9 +67,10 @@ export class EmployeeController {
     }
   }
 
-  async getAll(_: Request, res: Response) {
+  async getAll(req: Request, res: Response) {
     try {
-      const list = await this._getAll.execute();
+      const schoolUuid = schoolByUserMiddleware(req);
+      const list = await this._getAll.execute(schoolUuid);
       return Handler.ok(res, list);
     } catch (err: unknown) {
       return Handler.error(res, err);
@@ -77,18 +80,24 @@ export class EmployeeController {
   async getOne(req: Request, res: Response) {
     try {
       const { uuid } = req.params;
-      const item = await this._getOne.execute(uuid as string);
+      const schoolUuid = schoolByUserMiddleware(req);
+      const item = await this._getOne.execute(uuid as string, schoolUuid);
       return Handler.ok(res, item);
     } catch (err: unknown) {
       return Handler.error(res, err);
     }
   }
 
-  async updateStatus(req: Request, res: Response) {
+  async updateStatus(req: any, res: Response) {
     try {
       const { uuid } = req.params;
       const { status } = req.body;
-      const updated = await this._updateStatus.execute(uuid as string, status);
+      const schoolUuid = schoolByUserMiddleware(req);
+      const updated = await this._updateStatus.execute(
+        uuid as string,
+        status,
+        schoolUuid,
+      );
       return Handler.ok(res, updated);
     } catch (err: unknown) {
       return Handler.error(res, err);

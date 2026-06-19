@@ -7,6 +7,7 @@ import { GetOneNotesUseCase } from "../../../application/use-cases/notes/getOne.
 import { DeleteNotesUseCase } from "../../../application/use-cases/notes/delete.usecase";
 import { UpdateNotesUseCase } from "../../../application/use-cases/notes/update.usecase";
 import { CreateGradeReportByStudentUuidUseCase } from "../../../application/use-cases/notes/createGradeReportByStudentUuid.usecase";
+import { schoolByUserMiddleware } from "../middleware/schoolByUser.middleware";
 
 @injectable()
 export class NotesController {
@@ -19,9 +20,10 @@ export class NotesController {
     private readonly _gradeByStudent: CreateGradeReportByStudentUuidUseCase,
   ) {}
 
-  async getAll(_: Request, res: Response) {
+  async getAll(req: any, res: Response) {
     try {
-      const list = await this._getAll.execute();
+      const schoolUuid = schoolByUserMiddleware(req);
+      const list = await this._getAll.execute(schoolUuid);
       return Handler.ok(res, list);
     } catch (err: unknown) {
       return Handler.error(res, err);
@@ -36,7 +38,7 @@ export class NotesController {
         disciplineUuid: req.body?.disciplineUuid,
         academiccycleUuid: req.body?.academiccycleUuid,
         note: req.body?.note,
-        schoolUuid: req.user.escola.uuid,
+        schoolUuid: schoolByUserMiddleware(req),
         studentUuid: req.body?.studentUuid,
       });
       return Handler.created(res, created);
@@ -45,20 +47,22 @@ export class NotesController {
     }
   }
 
-  async getOne(req: Request, res: Response) {
+  async getOne(req: any, res: Response) {
     try {
       const { uuid } = req.params;
-      const displine = await this._getOne.execute(uuid as string);
-      return Handler.ok(res, displine);
+      const schoolUuid = schoolByUserMiddleware(req);
+      const item = await this._getOne.execute(uuid as string, schoolUuid);
+      return Handler.ok(res, item);
     } catch (err: unknown) {
       return Handler.error(res, err);
     }
   }
 
-  async delete(req: Request, res: Response) {
+  async delete(req: any, res: Response) {
     try {
       const { uuid } = req.params;
-      const deleted = await this._delete.execute(uuid as string);
+      const schoolUuid = schoolByUserMiddleware(req);
+      const deleted = await this._delete.execute(uuid as string, schoolUuid);
       return Handler.ok(res, deleted);
     } catch (err: unknown) {
       return Handler.error(res, err);

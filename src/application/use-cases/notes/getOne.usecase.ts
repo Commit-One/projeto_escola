@@ -15,13 +15,15 @@ export class GetOneNotesUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string): Promise<Notes | null> {
-    const cached = await this._cache.get<Notes[]>(cacheKeyEnum.NOTES);
-    let discipline;
+  async execute(uuid: string, schoolUuid: string): Promise<Notes | null> {
+    const cached = await this._cache.get<Notes[]>(
+      `${cacheKeyEnum.NOTES}:${schoolUuid}`,
+    );
+    let notes;
 
-    if (!cached) discipline = await this._repo.getOne(uuid);
-    else discipline = cached.find((s) => s.uuid.includes(uuid));
+    if (!cached) notes = await this._repo.getOne(uuid);
+    else notes = cached.find((s) => s.uuid === uuid);
 
-    return discipline ?? null;
+    return notes ?? null;
   }
 }

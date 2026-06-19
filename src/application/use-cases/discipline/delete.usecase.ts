@@ -15,7 +15,7 @@ export class DeleteDisciplineUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(uuid: string): Promise<boolean> {
+  async execute(uuid: string, schoolUuid: string): Promise<boolean> {
     const deleted = await this._repo.delete(uuid);
 
     if (!deleted) {
@@ -26,7 +26,7 @@ export class DeleteDisciplineUseCase {
       return false;
     }
 
-    await this._cache.delete(cacheKeyEnum.DISCIPLINE);
+    await this._cache.delete(`${cacheKeyEnum.DISCIPLINE}:${schoolUuid}`);
     logger.info({
       message: "Disciplina deletada com sucesso",
       uuid: uuid,

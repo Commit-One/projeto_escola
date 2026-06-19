@@ -4,16 +4,22 @@ import { IEmployeeRepository } from "../../../domain/repositories/IEmployeeRepos
 import { EmployeeDTO } from "../../dtos/employee.dto";
 import { ContainerEnum } from "../../../utils/enum/container";
 import { logger } from "../../../infrastructure/logger";
+import { IRedisService } from "../../../domain/contracts/IRedisService";
+import { cacheKeyEnum } from "../../../utils/enum/cacheKey";
 
 @injectable()
 export class CreateEmployeeUseCase {
   constructor(
     @inject(ContainerEnum.EMPLOYEE_REPOSITORY)
     private readonly _repo: IEmployeeRepository,
+
+    @inject(ContainerEnum.REDIS_SERVICE)
+    private readonly _cache: IRedisService,
   ) {}
 
   async execute(data: EmployeeDTO): Promise<Employee> {
     const created = await this._repo.create(data);
+    await this._cache.delete(`${cacheKeyEnum.EMPLOYEES}:${data.schoolUuid}`);
 
     logger.info({
       message: "Employee criado com sucesso",

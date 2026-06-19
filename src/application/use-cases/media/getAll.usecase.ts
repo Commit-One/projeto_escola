@@ -15,13 +15,15 @@ export class GetAllMediaUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(): Promise<Media[]> {
-    const cached = await this._cache.get<Media[]>(cacheKeyEnum.MEDIAS);
+  async execute(schoolUuid: string): Promise<Media[]> {
+    const cached = await this._cache.get<Media[]>(
+      `${cacheKeyEnum.MEDIAS}:${schoolUuid}`,
+    );
 
     if (cached) return cached;
 
     const list = await this._repo.getAll();
-    await this._cache.set(cacheKeyEnum.MEDIAS, list);
+    await this._cache.set(`${cacheKeyEnum.MEDIAS}:${schoolUuid}`, list);
     return list;
   }
 }

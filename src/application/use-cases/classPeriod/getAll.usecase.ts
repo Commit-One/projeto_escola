@@ -17,13 +17,13 @@ export class GetAllClassPeriodUseCase {
 
   async execute(schoolUuid: string): Promise<ClassPeriod[]> {
     const cached = await this._cache.get<ClassPeriod[]>(
-      cacheKeyEnum.CLASS_PERIOD,
+      `${cacheKeyEnum.CLASS_PERIOD}:${schoolUuid}`,
     );
 
-    if (cached) return cached.filter((c) => c.schoolUuid === schoolUuid);
+    if (cached) return cached;
 
     const list = await this._repo.getAll(schoolUuid);
-    await this._cache.delete(cacheKeyEnum.CLASS_PERIOD);
+    await this._cache.set(`${cacheKeyEnum.CLASS_PERIOD}:${schoolUuid}`, list);
     return list;
   }
 }

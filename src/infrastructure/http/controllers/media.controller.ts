@@ -6,6 +6,7 @@ import { GetAllMediaUseCase } from "../../../application/use-cases/media/getAll.
 import { GetOneMediaUseCase } from "../../../application/use-cases/media/getOne.usecase";
 import { UpdateMediaUseCase } from "../../../application/use-cases/media/update.usecase";
 import { Handler } from "../statusHttp";
+import { schoolByUserMiddleware } from "../middleware/schoolByUser.middleware";
 
 @injectable()
 export class MediaController {
@@ -20,7 +21,7 @@ export class MediaController {
   async create(req: any, res: Response) {
     try {
       const { media } = req.body;
-      const schoolUuid = req.user.escola.uuid;
+      const schoolUuid = schoolByUserMiddleware(req);
       const created = await this._create.execute({ media, schoolUuid });
       return Handler.created(res, created);
     } catch (err: unknown) {
@@ -28,10 +29,11 @@ export class MediaController {
     }
   }
 
-  async delete(req: Request, res: Response) {
+  async delete(req: any, res: Response) {
     try {
       const { uuid } = req.params;
-      const deleted = await this._delete.execute(uuid as string);
+      const schoolUuid = schoolByUserMiddleware(req);
+      const deleted = await this._delete.execute(uuid as string, schoolUuid);
       return Handler.ok(res, deleted);
     } catch (err: unknown) {
       return Handler.error(res, err);
@@ -42,7 +44,7 @@ export class MediaController {
     try {
       const { uuid } = req.params;
       const { media } = req.body;
-      const schoolUuid = req.user.escola.uuid;
+      const schoolUuid = schoolByUserMiddleware(req);
       const updated = await this._update.execute(uuid as string, {
         media,
         schoolUuid,
@@ -53,19 +55,21 @@ export class MediaController {
     }
   }
 
-  async getAll(_: Request, res: Response) {
+  async getAll(req: any, res: Response) {
     try {
-      const list = await this._getAll.execute();
+      const schoolUuid = schoolByUserMiddleware(req);
+      const list = await this._getAll.execute(schoolUuid);
       return Handler.ok(res, list);
     } catch (err: unknown) {
       return Handler.error(res, err);
     }
   }
 
-  async getOne(req: Request, res: Response) {
+  async getOne(req: any, res: Response) {
     try {
       const { uuid } = req.params;
-      const item = await this._getOne.execute(uuid as string);
+      const schoolUuid = schoolByUserMiddleware(req);
+      const item = await this._getOne.execute(uuid as string, schoolUuid);
       return Handler.ok(res, item);
     } catch (err: unknown) {
       return Handler.error(res, err);

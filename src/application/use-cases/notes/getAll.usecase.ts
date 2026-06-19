@@ -15,13 +15,15 @@ export class GetAllNotesUseCase {
     private readonly _cache: IRedisService,
   ) {}
 
-  async execute(): Promise<Notes[]> {
-    const cached = await this._cache.get<Notes[]>(cacheKeyEnum.NOTES);
+  async execute(schoolUuid: string): Promise<Notes[]> {
+    const cached = await this._cache.get<Notes[]>(
+      `${cacheKeyEnum.NOTES}:${schoolUuid}`,
+    );
 
     if (cached) return cached;
 
     const list = await this._repo.getAll();
-    await this._cache.set(cacheKeyEnum.NOTES, list);
+    await this._cache.set(`${cacheKeyEnum.NOTES}:${schoolUuid}`, list);
     return list;
   }
 }
